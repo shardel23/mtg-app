@@ -25,9 +25,7 @@ export async function Sidebar() {
             <h2 className="px-4 text-lg font-semibold tracking-tight">
               My Albums
             </h2>
-            <div className="space-y-1">
-              <CreateNewAlbum sets={sets} />
-            </div>
+            <CreateNewAlbum sets={sets} />
           </div>
           <Button variant="ghost" className="w-full justify-start">
             Dominaria United

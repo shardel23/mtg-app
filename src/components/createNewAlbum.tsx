@@ -17,7 +17,7 @@ import {
 async function CreateNewAlbum({ sets }: { sets: Array<SetData> }) {
   return (
     <Dialog>
-      <DialogTrigger asChild>
+      <DialogTrigger>
         <PlusCircle className="cursor-pointer" />
       </DialogTrigger>
       <DialogContent>
