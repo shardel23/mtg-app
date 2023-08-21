@@ -1,3 +1,5 @@
+"use client";
+
 import { SetData } from "@/actions/mtgActions";
 import {
   Select,
