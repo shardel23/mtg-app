@@ -1,7 +1,7 @@
 "use client";
 
-import { SetData, createAlbum } from "@/actions/mtgActions";
-import { useTransition } from "react";
+import { SetData, createAlbumFromSetId } from "@/actions/mtgActions";
+import { useState, useTransition } from "react";
 import PlusCircle from "./icons/plus-circle";
 import SetSelector from "./setSelector";
 import { Button } from "./ui/button";
@@ -17,6 +17,7 @@ import {
 
 async function CreateNewAlbum({ sets }: { sets: Array<SetData> }) {
   const [isPending, startTransition] = useTransition();
+  const [selectedSetId, setSelectedSetId] = useState<string>("");
 
   return (
     <Dialog>
@@ -30,17 +31,22 @@ async function CreateNewAlbum({ sets }: { sets: Array<SetData> }) {
             Select a magic set to create a new album
           </DialogDescription>
         </DialogHeader>
-        <SetSelector sets={sets} onSetChange={(set) => {}} />
+        <SetSelector
+          sets={sets}
+          onSetChange={(setId) => {
+            setSelectedSetId(setId);
+          }}
+        />
         <DialogFooter>
           <Button
             type="submit"
             onClick={() =>
-              startTransition(() =>
-                createAlbum(
-                  "March of the Machine",
-                  "392f7315-dc53-40a3-a2cc-5482dbd498b3"
-                )
-              )
+              startTransition(() => {
+                if (selectedSetId === "") {
+                  return;
+                }
+                createAlbumFromSetId(selectedSetId);
+              })
             }
           >
             Add Album

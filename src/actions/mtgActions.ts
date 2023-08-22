@@ -3,7 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import * as Scry from "scryfall-sdk";
 
-export type SetData = { name: string; releasedAt: string | null | undefined };
+export type SetData = { name: string; id: string };
 
 export type CardData = { name: string; image: string | undefined };
 
@@ -20,7 +20,7 @@ export async function getAllSets(): Promise<SetData[]> {
   return sets
     .filter((set) => ["core", "expansion", "masters"].includes(set.set_type))
     .filter((set) => set.digital === false)
-    .map((set) => ({ name: set.name, releasedAt: set.released_at }));
+    .map((set) => ({ name: set.name, id: set.id }));
 }
 
 export async function getAllCardsOfSet(setName: string): Promise<CardData[]> {
@@ -59,6 +59,28 @@ export async function createAlbum(
   await prisma.album.create({
     data: {
       name: albumName,
+      setId: set.id,
+      setName: set.name,
+      cards: {
+        create: cards.map((card) => ({
+          name: card.name,
+          imageUri: getImageUri(card),
+          id: card.id,
+          collectorNumber: parseInt(card.collector_number),
+          setName: set.name,
+          setId: set.id,
+        })),
+      },
+    },
+  });
+}
+
+export async function createAlbumFromSetId(setId: string): Promise<void> {
+  const set = await Scry.Sets.byId(setId);
+  const cards = await set.getCards();
+  await prisma.album.create({
+    data: {
+      name: set.name,
       setId: set.id,
       setName: set.name,
       cards: {
