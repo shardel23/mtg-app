@@ -15,7 +15,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 
-async function CreateNewAlbum({ sets }: { sets: Array<SetData> }) {
+function CreateNewAlbum({ sets }: { sets: Array<SetData> }) {
   const [isPending, startTransition] = useTransition();
   const [selectedSetId, setSelectedSetId] = useState<string>("");
 
