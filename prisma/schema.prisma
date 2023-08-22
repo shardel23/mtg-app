@@ -9,3 +9,24 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Card {
+  id              String  @id
+  name            String
+  setId           String
+  setName         String
+  collectorNumber Int
+  imageUri        String
+  isCollected     Boolean @default(false)
+  isFoil          Boolean @default(false)
+  Album           Album?  @relation(fields: [albumId], references: [id])
+  albumId         Int?
+}
+
+model Album {
+  id      Int     @id @default(autoincrement())
+  name    String
+  setId   String?
+  setName String?
+  cards   Card[]
+}
