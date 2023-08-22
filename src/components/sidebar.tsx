@@ -1,10 +1,11 @@
-import { getAllSets } from "@/actions/mtgActions";
+import { getAllAlbums, getAllSets } from "@/actions/mtgActions";
 import Link from "next/link";
 import CreateNewAlbum from "./createNewAlbum";
 import { Button } from "./ui/button";
 
 export async function Sidebar() {
   const sets = await getAllSets();
+  const albums = await getAllAlbums();
   return (
     <div className="pb-12 w-1/4">
       <div className="space-y-4 py-4">
@@ -27,9 +28,11 @@ export async function Sidebar() {
             </h2>
             <CreateNewAlbum sets={sets} />
           </div>
-          <Button variant="ghost" className="w-full justify-start">
-            Dominaria United
-          </Button>
+          {albums.map((album) => (
+            <Button variant="ghost" className="w-full justify-start">
+              {album.name}
+            </Button>
+          ))}
         </div>
       </div>
     </div>
