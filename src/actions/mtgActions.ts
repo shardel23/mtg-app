@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 import * as Scry from "scryfall-sdk";
 
 export type SetData = { name: string; id: string };
@@ -75,8 +76,21 @@ export async function createAlbum(
   });
 }
 
+async function isSetExists(setName: string): Promise<boolean> {
+  const album = await prisma.album.findFirst({
+    where: {
+      name: setName,
+    },
+  });
+  return album != null;
+}
+
 export async function createAlbumFromSetId(setId: string): Promise<void> {
   const set = await Scry.Sets.byId(setId);
+  const isSetInDB = await isSetExists(set.name);
+  if (isSetInDB) {
+    return;
+  }
   const cards = await set.getCards();
   await prisma.album.create({
     data: {
@@ -95,4 +109,5 @@ export async function createAlbumFromSetId(setId: string): Promise<void> {
       },
     },
   });
+  revalidatePath("/");
 }

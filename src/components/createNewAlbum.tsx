@@ -18,9 +18,10 @@ import {
 function CreateNewAlbum({ sets }: { sets: Array<SetData> }) {
   const [isPending, startTransition] = useTransition();
   const [selectedSetId, setSelectedSetId] = useState<string>("");
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger>
         <PlusCircle className="cursor-pointer" />
       </DialogTrigger>
@@ -46,6 +47,7 @@ function CreateNewAlbum({ sets }: { sets: Array<SetData> }) {
                   return;
                 }
                 createAlbumFromSetId(selectedSetId);
+                setIsDialogOpen(false);
               })
             }
           >
