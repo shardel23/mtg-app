@@ -6,7 +6,13 @@ import * as Scry from "scryfall-sdk";
 
 export type SetData = { name: string; id: string };
 
-export type CardData = { name: string; image: string | undefined };
+export type CardData = {
+  id: string;
+  name: string;
+  image: string | undefined;
+  isInCollection?: boolean;
+  albumId?: number;
+};
 
 function getImageUri(card: Scry.Card): string {
   return (
@@ -30,6 +36,7 @@ export async function getAllCardsOfSet(setName: string): Promise<CardData[]> {
   return cards
     .filter((card) => !card.digital)
     .map((card) => ({
+      id: card.id,
       name: card.name,
       image: getImageUri(card),
     }));
@@ -106,13 +113,37 @@ export async function getAlbumCards(albumId: number): Promise<CardData[]> {
       id: albumId,
     },
     include: {
-      cards: true,
+      cards: {
+        orderBy: {
+          collectorNumber: "asc",
+        },
+      },
     },
   });
   return (
     album?.cards.map((card) => ({
+      id: card.id,
       name: card.name,
       image: card.imageUri,
+      isInCollection: card.isCollected,
+      albumId: albumId,
     })) ?? []
   );
+}
+
+export async function markCardIsCollected(
+  albumId: number,
+  cardId: string,
+  isCollected: boolean
+): Promise<void> {
+  await prisma.card.update({
+    where: {
+      id: cardId,
+      albumId: albumId,
+    },
+    data: {
+      isCollected: isCollected,
+    },
+  });
+  revalidatePath(`/view/{albumId}`);
 }
