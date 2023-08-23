@@ -48,34 +48,6 @@ export async function getAllAlbums(): Promise<
     }));
 }
 
-export async function createAlbum(
-  albumName: string,
-  setId?: string
-): Promise<void> {
-  if (!setId) {
-    return;
-  }
-  const set = await Scry.Sets.byId(setId);
-  const cards = await set.getCards();
-  await prisma.album.create({
-    data: {
-      name: albumName,
-      setId: set.id,
-      setName: set.name,
-      cards: {
-        create: cards.map((card) => ({
-          name: card.name,
-          imageUri: getImageUri(card),
-          id: card.id,
-          collectorNumber: parseInt(card.collector_number),
-          setName: set.name,
-          setId: set.id,
-        })),
-      },
-    },
-  });
-}
-
 async function isSetExists(setName: string): Promise<boolean> {
   const album = await prisma.album.findFirst({
     where: {
