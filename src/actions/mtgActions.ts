@@ -57,13 +57,24 @@ async function isSetExists(setName: string): Promise<boolean> {
   return album != null;
 }
 
+function endsWithNumber(text: string) {
+  return /\d$/.test(text);
+}
+
 export async function createAlbumFromSetId(setId: string): Promise<void> {
   const set = await Scry.Sets.byId(setId);
   const isSetInDB = await isSetExists(set.name);
   if (isSetInDB) {
     return;
   }
-  const cards = await set.getCards();
+  const cards = (await set.getCards())
+    .filter((card) => !card.digital)
+    .filter(
+      (card) =>
+        card.layout === "normal" ||
+        card.collector_number.endsWith("a") ||
+        endsWithNumber(card.collector_number)
+    );
   await prisma.album.create({
     data: {
       name: set.name,
@@ -74,7 +85,11 @@ export async function createAlbumFromSetId(setId: string): Promise<void> {
           name: card.name,
           imageUri: getImageUri(card),
           id: card.id,
-          collectorNumber: parseInt(card.collector_number),
+          collectorNumber: parseInt(
+            endsWithNumber(card.collector_number)
+              ? card.collector_number
+              : card.collector_number.slice(0, -1)
+          ),
           setName: set.name,
           setId: set.id,
         })),
