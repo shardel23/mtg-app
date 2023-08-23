@@ -8,7 +8,10 @@ function Card({ card }: { card: CardData }) {
   const [isPending, startTransition] = useTransition();
   return (
     <div>
-      <div className="truncate">{card.name}</div>
+      <div className="flex justify-between">
+        <div className="truncate">{card.name}</div>
+        <div>#{card.collectorNumber}</div>
+      </div>
       {card.image && (
         <Image
           className={`${!card.isInCollection ? "opacity-50" : ""}`}

@@ -12,6 +12,7 @@ export type CardData = {
   image: string | undefined;
   isInCollection?: boolean;
   albumId?: number;
+  collectorNumber: string;
 };
 
 function getImageUri(card: Scry.Card): string {
@@ -39,6 +40,7 @@ export async function getAllCardsOfSet(setName: string): Promise<CardData[]> {
       id: card.id,
       name: card.name,
       image: getImageUri(card),
+      collectorNumber: card.collector_number,
     }));
 }
 
@@ -75,7 +77,7 @@ export async function createAlbumFromSetId(setId: string): Promise<void> {
   if (isSetInDB) {
     return;
   }
-  const cards = (await set.getCards())
+  const cards = (await set.getCards({ unique: "prints" }))
     .filter((card) => !card.digital)
     .filter(
       (card) =>
@@ -127,6 +129,7 @@ export async function getAlbumCards(albumId: number): Promise<CardData[]> {
       image: card.imageUri,
       isInCollection: card.isCollected,
       albumId: albumId,
+      collectorNumber: card.collectorNumber.toString(),
     })) ?? []
   );
 }
