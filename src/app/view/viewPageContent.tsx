@@ -3,8 +3,8 @@
 import { CardData, SetData, getAllCardsOfSet } from "@/actions/mtgActions";
 import SetSelector from "@/components/setSelector";
 
+import CardGrid from "@/components/cardGrid";
 import { useState, useTransition } from "react";
-import Card from "../../components/card";
 
 function ViewPageContent({ sets }: { sets: Array<SetData> }) {
   const [chosenSet, setChosenSet] = useState<string | null>(null);
@@ -25,13 +25,7 @@ function ViewPageContent({ sets }: { sets: Array<SetData> }) {
           }}
         />
       </div>
-      {cards.length !== 0 && (
-        <div className="grid grid-cols-5 gap-1">
-          {cards.map((card) => (
-            <Card key={card.name} card={card} />
-          ))}
-        </div>
-      )}
+      {cards.length !== 0 && <CardGrid cards={cards} />}
     </div>
   );
 }

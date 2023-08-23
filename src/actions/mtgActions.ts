@@ -36,12 +36,13 @@ export async function getAllCardsOfSet(setName: string): Promise<CardData[]> {
 }
 
 export async function getAllAlbums(): Promise<
-  { name: string; setId: string; setName: string }[]
+  { id: number; name: string; setId: string; setName: string }[]
 > {
   const albums = await prisma.album.findMany();
   return albums
     .filter((album) => album.setId != null && album.setName != null)
     .map((album) => ({
+      id: album.id,
       name: album.name,
       setId: album.setId as string,
       setName: album.setName as string,
@@ -97,4 +98,21 @@ export async function createAlbumFromSetId(setId: string): Promise<void> {
     },
   });
   revalidatePath("/");
+}
+
+export async function getAlbumCards(albumId: number): Promise<CardData[]> {
+  const album = await prisma.album.findUnique({
+    where: {
+      id: albumId,
+    },
+    include: {
+      cards: true,
+    },
+  });
+  return (
+    album?.cards.map((card) => ({
+      name: card.name,
+      image: card.imageUri,
+    })) ?? []
+  );
 }

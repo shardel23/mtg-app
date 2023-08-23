@@ -30,7 +30,7 @@ export async function Sidebar() {
           </div>
           {albums.map((album) => (
             <Button variant="ghost" className="w-full justify-start">
-              {album.name}
+              <Link href={`/view/${album.id}`}>{album.name}</Link>
             </Button>
           ))}
         </div>
