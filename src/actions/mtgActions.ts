@@ -71,11 +71,11 @@ function endsWithNumber(text: string) {
   return /\d$/.test(text);
 }
 
-export async function createAlbumFromSetId(setId: string): Promise<void> {
+export async function createAlbumFromSetId(setId: string): Promise<number> {
   const set = await Scry.Sets.byId(setId);
   const isSetInDB = await isSetExists(set.name);
   if (isSetInDB) {
-    return;
+    return -1;
   }
   const cards = (await set.getCards({ unique: "prints" }))
     .filter((card) => !card.digital)
@@ -86,7 +86,7 @@ export async function createAlbumFromSetId(setId: string): Promise<void> {
         card.collector_number.endsWith("a") ||
         endsWithNumber(card.collector_number)
     );
-  await prisma.album.create({
+  const album = await prisma.album.create({
     data: {
       name: set.name,
       setId: set.id,
@@ -108,6 +108,7 @@ export async function createAlbumFromSetId(setId: string): Promise<void> {
     },
   });
   revalidatePath("/");
+  return album.id;
 }
 
 export async function getAlbumCards(
@@ -160,4 +161,22 @@ export async function markCardIsCollected(
     },
   });
   revalidatePath(`/view/{albumId}`);
+}
+
+export async function deleteAlbum(albumId: number): Promise<void> {
+  const deleteCards = prisma.card.deleteMany({
+    where: {
+      albumId: albumId,
+    },
+  });
+
+  const deleteAlbum = prisma.album.delete({
+    where: {
+      id: albumId,
+    },
+  });
+
+  await prisma.$transaction([deleteCards, deleteAlbum]);
+
+  revalidatePath("/");
 }

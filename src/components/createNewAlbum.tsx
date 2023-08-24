@@ -1,6 +1,7 @@
 "use client";
 
 import { SetData, createAlbumFromSetId } from "@/actions/mtgActions";
+import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import PlusCircle from "./icons/plus-circle";
 import SetSelector from "./setSelector";
@@ -19,6 +20,7 @@ function CreateNewAlbum({ sets }: { sets: Array<SetData> }) {
   const [isPending, startTransition] = useTransition();
   const [selectedSetId, setSelectedSetId] = useState<string>("");
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const router = useRouter();
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -39,20 +41,20 @@ function CreateNewAlbum({ sets }: { sets: Array<SetData> }) {
           }}
         />
         <DialogFooter>
-          <Button
-            type="submit"
-            onClick={() =>
-              startTransition(() => {
-                if (selectedSetId === "") {
-                  return;
-                }
-                createAlbumFromSetId(selectedSetId);
-                setIsDialogOpen(false);
-              })
-            }
+          <form
+            action={async () => {
+              if (selectedSetId === "") {
+                return;
+              }
+              const albumId = await createAlbumFromSetId(selectedSetId);
+              setIsDialogOpen(false);
+              if (albumId !== -1) {
+                router.push(`/view/${albumId}`);
+              }
+            }}
           >
-            Add Album
-          </Button>
+            <Button type="submit">Add Album</Button>
+          </form>
         </DialogFooter>
       </DialogContent>
     </Dialog>

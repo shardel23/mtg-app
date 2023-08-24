@@ -6,6 +6,7 @@ export default async function AlbumPage({
 }: {
   params: { albumId: string };
 }) {
-  const cards = await getAlbumCards(parseInt(params.albumId));
-  return <AlbumView cards={cards} />;
+  const albumIdInt = parseInt(params.albumId);
+  const cards = await getAlbumCards(albumIdInt);
+  return <AlbumView albumId={albumIdInt} cards={cards} />;
 }
