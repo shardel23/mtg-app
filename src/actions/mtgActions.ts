@@ -180,3 +180,16 @@ export async function deleteAlbum(albumId: number): Promise<void> {
 
   revalidatePath("/");
 }
+
+export async function deleteCardFromAlbum(
+  albumId: number,
+  cardName: string
+): Promise<void> {
+  await prisma.card.deleteMany({
+    where: {
+      albumId: albumId,
+      name: cardName,
+    },
+  });
+  revalidatePath(`/view/{albumId}`);
+}

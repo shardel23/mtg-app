@@ -1,9 +1,15 @@
 "use client";
 
-import { CardData, markCardIsCollected } from "@/actions/mtgActions";
+import {
+  CardData,
+  deleteCardFromAlbum,
+  markCardIsCollected,
+} from "@/actions/mtgActions";
 import Image from "next/image";
 import { useCallback, useState, useTransition } from "react";
 import ArrowRightLeft from "./icons/arrow-right-left";
+import CheckCircle from "./icons/check-circle";
+import Trash from "./icons/trash";
 
 function Card({ cardVersions }: { cardVersions: CardData[] }) {
   const [isPending, startTransition] = useTransition();
@@ -47,6 +53,9 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
             alt={card.name}
             height={400}
             width={300}
+          />
+          <CheckCircle
+            className="absolute top-6 left-6 hover:text-green-500 cursor-pointer"
             onClick={() => {
               setIsVersionCollected((curr) => {
                 const newIsVersionCollected = [...curr];
@@ -71,6 +80,15 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
               }}
             />
           )}
+          <Trash
+            className="absolute bottom-6 right-6 hover:text-red-500 cursor-pointer"
+            onClick={() => {
+              startTransition(() => {
+                // TODO: Add optimistic update
+                deleteCardFromAlbum(card.albumId as number, card.name);
+              });
+            }}
+          />
         </div>
       )}
     </div>
