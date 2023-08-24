@@ -9,7 +9,7 @@ export async function Sidebar() {
   return (
     <div className="pb-12 w-1/4">
       <div className="space-y-4 py-4">
-        <div className="px-3 py-2">
+        {/* <div className="px-3 py-2">
           <h2 className="px-4 text-lg font-semibold tracking-tight">
             MTG Library
           </h2>
@@ -20,7 +20,7 @@ export async function Sidebar() {
               </Button>
             </Link>
           </div>
-        </div>
+        </div> */}
         <div className="px-3 py-2">
           <div className="flex items-center justify-between">
             <h2 className="px-4 text-lg font-semibold tracking-tight">
