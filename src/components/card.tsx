@@ -7,20 +7,27 @@ import ArrowRightLeft from "./icons/arrow-right-left";
 
 function Card({ cardVersions }: { cardVersions: CardData[] }) {
   const [isPending, startTransition] = useTransition();
-  const [cardVersionNumber, setCardVersionNumber] = useState(() => {
-    const inCollectionIndex = cardVersions.findIndex(
-      (card) => card.isInCollection
-    );
-    return inCollectionIndex === -1 ? 0 : inCollectionIndex;
-  });
+  const [cardVersionNumberToDisplay, setCardVersionNumberToDisplay] = useState(
+    () => {
+      const inCollectionIndex = cardVersions.findIndex(
+        (card) => card.isInCollection
+      );
+      return inCollectionIndex === -1 ? 0 : inCollectionIndex;
+    }
+  );
+  const [isVersionCollected, setIsVersionCollected] = useState<boolean[]>(
+    () => {
+      return cardVersions.map((card) => card.isInCollection!);
+    }
+  );
 
   const changeCardVersion = useCallback(() => {
-    setCardVersionNumber(
+    setCardVersionNumberToDisplay(
       (currVersionNum) => (currVersionNum + 1) % cardVersions.length
     );
   }, []);
 
-  const card = cardVersions[cardVersionNumber];
+  const card = cardVersions[cardVersionNumberToDisplay];
 
   return (
     <div>
@@ -31,12 +38,22 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
       {card.image && (
         <div className="relative">
           <Image
-            className={`${!card.isInCollection ? "opacity-50" : ""}`}
+            className={`${
+              !isVersionCollected[cardVersionNumberToDisplay]
+                ? "opacity-50"
+                : ""
+            }`}
             src={card.image}
             alt={card.name}
             height={400}
             width={300}
             onClick={() => {
+              setIsVersionCollected((curr) => {
+                const newIsVersionCollected = [...curr];
+                newIsVersionCollected[cardVersionNumberToDisplay] =
+                  !newIsVersionCollected[cardVersionNumberToDisplay];
+                return newIsVersionCollected;
+              });
               startTransition(() => {
                 markCardIsCollected(
                   card.albumId as number,
