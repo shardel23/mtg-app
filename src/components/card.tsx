@@ -75,7 +75,7 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
                 markCardIsCollected(
                   card.albumId as number,
                   card.id,
-                  !card.isInCollection
+                  !isVersionCollected[cardVersionNumberToDisplay]
                 );
               });
             }}
