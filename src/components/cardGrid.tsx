@@ -5,7 +5,7 @@ function CardGrid({ cards }: { cards: CardData[] }) {
   return (
     <div className="grid grid-cols-5 gap-1">
       {cards.map((card) => (
-        <Card key={card.name} card={card} />
+        <Card key={card.name} cardVersions={[card]} />
       ))}
     </div>
   );

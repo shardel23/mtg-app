@@ -14,8 +14,8 @@ export default async function AlbumPage({
       </div>
       <div className="grid grid-cols-5 gap-1">
         {Array.from(cards.keys()).map((cardName) => {
-          const card = cards.get(cardName)![0];
-          return <Card key={card.name} card={card} />;
+          const cardVersions = cards.get(cardName)!;
+          return <Card key={cardName} cardVersions={cardVersions} />;
         })}
       </div>
     </div>
