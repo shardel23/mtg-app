@@ -56,7 +56,7 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
           />
           <CheckCircle
             className={
-              "absolute top-6 left-6  cursor-pointer " +
+              "absolute top-1/10 left-1/10 cursor-pointer " +
               (isVersionCollected[cardVersionNumberToDisplay]
                 ? "text-green-500 "
                 : "text-white ") +
@@ -82,14 +82,14 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
           />
           {cardVersions.length > 1 && (
             <ArrowRightLeft
-              className="absolute top-6 right-6 hover:text-red-500 cursor-pointer"
+              className="absolute top-1/10 right-1/10 hover:text-red-500 cursor-pointer"
               onClick={() => {
                 changeCardVersion();
               }}
             />
           )}
           <Trash
-            className="absolute bottom-6 right-6 hover:text-red-500 cursor-pointer"
+            className="absolute bottom-1/10 right-1/10 hover:text-red-500 cursor-pointer"
             onClick={() => {
               startTransition(() => {
                 // TODO: Add optimistic update
