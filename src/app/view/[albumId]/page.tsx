@@ -10,12 +10,13 @@ export default async function AlbumPage({
   return (
     <div>
       <div>
-        My album: {params.albumId} Cards count: {cards.length}
+        My album: {params.albumId} Cards count: {cards.size}
       </div>
       <div className="grid grid-cols-5 gap-1">
-        {cards.map((card) => (
-          <Card key={card.name} card={card} />
-        ))}
+        {Array.from(cards.keys()).map((cardName) => {
+          const card = cards.get(cardName)![0];
+          return <Card key={card.name} card={card} />;
+        })}
       </div>
     </div>
   );

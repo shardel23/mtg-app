@@ -109,7 +109,9 @@ export async function createAlbumFromSetId(setId: string): Promise<void> {
   revalidatePath("/");
 }
 
-export async function getAlbumCards(albumId: number): Promise<CardData[]> {
+export async function getAlbumCards(
+  albumId: number
+): Promise<Map<string, CardData[]>> {
   const album = await prisma.album.findUnique({
     where: {
       id: albumId,
@@ -122,7 +124,7 @@ export async function getAlbumCards(albumId: number): Promise<CardData[]> {
       },
     },
   });
-  return (
+  const cardsData: CardData[] =
     album?.cards.map((card) => ({
       id: card.id,
       name: card.name,
@@ -130,8 +132,16 @@ export async function getAlbumCards(albumId: number): Promise<CardData[]> {
       isInCollection: card.isCollected,
       albumId: albumId,
       collectorNumber: card.collectorNumber.toString(),
-    })) ?? []
-  );
+    })) ?? [];
+  const cardNameToVersions = new Map<string, CardData[]>();
+  cardsData.forEach((card) => {
+    if (cardNameToVersions.has(card.name)) {
+      cardNameToVersions.get(card.name)?.push(card);
+      return;
+    }
+    cardNameToVersions.set(card.name, [card]);
+  });
+  return cardNameToVersions;
 }
 
 export async function markCardIsCollected(
