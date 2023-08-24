@@ -79,13 +79,13 @@ export async function createAlbumFromSetId(setId: string): Promise<void> {
   }
   const cards = (await set.getCards({ unique: "prints" }))
     .filter((card) => !card.digital)
+    // .filter((card) => card.booster === true)
     .filter(
       (card) =>
         card.layout === "normal" ||
         card.collector_number.endsWith("a") ||
         endsWithNumber(card.collector_number)
-    )
-    .filter((card) => card.booster === true);
+    );
   await prisma.album.create({
     data: {
       name: set.name,
