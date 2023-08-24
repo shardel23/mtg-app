@@ -1,12 +1,25 @@
+function generateGridColumnsClasses() {
+  const gridColumns = Array.from({ length: 12 }, (_, i) => i + 1);
+  const gridColumnsClasses = gridColumns.map(
+    (numOfColumns) => `grid-cols-${numOfColumns}`
+  );
+  return gridColumnsClasses;
+}
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
+  purge: {
+    options: {
+      safelist: generateGridColumnsClasses(),
+    },
+  },
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   theme: {
     container: {
       center: true,
@@ -73,4 +86,4 @@ module.exports = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+};
