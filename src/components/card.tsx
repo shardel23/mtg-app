@@ -55,7 +55,15 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
             width={300}
           />
           <CheckCircle
-            className="absolute top-6 left-6 hover:text-green-500 cursor-pointer"
+            className={
+              "absolute top-6 left-6  cursor-pointer " +
+              (isVersionCollected[cardVersionNumberToDisplay]
+                ? "text-green-500 "
+                : "text-white ") +
+              (isVersionCollected[cardVersionNumberToDisplay]
+                ? "hover:text-white"
+                : "hover:text-green-500")
+            }
             onClick={() => {
               setIsVersionCollected((curr) => {
                 const newIsVersionCollected = [...curr];
