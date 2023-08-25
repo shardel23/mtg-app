@@ -29,7 +29,11 @@ export async function Sidebar() {
             <CreateNewAlbum sets={sets} />
           </div>
           {albums.map((album) => (
-            <Button variant="ghost" className="w-full justify-start">
+            <Button
+              key={album.id}
+              variant="ghost"
+              className="w-full justify-start"
+            >
               <Link href={`/view/${album.id}`}>{album.name}</Link>
             </Button>
           ))}
