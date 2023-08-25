@@ -34,7 +34,7 @@ function AlbumView({
   }, [cards]);
 
   return (
-    <div className="md:space-y-2">
+    <div className="pt-2 md:pt-0 space-y-2">
       <div>Cards count: {cardToDisplay.size}</div>
       <div className="flex justify-between">
         <div className="flex gap-x-2 items-center">
@@ -69,7 +69,7 @@ function AlbumView({
             <Trash />
           </Button>
         </div>
-        <div className="flex gap-x-6 items-center invisible md:visible">
+        <div className="gap-x-6 items-center hidden md:flex md:visible">
           <div>Cards per row:</div>
           <Button
             variant="ghost"
