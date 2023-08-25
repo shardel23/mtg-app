@@ -58,11 +58,11 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
             className={
               "absolute top-1/10 left-1/10 cursor-pointer " +
               (isVersionCollected[cardVersionNumberToDisplay]
-                ? "text-green-500 "
-                : "text-white ") +
+                ? "text-green-400 "
+                : "text-slate-400 ") +
               (isVersionCollected[cardVersionNumberToDisplay]
-                ? "hover:text-white"
-                : "hover:text-green-500")
+                ? "md:hover:text-white"
+                : "md:hover:text-green-500")
             }
             onClick={() => {
               setIsVersionCollected((curr) => {
@@ -82,14 +82,14 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
           />
           {cardVersions.length > 1 && (
             <ArrowRightLeft
-              className="absolute top-1/10 right-1/10 hover:text-red-500 cursor-pointer"
+              className="absolute top-1/10 right-1/10 text-slate-400 md:hover:text-red-500 cursor-pointer"
               onClick={() => {
                 changeCardVersion();
               }}
             />
           )}
           <Trash
-            className="absolute bottom-1/10 right-1/10 hover:text-red-500 cursor-pointer"
+            className="invisible md:visible absolute bottom-1/10 right-1/10 md:hover:text-red-500 cursor-pointer"
             onClick={() => {
               startTransition(() => {
                 // TODO: Add optimistic update

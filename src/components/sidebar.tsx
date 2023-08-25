@@ -10,8 +10,8 @@ export async function Sidebar() {
     <div className="md:w-1/4 overflow-x-scroll">
       <div className="md:space-y-4 py-4">
         <div className="md:px-3 flex items-center md:flex-col">
-          <div className="flex items-center justify-between md:pb-4">
-            <h2 className="md:px-4 text-lg font-semibold tracking-tight">
+          <div className="flex items-center justify-between gap-x-3 md:pb-4">
+            <h2 className="md:px-4 text-sm md:text-lg font-semibold tracking-tight">
               My Albums
             </h2>
             <CreateNewAlbum sets={sets} />
