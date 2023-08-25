@@ -34,15 +34,16 @@ function AlbumView({
   }, [cards]);
 
   return (
-    <div>
+    <div className="md:space-y-2">
       <div>Cards count: {cardToDisplay.size}</div>
       <div className="flex justify-between">
-        <div className="flex gap-x-6 items-center">
+        <div className="flex gap-x-2 items-center">
           <Button
             variant="default"
             onClick={() => {
               setCardsToDisplay(cards);
             }}
+            className="text-xs px-1 w-24 md:text-sm md:w-32"
           >
             Show all
           </Button>
@@ -51,8 +52,9 @@ function AlbumView({
             onClick={() => {
               showMissingCards();
             }}
+            className="text-xs px-1 w-24 md:text-sm md:w-32"
           >
-            Show missing cards
+            Show missing
           </Button>
           <Button
             variant="destructive"
@@ -67,7 +69,7 @@ function AlbumView({
             <Trash />
           </Button>
         </div>
-        <div className="flex gap-x-6 items-center">
+        <div className="flex gap-x-6 items-center invisible md:visible">
           <div>Cards per row:</div>
           <Button
             variant="ghost"
@@ -84,7 +86,7 @@ function AlbumView({
           </Button>
         </div>
       </div>
-      <div className={`grid grid-cols-${cardsPerRow} gap-1`}>
+      <div className={`grid grid-cols-3 md:grid-cols-${cardsPerRow} gap-1`}>
         {Array.from(cardToDisplay.keys()).map((cardName) => {
           const cardVersions = cardToDisplay.get(cardName)!;
           return <Card key={cardName} cardVersions={cardVersions} />;
