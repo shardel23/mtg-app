@@ -12,11 +12,7 @@ function generateGridColumnsClasses() {
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
-  purge: {
-    options: {
-      safelist: generateGridColumnsClasses(),
-    },
-  },
+  safelist: generateGridColumnsClasses(),
   content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
