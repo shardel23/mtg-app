@@ -7,7 +7,7 @@ export async function Sidebar() {
   const sets = await getAllSets();
   const albums = await getAllAlbums();
   return (
-    <div className="md:w-1/4 overflow-x-scroll">
+    <div className="md:w-1/4 overflow-x-auto">
       <div className="md:space-y-4 py-4">
         <div className="md:px-3 flex items-center md:flex-col">
           <div className="flex items-center justify-between gap-x-3 md:pb-4">
