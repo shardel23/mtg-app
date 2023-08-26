@@ -1,8 +1,11 @@
 function generateGridColumnsClasses() {
   const gridColumns = Array.from({ length: 12 }, (_, i) => i + 1);
-  const gridColumnsClasses = gridColumns.map(
-    (numOfColumns) => `grid-cols-${numOfColumns}`
-  );
+  const gridColumnsClasses = gridColumns
+    .map((numOfColumns) => {
+      const className = `grid-cols-${numOfColumns}`;
+      return [className, `md:${className}`];
+    })
+    .flat();
   return gridColumnsClasses;
 }
 
