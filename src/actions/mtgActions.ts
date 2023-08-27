@@ -4,6 +4,13 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import * as Scry from "scryfall-sdk";
 
+export type AlbumData = {
+  id: number;
+  name: string;
+  setId: string;
+  setName: string;
+};
+
 export type SetData = { name: string; id: string };
 
 export type CardData = {
@@ -44,9 +51,7 @@ export async function getAllCardsOfSet(setName: string): Promise<CardData[]> {
     }));
 }
 
-export async function getAllAlbums(): Promise<
-  { id: number; name: string; setId: string; setName: string }[]
-> {
+export async function getAllAlbums(): Promise<AlbumData[]> {
   const albums = await prisma.album.findMany();
   return albums
     .filter((album) => album.setId != null && album.setName != null)

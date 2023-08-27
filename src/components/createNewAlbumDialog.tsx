@@ -2,7 +2,8 @@
 
 import { SetData, createAlbumFromSetId } from "@/actions/mtgActions";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useState } from "react";
+import CSVUploader from "./csvUploader";
 import PlusCircle from "./icons/plus-circle";
 import SetSelector from "./setSelector";
 import { Button } from "./ui/button";
@@ -17,7 +18,6 @@ import {
 } from "./ui/dialog";
 
 function CreateNewAlbumDialog({ sets }: { sets: Array<SetData> }) {
-  const [isPending, startTransition] = useTransition();
   const [selectedSetId, setSelectedSetId] = useState<string>("");
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const router = useRouter();
@@ -34,13 +34,15 @@ function CreateNewAlbumDialog({ sets }: { sets: Array<SetData> }) {
             Select a magic set to create a new album
           </DialogDescription>
         </DialogHeader>
-        <SetSelector
-          sets={sets}
-          onSetChange={(setId) => {
-            setSelectedSetId(setId);
-          }}
-        />
-        <DialogFooter>
+        <div className="flex justify-between">
+          <div className="w-3/4">
+            <SetSelector
+              sets={sets}
+              onSetChange={(setId) => {
+                setSelectedSetId(setId);
+              }}
+            />
+          </div>
           <form
             action={async () => {
               if (selectedSetId === "") {
@@ -53,9 +55,14 @@ function CreateNewAlbumDialog({ sets }: { sets: Array<SetData> }) {
               }
             }}
           >
-            <Button type="submit">Add Album</Button>
+            <Button type="submit" disabled={selectedSetId === ""}>
+              Add Album
+            </Button>
           </form>
-        </DialogFooter>
+        </div>
+        <div>Or</div>
+        <CSVUploader />
+        <DialogFooter></DialogFooter>
       </DialogContent>
     </Dialog>
   );
