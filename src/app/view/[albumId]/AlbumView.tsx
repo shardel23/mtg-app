@@ -1,11 +1,10 @@
 "use client";
 
-import { CardData, deleteAlbum } from "@/actions/mtgActions";
+import { CardData } from "@/actions/mtgActions";
 import Card from "@/components/card";
+import DeleteAlbumDialog from "@/components/deleteAlbumDialog";
 import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useCallback, useState, useTransition } from "react";
+import { useCallback, useState } from "react";
 
 function AlbumView({
   albumId,
@@ -17,8 +16,6 @@ function AlbumView({
   const [cardToDisplay, setCardsToDisplay] =
     useState<Map<string, CardData[]>>(cards);
   const [cardsPerRow, setCardsPerRow] = useState<number>(5);
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
 
   const showMissingCards = useCallback(() => {
     const missingCards = new Map<string, CardData[]>();
@@ -56,18 +53,7 @@ function AlbumView({
           >
             Show missing
           </Button>
-          <Button
-            variant="destructive"
-            size={"icon"}
-            onClick={() => {
-              startTransition(() => {
-                deleteAlbum(albumId);
-                router.push("/");
-              });
-            }}
-          >
-            <Trash />
-          </Button>
+          <DeleteAlbumDialog albumId={albumId} />
         </div>
         <div className="gap-x-6 items-center hidden md:flex md:visible">
           <div>Cards per row:</div>
