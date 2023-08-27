@@ -16,7 +16,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 
-function CreateNewAlbum({ sets }: { sets: Array<SetData> }) {
+function CreateNewAlbumDialog({ sets }: { sets: Array<SetData> }) {
   const [isPending, startTransition] = useTransition();
   const [selectedSetId, setSelectedSetId] = useState<string>("");
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
@@ -61,4 +61,4 @@ function CreateNewAlbum({ sets }: { sets: Array<SetData> }) {
   );
 }
 
-export default CreateNewAlbum;
+export default CreateNewAlbumDialog;

@@ -1,15 +1,11 @@
 "use client";
 
-import {
-  CardData,
-  deleteCardFromAlbum,
-  markCardIsCollected,
-} from "@/actions/mtgActions";
+import { CardData, markCardIsCollected } from "@/actions/mtgActions";
 import Image from "next/image";
 import { useCallback, useState, useTransition } from "react";
+import DeleteCardDialog from "./deleteCardDialog";
 import ArrowRightLeft from "./icons/arrow-right-left";
 import CheckCircle from "./icons/check-circle";
-import Trash from "./icons/trash";
 
 function Card({ cardVersions }: { cardVersions: CardData[] }) {
   const [isPending, startTransition] = useTransition();
@@ -88,14 +84,9 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
               }}
             />
           )}
-          <Trash
-            className="invisible md:visible absolute bottom-1/10 right-1/10 md:hover:text-red-500 cursor-pointer"
-            onClick={() => {
-              startTransition(() => {
-                // TODO: Add optimistic update
-                deleteCardFromAlbum(card.albumId as number, card.name);
-              });
-            }}
+          <DeleteCardDialog
+            albumId={card.albumId as number}
+            cardName={card.name}
           />
         </div>
       )}

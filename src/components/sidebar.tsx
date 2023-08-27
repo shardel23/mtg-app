@@ -1,6 +1,6 @@
 import { getAllAlbums, getAllSets } from "@/actions/mtgActions";
 import Link from "next/link";
-import CreateNewAlbum from "./createNewAlbum";
+import CreateNewAlbumDialog from "./createNewAlbumDialog";
 import { Button } from "./ui/button";
 
 export async function Sidebar() {
@@ -14,7 +14,7 @@ export async function Sidebar() {
             <h2 className="md:px-4 text-sm md:text-lg font-semibold tracking-tight">
               My Albums
             </h2>
-            <CreateNewAlbum sets={sets} />
+            <CreateNewAlbumDialog sets={sets} />
           </div>
           <div className="flex flex-row md:flex-col md:space-y-1">
             {albums.map((album) => (
