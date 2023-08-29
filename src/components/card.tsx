@@ -40,6 +40,7 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
       {card.image && (
         <div className="relative">
           <Image
+            unoptimized
             className={`${
               !isVersionCollected[cardVersionNumberToDisplay]
                 ? "opacity-50"
