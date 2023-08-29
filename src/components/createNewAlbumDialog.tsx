@@ -1,8 +1,9 @@
 "use client";
 
 import { SetData, createAlbumFromSetId } from "@/actions/mtgActions";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import CSVUploader from "./csvUploader";
 import PlusCircle from "./icons/plus-circle";
 import SetSelector from "./setSelector";
@@ -18,6 +19,7 @@ import {
 } from "./ui/dialog";
 
 function CreateNewAlbumDialog({ sets }: { sets: Array<SetData> }) {
+  const [isPending, startTransition] = useTransition();
   const [selectedSetId, setSelectedSetId] = useState<string>("");
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const router = useRouter();
@@ -48,20 +50,30 @@ function CreateNewAlbumDialog({ sets }: { sets: Array<SetData> }) {
               if (selectedSetId === "") {
                 return;
               }
-              const albumId = await createAlbumFromSetId(selectedSetId);
-              setIsDialogOpen(false);
-              if (albumId !== -1) {
-                router.push(`/view/${albumId}`);
-              }
+              startTransition(async () => {
+                const albumId = await createAlbumFromSetId(selectedSetId);
+                setIsDialogOpen(false);
+                if (albumId !== -1) {
+                  router.push(`/view/${albumId}`);
+                }
+              });
             }}
           >
-            <Button type="submit" disabled={selectedSetId === ""}>
+            <Button type="submit" disabled={selectedSetId === "" || isPending}>
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Add Album
             </Button>
           </form>
         </div>
         <div>Or</div>
-        <CSVUploader />
+        <CSVUploader
+          onUploadSuccess={(albumId: number) => {
+            setIsDialogOpen(false);
+            if (albumId !== -1) {
+              router.push(`/view/${albumId}`);
+            }
+          }}
+        />
         <DialogFooter></DialogFooter>
       </DialogContent>
     </Dialog>

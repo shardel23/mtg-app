@@ -1,14 +1,25 @@
 "use client";
 
+import { createAlbumFromCSV } from "@/actions/mtgActions";
 import { csvFileToArray } from "@/lib/utils";
-import { ChangeEventHandler, MouseEventHandler, useState } from "react";
+import { Loader2 } from "lucide-react";
+import {
+  ChangeEventHandler,
+  MouseEventHandler,
+  useState,
+  useTransition,
+} from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
-const fileReader = new FileReader();
-
-function CSVUploader() {
+function CSVUploader({
+  onUploadSuccess,
+}: {
+  onUploadSuccess: (albumId: number) => void;
+}) {
+  const [isPending, startTransition] = useTransition();
   const [file, setFile] = useState<File>();
+  const [fileReader, setFileReader] = useState<FileReader>(new FileReader());
 
   const handleOnChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setFile(e.target.files![0]);
@@ -20,6 +31,20 @@ function CSVUploader() {
       fileReader.onload = function (event) {
         const text = event.target?.result as string;
         const array = csvFileToArray(text);
+        const cards = array.map((row) => {
+          return {
+            cardName: row["Name"],
+            setCode: row["Set code"],
+            collectorNumber: row["Collector number"],
+            cardId: row["Scryfall ID"],
+          };
+        });
+        startTransition(async () => {
+          const albumId = await createAlbumFromCSV(cards);
+          if (albumId !== -1) {
+            onUploadSuccess(albumId);
+          }
+        });
       };
       fileReader.readAsText(file);
     }
@@ -40,8 +65,9 @@ function CSVUploader() {
         onClick={(e) => {
           handleOnSubmit(e);
         }}
-        disabled={!file}
+        disabled={!file || isPending}
       >
+        {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
         Import CSV
       </Button>
     </div>

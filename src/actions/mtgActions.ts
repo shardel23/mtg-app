@@ -116,6 +116,59 @@ export async function createAlbumFromSetId(setId: string): Promise<number> {
   return album.id;
 }
 
+export type createAlbumFromCSVInput = {
+  cardName: string;
+  setCode: string;
+  collectorNumber: string;
+  cardId: string;
+}[];
+
+export async function createAlbumFromCSV(
+  input: createAlbumFromCSVInput
+): Promise<number> {
+  const importedCards = new Map(input.map((row) => [row.cardId, row]));
+  const set = await Scry.Sets.byCode(input[0].setCode);
+  const isSetInDB = await isSetExists(set.name);
+  if (isSetInDB) {
+    return -1;
+  }
+  console.log("Getting cards... ", new Date().toLocaleTimeString());
+  const cards = (await set.getCards({ unique: "prints" }))
+    .filter((card) => !card.digital)
+    .filter(
+      (card) =>
+        card.layout === "normal" ||
+        card.collector_number.endsWith("a") ||
+        endsWithNumber(card.collector_number)
+    );
+  console.log("Creating album... ", new Date().toLocaleTimeString());
+  const album = await prisma.album.create({
+    data: {
+      name: set.name,
+      setId: set.id,
+      setName: set.name,
+      cards: {
+        create: cards.map((card) => ({
+          name: card.name,
+          imageUri: getImageUri(card),
+          id: card.id,
+          collectorNumber: parseInt(
+            endsWithNumber(card.collector_number)
+              ? card.collector_number
+              : card.collector_number.slice(0, -1)
+          ),
+          setName: set.name,
+          setId: set.id,
+          isCollected: importedCards.has(card.id),
+        })),
+      },
+    },
+  });
+  console.log("Done ", new Date().toLocaleTimeString());
+  revalidatePath("/");
+  return album.id;
+}
+
 export async function getAlbumCards(
   albumId: number
 ): Promise<Map<string, CardData[]>> {
