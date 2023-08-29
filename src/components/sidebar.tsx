@@ -19,6 +19,7 @@ export async function Sidebar() {
           <div className="flex flex-row md:flex-col md:space-y-1">
             {albums.map((album) => (
               <Button
+                asChild
                 key={album.id}
                 variant="ghost"
                 className="w-full justify-start"
