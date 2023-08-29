@@ -1,7 +1,7 @@
+import Header from "@/components/header";
 import { Sidebar } from "@/components/sidebar";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Link from "next/link";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -20,9 +20,7 @@ export default function RootLayout({
     <html lang="en" className="dark w-full">
       <body className={inter.className + " w-full"}>
         <div className="flex-1 space-y-4 p-3 md:p-8 md:pt-6 w-full">
-          <div className="font-bold text-xl md:text-4xl">
-            <Link href={`/`}>MTG Collection</Link>
-          </div>
+          <Header />
           <div className="flex w-full flex-col md:flex-row">
             <Sidebar />
             <div className="w-full">{children}</div>
