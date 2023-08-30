@@ -10,7 +10,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "./ui/dialog";
 
 function DeleteCardDialog({
@@ -25,12 +24,13 @@ function DeleteCardDialog({
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogTrigger>
-        <Trash className="invisible md:visible absolute bottom-1/10 right-1/10 md:hover:text-red-500 md:cursor-pointer" />
-      </DialogTrigger>
+      <Trash
+        className="invisible md:visible absolute bottom-1/10 right-1/10 md:hover:text-red-500 md:cursor-pointer"
+        onClick={() => setIsDialogOpen(true)}
+      />
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Are you sure you want to delete this card?</DialogTitle>
+          <DialogTitle>Are you sure you want to delete {cardName}?</DialogTitle>
           <DialogDescription>
             This action is irreversible. You will lose all the data associated
           </DialogDescription>
