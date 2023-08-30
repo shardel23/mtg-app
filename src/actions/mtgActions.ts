@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { cardsArrayToMap } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import * as Scry from "scryfall-sdk";
 
@@ -193,15 +194,7 @@ export async function getAlbumCards(
       albumId: albumId,
       collectorNumber: card.collectorNumber.toString(),
     })) ?? [];
-  const cardNameToVersions = new Map<string, CardData[]>();
-  cardsData.forEach((card) => {
-    if (cardNameToVersions.has(card.name)) {
-      cardNameToVersions.get(card.name)?.push(card);
-      return;
-    }
-    cardNameToVersions.set(card.name, [card]);
-  });
-  return cardNameToVersions;
+  return cardsArrayToMap(cardsData);
 }
 
 export async function markCardIsCollected(
@@ -250,4 +243,26 @@ export async function deleteCardFromAlbum(
     },
   });
   revalidatePath(`/view/{albumId}`);
+}
+
+export async function searchCardInCollection(
+  cardName: string
+): Promise<Map<string, CardData[]>> {
+  const cards = await prisma.card.findMany({
+    where: {
+      name: {
+        contains: cardName,
+        mode: "insensitive",
+      },
+    },
+  });
+  const results = cards.map((card) => ({
+    id: card.id,
+    name: card.name,
+    image: card.imageUri,
+    isInCollection: card.isCollected,
+    albumId: card.albumId!,
+    collectorNumber: card.collectorNumber.toString(),
+  }));
+  return cardsArrayToMap(results);
 }

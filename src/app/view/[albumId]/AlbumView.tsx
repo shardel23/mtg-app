@@ -1,7 +1,7 @@
 "use client";
 
 import { CardData } from "@/actions/mtgActions";
-import Card from "@/components/card";
+import CardGrid from "@/components/cardGrid";
 import DeleteAlbumDialog from "@/components/deleteAlbumDialog";
 import { Button } from "@/components/ui/button";
 import { useCallback, useState } from "react";
@@ -72,12 +72,7 @@ function AlbumView({
           </Button>
         </div>
       </div>
-      <div className={`grid grid-cols-3 md:grid-cols-${cardsPerRow} gap-1`}>
-        {Array.from(cardToDisplay.keys()).map((cardName) => {
-          const cardVersions = cardToDisplay.get(cardName)!;
-          return <Card key={cardName} cardVersions={cardVersions} />;
-        })}
-      </div>
+      <CardGrid cards={cardToDisplay} cardsPerRow={cardsPerRow} />
     </div>
   );
 }

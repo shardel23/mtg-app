@@ -1,3 +1,4 @@
+import { CardData } from "@/actions/mtgActions";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -32,4 +33,16 @@ export const csvFileToArray = (string: string) => {
   });
 
   return array;
+};
+
+export const cardsArrayToMap = (cards: CardData[]): Map<string, CardData[]> => {
+  const cardNameToVersions = new Map<string, CardData[]>();
+  cards.forEach((card) => {
+    if (cardNameToVersions.has(card.name)) {
+      cardNameToVersions.get(card.name)?.push(card);
+      return;
+    }
+    cardNameToVersions.set(card.name, [card]);
+  });
+  return cardNameToVersions;
 };

@@ -1,13 +1,16 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { ChangeEventHandler, KeyboardEventHandler, useState } from "react";
 import { Input } from "./ui/input";
 
 function CardSearch() {
   const [searchString, setSearchString] = useState("");
+  const router = useRouter();
+
   const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
     if (event.key === "Enter") {
-      console.log(searchString);
+      router.push(`/search/${searchString}`);
     }
   };
 
@@ -17,6 +20,7 @@ function CardSearch() {
 
   return (
     <Input
+      value={searchString}
       className="w-72 foc"
       placeholder="Search..."
       autoFocus
