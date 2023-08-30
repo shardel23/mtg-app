@@ -21,7 +21,7 @@ function CardSearch() {
   return (
     <Input
       value={searchString}
-      className="w-72 foc"
+      className="w-1/2 md:w-72"
       placeholder="Search..."
       autoFocus
       onChange={handleChange}
