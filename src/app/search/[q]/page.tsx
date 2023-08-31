@@ -7,6 +7,5 @@ export default async function SearchResultsPage({
   params: { q: string };
 }) {
   const cards = await searchCardInCollection(params.q);
-  console.log(cards);
-  return <SearchResultsView results={cards} />;
+  return <SearchResultsView results={cards} query={params.q} />;
 }

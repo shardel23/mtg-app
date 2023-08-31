@@ -32,7 +32,7 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
   const card = cardVersions[cardVersionNumberToDisplay];
 
   return (
-    <div className="border shadow-md rounded p-1">
+    <div className="shadow-md rounded p-1">
       {card.image && (
         <div>
           <div className="relative">
@@ -87,7 +87,7 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
               cardName={card.name}
             />
           </div>
-          <div className="flex justify-center items-center gap-x-1 p-1">
+          <div className="flex justify-center items-center gap-x-1 pt-1 md:pt-2">
             <img
               src={`/assets/${card.setCode}/${card.setCode}-${
                 card.rarity !== "common" ? card.rarity : `${card.rarity}-dark`
