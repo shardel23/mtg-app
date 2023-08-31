@@ -25,9 +25,10 @@ model Card {
 }
 
 model Album {
-  id      Int     @id @default(autoincrement())
-  name    String
-  setId   String?
-  setName String?
-  cards   Card[]
+  id             Int     @id @default(autoincrement())
+  name           String
+  setId          String?
+  setName        String?
+  setReleaseDate String?
+  cards          Card[]
 }
