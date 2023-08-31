@@ -10,6 +10,7 @@ export type AlbumData = {
   name: string;
   setId: string;
   setName: string;
+  setReleaseDate: string;
 };
 
 export type SetData = { name: string; id: string };
@@ -59,7 +60,11 @@ export async function getAllCardsOfSet(setName: string): Promise<CardData[]> {
 }
 
 export async function getAllAlbums(): Promise<AlbumData[]> {
-  const albums = await prisma.album.findMany();
+  const albums = await prisma.album.findMany({
+    orderBy: {
+      setReleaseDate: "desc",
+    },
+  });
   return albums
     .filter((album) => album.setId != null && album.setName != null)
     .map((album) => ({
@@ -67,6 +72,7 @@ export async function getAllAlbums(): Promise<AlbumData[]> {
       name: album.name,
       setId: album.setId as string,
       setName: album.setName as string,
+      setReleaseDate: album.setReleaseDate as string,
     }));
 }
 
@@ -103,6 +109,7 @@ export async function createAlbumFromSetId(setId: string): Promise<number> {
       name: set.name,
       setId: set.id,
       setName: set.name,
+      setReleaseDate: set.released_at,
       cards: {
         create: cards.map((card) => ({
           name: card.name,
@@ -157,6 +164,7 @@ export async function createAlbumFromCSV(
       name: set.name,
       setId: set.id,
       setName: set.name,
+      setReleaseDate: set.released_at,
       cards: {
         create: cards.map((card) => ({
           name: card.name,
