@@ -32,7 +32,7 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
   const card = cardVersions[cardVersionNumberToDisplay];
 
   return (
-    <div>
+    <div className="border shadow-md rounded p-1">
       {card.image && (
         <div>
           <div className="relative">
@@ -87,18 +87,20 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
               cardName={card.name}
             />
           </div>
-          <div className="flex justify-center gap-x-2">
-            <Image
-              unoptimized
+          <div className="flex justify-center items-center gap-x-1 p-1">
+            <img
               src={`/assets/${card.setCode}/${card.setCode}-${
                 card.rarity !== "common" ? card.rarity : `${card.rarity}-dark`
               }.svg`}
-              height="15"
-              width="15"
               alt={card.setCode}
+              className="h-2.5 w-2.5 md:h-4 md:w-4"
             />
-            <div> {card.setCode.toUpperCase()} </div>
-            <div>#{card.collectorNumber}</div>
+            <div className="text-xxs md:text-xs">
+              {card.setCode.toUpperCase()}
+            </div>
+            <div className="text-gray-400 text-xxxs md:text-xxs">
+              #{card.collectorNumber}
+            </div>
           </div>
         </div>
       )}
