@@ -38,5 +38,5 @@ next-env.d.ts
 .vercel
 .env*.local
 
-# scripts
-/scripts
+# packages
+/packages
