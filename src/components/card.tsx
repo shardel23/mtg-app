@@ -47,6 +47,8 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
               alt={card.name}
               height={400}
               width={300}
+              placeholder="blur"
+              blurDataURL="/assets/card-back.jpg"
             />
             <CheckCircle
               className={
