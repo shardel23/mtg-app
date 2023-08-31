@@ -90,7 +90,7 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
           <div className="flex justify-center gap-x-2">
             <Image
               unoptimized
-              src={`/assets/${card.setCode}-${
+              src={`/assets/${card.setCode}/${card.setCode}-${
                 card.rarity !== "common" ? card.rarity : `${card.rarity}-dark`
               }.svg`}
               height="15"
