@@ -21,6 +21,9 @@ model Card {
   name            String
   setId           String
   setName         String
+  setCode         String
+  setIconSvgUri   String
+  rarity          String
   collectorNumber Int
   imageUri        String
   isCollected     Boolean @default(false)

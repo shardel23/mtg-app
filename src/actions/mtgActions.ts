@@ -21,6 +21,9 @@ export type CardData = {
   isInCollection?: boolean;
   albumId?: number;
   collectorNumber: string;
+  setCode: string;
+  setIconUri: string;
+  rarity: string;
 };
 
 function getImageUri(card: Scry.Card): string {
@@ -49,6 +52,9 @@ export async function getAllCardsOfSet(setName: string): Promise<CardData[]> {
       name: card.name,
       image: getImageUri(card),
       collectorNumber: card.collector_number,
+      setCode: set.code,
+      setIconUri: set.icon_svg_uri,
+      rarity: card.rarity,
     }));
 }
 
@@ -109,6 +115,9 @@ export async function createAlbumFromSetId(setId: string): Promise<number> {
           ),
           setName: set.name,
           setId: set.id,
+          setCode: set.code,
+          setIconSvgUri: set.icon_svg_uri,
+          rarity: card.rarity,
         })),
       },
     },
@@ -161,6 +170,9 @@ export async function createAlbumFromCSV(
           setName: set.name,
           setId: set.id,
           isCollected: importedCards.has(card.id),
+          setCode: set.code,
+          setIconSvgUri: set.icon_svg_uri,
+          rarity: card.rarity,
         })),
       },
     },
@@ -193,6 +205,9 @@ export async function getAlbumCards(
       isInCollection: card.isCollected,
       albumId: albumId,
       collectorNumber: card.collectorNumber.toString(),
+      setCode: card.setCode,
+      setIconUri: card.setIconSvgUri,
+      rarity: card.rarity,
     })) ?? [];
   return cardsArrayToMap(cardsData);
 }
@@ -263,6 +278,9 @@ export async function searchCardInCollection(
     isInCollection: card.isCollected,
     albumId: card.albumId!,
     collectorNumber: card.collectorNumber.toString(),
+    setCode: card.setCode,
+    setIconUri: card.setIconSvgUri,
+    rarity: card.rarity,
   }));
   return cardsArrayToMap(results);
 }

@@ -33,62 +33,73 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
 
   return (
     <div>
-      <div className="flex justify-between">
-        <div className="truncate">{card.name}</div>
-        <div>#{card.collectorNumber}</div>
-      </div>
       {card.image && (
-        <div className="relative">
-          <Image
-            unoptimized
-            className={`${
-              !isVersionCollected[cardVersionNumberToDisplay]
-                ? "opacity-50"
-                : ""
-            }`}
-            src={card.image}
-            alt={card.name}
-            height={400}
-            width={300}
-          />
-          <CheckCircle
-            className={
-              "absolute top-1/10 left-1/10 cursor-pointer " +
-              (isVersionCollected[cardVersionNumberToDisplay]
-                ? "text-green-400 "
-                : "text-slate-400 ") +
-              (isVersionCollected[cardVersionNumberToDisplay]
-                ? "md:hover:text-white"
-                : "md:hover:text-green-500")
-            }
-            onClick={() => {
-              setIsVersionCollected((curr) => {
-                const newIsVersionCollected = [...curr];
-                newIsVersionCollected[cardVersionNumberToDisplay] =
-                  !newIsVersionCollected[cardVersionNumberToDisplay];
-                return newIsVersionCollected;
-              });
-              startTransition(() => {
-                markCardIsCollected(
-                  card.albumId as number,
-                  card.id,
-                  !isVersionCollected[cardVersionNumberToDisplay]
-                );
-              });
-            }}
-          />
-          {cardVersions.length > 1 && (
-            <ArrowRightLeft
-              className="absolute top-1/10 right-1/10 text-slate-400 md:hover:text-red-500 cursor-pointer"
+        <div>
+          <div className="relative">
+            <Image
+              unoptimized
+              className={`${
+                !isVersionCollected[cardVersionNumberToDisplay]
+                  ? "opacity-50"
+                  : ""
+              }`}
+              src={card.image}
+              alt={card.name}
+              height={400}
+              width={300}
+            />
+            <CheckCircle
+              className={
+                "absolute top-1/10 left-1/10 cursor-pointer " +
+                (isVersionCollected[cardVersionNumberToDisplay]
+                  ? "text-green-400 "
+                  : "text-slate-400 ") +
+                (isVersionCollected[cardVersionNumberToDisplay]
+                  ? "md:hover:text-white"
+                  : "md:hover:text-green-500")
+              }
               onClick={() => {
-                changeCardVersion();
+                setIsVersionCollected((curr) => {
+                  const newIsVersionCollected = [...curr];
+                  newIsVersionCollected[cardVersionNumberToDisplay] =
+                    !newIsVersionCollected[cardVersionNumberToDisplay];
+                  return newIsVersionCollected;
+                });
+                startTransition(() => {
+                  markCardIsCollected(
+                    card.albumId as number,
+                    card.id,
+                    !isVersionCollected[cardVersionNumberToDisplay]
+                  );
+                });
               }}
             />
-          )}
-          <DeleteCardDialog
-            albumId={card.albumId as number}
-            cardName={card.name}
-          />
+            {cardVersions.length > 1 && (
+              <ArrowRightLeft
+                className="absolute top-1/10 right-1/10 text-slate-400 md:hover:text-red-500 cursor-pointer"
+                onClick={() => {
+                  changeCardVersion();
+                }}
+              />
+            )}
+            <DeleteCardDialog
+              albumId={card.albumId as number}
+              cardName={card.name}
+            />
+          </div>
+          <div className="flex justify-center gap-x-2">
+            <Image
+              unoptimized
+              src={`/assets/${card.setCode}-${
+                card.rarity !== "common" ? card.rarity : `${card.rarity}-dark`
+              }.svg`}
+              height="15"
+              width="15"
+              alt={card.setCode}
+            />
+            <div> {card.setCode.toUpperCase()} </div>
+            <div>#{card.collectorNumber}</div>
+          </div>
         </div>
       )}
     </div>
