@@ -8,9 +8,11 @@ import { useCallback, useMemo, useState } from "react";
 
 function AlbumView({
   albumId,
+  albumName,
   cards,
 }: {
   albumId: number;
+  albumName: string;
   cards: Map<string, CardData[]>;
 }) {
   const [cardToDisplay, setCardsToDisplay] =
@@ -39,7 +41,10 @@ function AlbumView({
 
   return (
     <div className="pt-2 md:pt-0 space-y-2">
-      <div>{`Collected: ${collectedCardsCount}/${cards.size}`} </div>
+      <div className="text-xl"> {albumName} </div>
+      <div className="text-sm">
+        {`Collected: ${collectedCardsCount}/${cards.size}`}{" "}
+      </div>
       <div className="flex justify-between">
         <div className="flex gap-x-2 items-center">
           <Button

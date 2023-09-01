@@ -164,7 +164,7 @@ export async function createAlbumFromCSV(
 
 export async function getAlbumCards(
   albumId: number
-): Promise<Map<string, CardData[]>> {
+): Promise<{ albumName: string; cards: Map<string, CardData[]> }> {
   const album = await prisma.album.findUnique({
     where: {
       id: albumId,
@@ -177,6 +177,12 @@ export async function getAlbumCards(
       },
     },
   });
+  if (album == null) {
+    return {
+      albumName: "",
+      cards: new Map(),
+    };
+  }
   const cardsData: CardData[] =
     album?.cards.map((card) => ({
       id: card.id,
@@ -189,7 +195,10 @@ export async function getAlbumCards(
       setIconUri: card.setIconSvgUri,
       rarity: card.rarity,
     })) ?? [];
-  return cardsArrayToMap(cardsData);
+  return {
+    albumName: album.name,
+    cards: cardsArrayToMap(cardsData),
+  };
 }
 
 export async function markCardIsCollected(
