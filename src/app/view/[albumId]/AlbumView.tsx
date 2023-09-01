@@ -4,7 +4,7 @@ import { CardData } from "@/actions/mtgActions";
 import CardGrid from "@/components/cardGrid";
 import DeleteAlbumDialog from "@/components/deleteAlbumDialog";
 import { Button } from "@/components/ui/button";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 function AlbumView({
   albumId,
@@ -16,6 +16,13 @@ function AlbumView({
   const [cardToDisplay, setCardsToDisplay] =
     useState<Map<string, CardData[]>>(cards);
   const [cardsPerRow, setCardsPerRow] = useState<number>(5);
+
+  const collectedCardsCount = useMemo(() => {
+    return Array.from(cards.keys()).filter((cardName) => {
+      const cardVersions = cards.get(cardName)!;
+      return cardVersions.some((card) => card.isInCollection);
+    }).length;
+  }, [cards]);
 
   const showMissingCards = useCallback(() => {
     const missingCards = new Map<string, CardData[]>();
@@ -32,7 +39,7 @@ function AlbumView({
 
   return (
     <div className="pt-2 md:pt-0 space-y-2">
-      <div>Cards count: {cardToDisplay.size}</div>
+      <div>{`Collected: ${collectedCardsCount}/${cards.size}`} </div>
       <div className="flex justify-between">
         <div className="flex gap-x-2 items-center">
           <Button
