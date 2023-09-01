@@ -38,7 +38,11 @@ function getImageUri(card: Scry.Card): string {
 export async function getAllSets(): Promise<SetData[]> {
   const sets = await Scry.Sets.all();
   return sets
-    .filter((set) => ["core", "expansion", "masters"].includes(set.set_type))
+    .filter((set) =>
+      ["core", "expansion", "masters", "draft_innovation"].includes(
+        set.set_type
+      )
+    )
     .filter((set) => set.digital === false)
     .map((set) => ({ name: set.name, id: set.id }));
 }
