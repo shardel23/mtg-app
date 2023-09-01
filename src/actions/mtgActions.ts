@@ -27,6 +27,13 @@ export type CardData = {
   rarity: string;
 };
 
+export type createAlbumFromCSVInput = {
+  cardName: string;
+  setCode: string;
+  collectorNumber: string;
+  cardId: string;
+}[];
+
 function getImageUri(card: Scry.Card): string {
   return (
     (card.card_faces.length > 1
@@ -93,15 +100,20 @@ function endsWithNumber(text: string) {
   return /\d$/.test(text);
 }
 
-export async function createAlbumFromSetId(setId: string): Promise<number> {
-  const set = await Scry.Sets.byId(setId);
+async function createAlbum(
+  setIdentifier: { setId?: string; setCode?: string },
+  collectedCards?: Map<string, boolean>
+): Promise<number> {
+  const set =
+    setIdentifier.setId != null
+      ? await Scry.Sets.byId(setIdentifier.setId)
+      : await Scry.Sets.byCode(setIdentifier.setCode!);
   const isSetInDB = await isSetExists(set.name);
   if (isSetInDB) {
     return -1;
   }
   const cards = (await set.getCards({ unique: "prints" }))
     .filter((card) => !card.digital)
-    // .filter((card) => card.booster === true)
     .filter(
       (card) =>
         card.layout === "normal" ||
@@ -126,6 +138,7 @@ export async function createAlbumFromSetId(setId: string): Promise<number> {
           ),
           setName: set.name,
           setId: set.id,
+          isCollected: collectedCards ? collectedCards.has(card.id) : false,
           setCode: set.code,
           setIconSvgUri: set.icon_svg_uri,
           rarity: card.rarity,
@@ -137,61 +150,16 @@ export async function createAlbumFromSetId(setId: string): Promise<number> {
   return album.id;
 }
 
-export type createAlbumFromCSVInput = {
-  cardName: string;
-  setCode: string;
-  collectorNumber: string;
-  cardId: string;
-}[];
+export async function createAlbumFromSetId(setId: string): Promise<number> {
+  return await createAlbum({ setId });
+}
 
 export async function createAlbumFromCSV(
   input: createAlbumFromCSVInput
 ): Promise<number> {
-  const importedCards = new Map(input.map((row) => [row.cardId, row]));
-  const set = await Scry.Sets.byCode(input[0].setCode);
-  const isSetInDB = await isSetExists(set.name);
-  if (isSetInDB) {
-    return -1;
-  }
-  console.log("Getting cards... ", new Date().toLocaleTimeString());
-  const cards = (await set.getCards({ unique: "prints" }))
-    .filter((card) => !card.digital)
-    .filter(
-      (card) =>
-        card.layout === "normal" ||
-        card.collector_number.endsWith("a") ||
-        endsWithNumber(card.collector_number)
-    );
-  console.log("Creating album... ", new Date().toLocaleTimeString());
-  const album = await prisma.album.create({
-    data: {
-      name: set.name,
-      setId: set.id,
-      setName: set.name,
-      setReleaseDate: set.released_at,
-      cards: {
-        create: cards.map((card) => ({
-          name: card.name,
-          imageUri: getImageUri(card),
-          id: card.id,
-          collectorNumber: parseInt(
-            endsWithNumber(card.collector_number)
-              ? card.collector_number
-              : card.collector_number.slice(0, -1)
-          ),
-          setName: set.name,
-          setId: set.id,
-          isCollected: importedCards.has(card.id),
-          setCode: set.code,
-          setIconSvgUri: set.icon_svg_uri,
-          rarity: card.rarity,
-        })),
-      },
-    },
-  });
-  console.log("Done ", new Date().toLocaleTimeString());
-  revalidatePath("/");
-  return album.id;
+  const importedCards = new Map(input.map((row) => [row.cardId, true]));
+  const setCode = input[0].setCode;
+  return await createAlbum({ setCode }, importedCards);
 }
 
 export async function getAlbumCards(
