@@ -25,10 +25,18 @@ model Card {
 }
 
 model Album {
-  id             Int     @id @default(autoincrement())
+  id             Int         @id @default(autoincrement())
   name           String
   setId          String?
   setName        String?
   setReleaseDate String?
   cards          Card[]
+  collection     Collection? @relation(fields: [collectionId], references: [id])
+  collectionId   Int?
+}
+
+model Collection {
+  id     Int     @id @default(autoincrement())
+  name   String
+  albums Album[]
 }
