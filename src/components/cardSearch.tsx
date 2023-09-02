@@ -9,7 +9,7 @@ function CardSearch() {
   const router = useRouter();
 
   const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && searchString.length > 0) {
       router.push(`/search/${searchString}`);
     }
   };

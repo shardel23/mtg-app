@@ -252,6 +252,9 @@ export async function deleteCardFromAlbum(
 export async function searchCardInCollection(
   cardName: string
 ): Promise<Map<string, CardData[]>> {
+  if (cardName.length < 2) {
+    return new Map();
+  }
   const cards = await prisma.card.findMany({
     where: {
       name: {
