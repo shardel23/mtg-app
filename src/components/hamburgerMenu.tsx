@@ -14,6 +14,7 @@ import {
 import Link from "next/link";
 import CreateNewAlbumDialog from "./createNewAlbumDialog";
 import Hamburger from "./icons/hamburger";
+import { Label } from "./ui/label";
 import { ScrollArea } from "./ui/scroll-area";
 
 function HamburgerMenu({
@@ -37,7 +38,7 @@ function HamburgerMenu({
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <ScrollArea className="h-48">
+          <ScrollArea className="max-h-48">
             {albums.map((album) => (
               <DropdownMenuItem
                 asChild
@@ -53,6 +54,19 @@ function HamburgerMenu({
             <span>Profile</span>
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem> */}
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>Collection</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <ScrollArea className="max-h-36">
+            <DropdownMenuItem>
+              <Label className="mr-2">Default</Label>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Label className="mr-2">Test</Label>
+            </DropdownMenuItem>
+          </ScrollArea>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
