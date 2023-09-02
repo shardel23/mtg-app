@@ -14,6 +14,7 @@ import {
 import Link from "next/link";
 import CreateNewAlbumDialog from "./createNewAlbumDialog";
 import Hamburger from "./icons/hamburger";
+import { ScrollArea } from "./ui/scroll-area";
 
 function HamburgerMenu({
   sets,
@@ -36,15 +37,17 @@ function HamburgerMenu({
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          {albums.map((album) => (
-            <DropdownMenuItem
-              asChild
-              key={album.id}
-              className="w-full justify-start"
-            >
-              <Link href={`/view/${album.id}`}>{album.name}</Link>
-            </DropdownMenuItem>
-          ))}
+          <ScrollArea className="h-48">
+            {albums.map((album) => (
+              <DropdownMenuItem
+                asChild
+                key={album.id}
+                className="w-full justify-start"
+              >
+                <Link href={`/view/${album.id}`}>{album.name}</Link>
+              </DropdownMenuItem>
+            ))}
+          </ScrollArea>
           {/* <DropdownMenuItem>
             <User className="mr-2 h-4 w-4" />
             <span>Profile</span>
