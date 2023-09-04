@@ -1,6 +1,6 @@
 "use client";
 
-import { AlbumData, SetData } from "@/actions/mtgActions";
+import { AlbumData, SetData, setCollection } from "@/actions/mtgActions";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { useEffect, useTransition } from "react";
 import CreateNewAlbumDialog from "./createNewAlbumDialog";
 import Hamburger from "./icons/hamburger";
 import { Label } from "./ui/label";
@@ -24,6 +25,14 @@ function HamburgerMenu({
   sets: SetData[];
   albums: AlbumData[];
 }) {
+  const [_, startTransition] = useTransition();
+
+  useEffect(() => {
+    startTransition(async () => {
+      await setCollection("Default");
+    });
+  }, []);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

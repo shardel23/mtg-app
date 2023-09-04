@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { redis } from "@/lib/redis";
 import { cardsArrayToMap } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import * as Scry from "scryfall-sdk";
@@ -275,4 +276,12 @@ export async function searchCardInCollection(
     rarity: card.rarity,
   }));
   return cardsArrayToMap(results);
+}
+
+export async function setCollection(collection: string) {
+  await redis.set("collection", collection);
+}
+
+export async function getCollection() {
+  return redis.get("collection") ?? "Default";
 }
