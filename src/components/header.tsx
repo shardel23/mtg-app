@@ -32,7 +32,7 @@ async function Header() {
           />
         </div>
         <div className="flex md:hidden">
-          <HamburgerMenu sets={sets} albums={albums} />
+          <HamburgerMenu sets={sets} albums={albums} collection={collection} />
         </div>
       </div>
     </div>

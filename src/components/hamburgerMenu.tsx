@@ -1,6 +1,6 @@
 "use client";
 
-import { AlbumData, SetData } from "@/actions/mtgActions";
+import { AlbumData, SetData, setCollection } from "@/actions/mtgActions";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,6 +12,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import CreateNewAlbumDialog from "./createNewAlbumDialog";
 import Hamburger from "./icons/hamburger";
 import { Label } from "./ui/label";
@@ -20,10 +22,15 @@ import { ScrollArea } from "./ui/scroll-area";
 function HamburgerMenu({
   sets,
   albums,
+  collection,
 }: {
   sets: SetData[];
   albums: AlbumData[];
+  collection: string;
 }) {
+  const [_, startTransition] = useTransition();
+  const router = useRouter();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -61,10 +68,36 @@ function HamburgerMenu({
           <DropdownMenuSeparator />
           <ScrollArea className="max-h-36">
             <DropdownMenuItem>
-              <Label className="mr-2">Default</Label>
+              <Label
+                className="mr-2"
+                onClick={() => {
+                  startTransition(async () => {
+                    await setCollection("Default");
+                    router.push("/");
+                  });
+                }}
+              >
+                Default
+              </Label>
+              {collection === "Default" && (
+                <span className="text-green-500">✓</span>
+              )}
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Label className="mr-2">Test</Label>
+              <Label
+                className="mr-2"
+                onClick={() => {
+                  startTransition(async () => {
+                    await setCollection("Test");
+                    router.push("/");
+                  });
+                }}
+              >
+                Test
+              </Label>
+              {collection === "Test" && (
+                <span className="text-green-500">✓</span>
+              )}
             </DropdownMenuItem>
           </ScrollArea>
         </DropdownMenuGroup>
