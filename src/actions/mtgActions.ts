@@ -103,6 +103,11 @@ async function isSetExists(setName: string): Promise<boolean> {
   const album = await prisma.album.findFirst({
     where: {
       name: setName,
+      collection: {
+        name: {
+          equals: await getCollection(),
+        },
+      },
     },
   });
   return album != null;
@@ -124,6 +129,14 @@ async function createAlbum(
   if (isSetInDB) {
     return -1;
   }
+  const collection = await prisma.collection.findFirst({
+    where: {
+      name: await getCollection(),
+    },
+  });
+  if (collection == null) {
+    return -1;
+  }
   const cards = (await set.getCards({ unique: "prints" }))
     .filter((card) => !card.digital)
     .filter(
@@ -134,6 +147,7 @@ async function createAlbum(
     );
   const album = await prisma.album.create({
     data: {
+      collectionId: collection.id,
       name: set.name,
       setId: set.id,
       setName: set.name,
@@ -180,6 +194,11 @@ export async function getAlbumCards(
   const album = await prisma.album.findUnique({
     where: {
       id: albumId,
+      collection: {
+        name: {
+          equals: await getCollection(),
+        },
+      },
     },
     include: {
       cards: {
@@ -272,6 +291,13 @@ export async function searchCardInCollection(
       name: {
         contains: cardName,
         mode: "insensitive",
+      },
+      Album: {
+        collection: {
+          name: {
+            equals: await getCollection(),
+          },
+        },
       },
     },
   });
