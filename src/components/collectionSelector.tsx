@@ -1,3 +1,8 @@
+"use client";
+
+import { CollectionData, setCollection } from "@/actions/mtgActions";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import {
   Select,
   SelectContent,
@@ -7,17 +12,34 @@ import {
   SelectValue,
 } from "./ui/select";
 
-export default function CollectionSelector() {
+export default function CollectionSelector({
+  collections,
+  initialCollection,
+}: {
+  collections: CollectionData[];
+  initialCollection: string;
+}) {
+  const [_, startTransition] = useTransition();
+  const router = useRouter();
+
   return (
-    <Select value="Default">
+    <Select
+      defaultValue={initialCollection}
+      onValueChange={(value) => {
+        startTransition(async () => {
+          await setCollection(value);
+          router.push("/");
+        });
+      }}
+    >
       <SelectTrigger id="collection">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup className="max-h-48 overflow-y-scroll">
-          {["Default", "Test"].map((value, idx) => (
-            <SelectItem key={idx} value={value}>
-              {value}
+          {collections.map((collection, idx) => (
+            <SelectItem key={idx} value={collection.name}>
+              {collection.name}
             </SelectItem>
           ))}
         </SelectGroup>

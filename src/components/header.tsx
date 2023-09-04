@@ -1,4 +1,9 @@
-import { getAllAlbums, getAllSets } from "@/actions/mtgActions";
+import {
+  getAllAlbums,
+  getAllCollections,
+  getAllSets,
+  getCollection,
+} from "@/actions/mtgActions";
 import Link from "next/link";
 import CardSearch from "./cardSearch";
 import CollectionSelector from "./collectionSelector";
@@ -8,6 +13,8 @@ import { Label } from "./ui/label";
 async function Header() {
   const sets = await getAllSets();
   const albums = await getAllAlbums();
+  const collection = await getCollection();
+  const collections = await getAllCollections();
   return (
     <div className="flex justify-between">
       <div className="flex items-center justify-between gap-x-2 md:justify-normal md:gap-x-8">
@@ -19,7 +26,10 @@ async function Header() {
       <div className="flex items-center">
         <div className="w-48 hidden md:flex items-center gap-x-4">
           <Label>Collection: </Label>
-          <CollectionSelector />
+          <CollectionSelector
+            collections={collections}
+            initialCollection={collection}
+          />
         </div>
         <div className="flex md:hidden">
           <HamburgerMenu sets={sets} albums={albums} />

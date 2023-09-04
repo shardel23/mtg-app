@@ -6,6 +6,10 @@ import { cardsArrayToMap } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import * as Scry from "scryfall-sdk";
 
+export type CollectionData = {
+  name: string;
+};
+
 export type AlbumData = {
   id: number;
   name: string;
@@ -73,6 +77,13 @@ export async function getAllCardsOfSet(setName: string): Promise<CardData[]> {
 
 export async function getAllAlbums(): Promise<AlbumData[]> {
   const albums = await prisma.album.findMany({
+    where: {
+      collection: {
+        name: {
+          equals: await getCollection(),
+        },
+      },
+    },
     orderBy: {
       setReleaseDate: "desc",
     },
@@ -278,10 +289,19 @@ export async function searchCardInCollection(
   return cardsArrayToMap(results);
 }
 
-export async function setCollection(collection: string) {
-  await redis.set("collection", collection);
+export async function setCollection(collectionName: string) {
+  console.log("Set collection to", collectionName);
+  revalidatePath("/");
+  await redis.set("collection", collectionName);
 }
 
 export async function getCollection() {
-  return redis.get("collection") ?? "Default";
+  const collection = await redis.get("collection");
+  console.log("Get collection: ", collection);
+  return collection ?? "Default";
+}
+
+export async function getAllCollections(): Promise<CollectionData[]> {
+  const collections = await prisma.collection.findMany();
+  return collections.map((collection) => ({ name: collection.name }));
 }
