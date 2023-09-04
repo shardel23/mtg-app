@@ -45,7 +45,7 @@ function HamburgerMenu({
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <ScrollArea className="max-h-48">
+          <ScrollArea viewportClassName="max-h-48">
             {albums.map((album) => (
               <DropdownMenuItem
                 asChild
@@ -66,7 +66,7 @@ function HamburgerMenu({
         <DropdownMenuGroup>
           <DropdownMenuLabel>Collection</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <ScrollArea className="max-h-36">
+          <ScrollArea viewportClassName="max-h-36">
             <DropdownMenuItem>
               <Label
                 className="mr-2"
