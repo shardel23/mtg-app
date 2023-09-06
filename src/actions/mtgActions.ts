@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { redis } from "@/lib/redis";
 import { cardsArrayToMap } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import * as Scry from "scryfall-sdk";
 
 export type CollectionData = {
@@ -315,16 +316,17 @@ export async function searchCardInCollection(
   return cardsArrayToMap(results);
 }
 
-export async function setCollection(collectionName: string) {
-  console.log("Set collection to", collectionName);
-  revalidatePath("/");
-  await redis.set("collection", collectionName);
-}
-
 export async function getCollection() {
+  const cookieStore = cookies();
+  const collectionCookie = cookieStore.get("collection");
+  if (collectionCookie != null) {
+    return collectionCookie.value;
+  }
   const collection = await redis.get("collection");
-  console.log("Get collection: ", collection);
-  return collection ?? "Default";
+  if (collection == null) {
+    return "Default";
+  }
+  return collection;
 }
 
 export async function getAllCollections(): Promise<CollectionData[]> {

@@ -1,6 +1,7 @@
 "use client";
 
-import { AlbumData, SetData, setCollection } from "@/actions/mtgActions";
+import { setCollectionCookie } from "@/actions/cookieActions";
+import { AlbumData, SetData } from "@/actions/mtgActions";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -72,7 +73,7 @@ function HamburgerMenu({
                 className="mr-2"
                 onClick={() => {
                   startTransition(async () => {
-                    await setCollection("Default");
+                    await setCollectionCookie("Default");
                     router.push("/");
                   });
                 }}
@@ -88,7 +89,7 @@ function HamburgerMenu({
                 className="mr-2"
                 onClick={() => {
                   startTransition(async () => {
-                    await setCollection("Test");
+                    await setCollectionCookie("Test");
                     router.push("/");
                   });
                 }}

@@ -1,6 +1,7 @@
 "use client";
 
-import { CollectionData, setCollection } from "@/actions/mtgActions";
+import { setCollectionCookie } from "@/actions/cookieActions";
+import { CollectionData } from "@/actions/mtgActions";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import {
@@ -27,7 +28,7 @@ export default function CollectionSelector({
       defaultValue={initialCollection}
       onValueChange={(value) => {
         startTransition(async () => {
-          await setCollection(value);
+          await setCollectionCookie(value);
           router.push("/");
         });
       }}
