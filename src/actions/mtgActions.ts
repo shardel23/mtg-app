@@ -1,7 +1,6 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { redis } from "@/lib/redis";
 import { cardsArrayToMap } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
@@ -322,11 +321,7 @@ export async function getCollection() {
   if (collectionCookie != null) {
     return collectionCookie.value;
   }
-  const collection = await redis.get("collection");
-  if (collection == null) {
-    return "Default";
-  }
-  return collection;
+  return "Default";
 }
 
 export async function getAllCollections(): Promise<CollectionData[]> {
