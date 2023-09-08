@@ -239,8 +239,10 @@ export async function markCardIsCollected(
 ): Promise<void> {
   await prisma.card.update({
     where: {
-      id: cardId,
-      albumId: albumId,
+      id_albumId: {
+        id: cardId,
+        albumId: albumId,
+      },
     },
     data: {
       isCollected: isCollected,
