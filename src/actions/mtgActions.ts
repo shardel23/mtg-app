@@ -1,7 +1,9 @@
 "use server";
 
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/lib/prisma";
 import { cardsArrayToMap } from "@/lib/utils";
+import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import * as Scry from "scryfall-sdk";
@@ -75,13 +77,27 @@ export async function getAllCardsOfSet(setName: string): Promise<CardData[]> {
     }));
 }
 
+async function getUserIdFromSession(): Promise<string | null> {
+  const session = await getServerSession(authOptions);
+  const user = session?.user;
+  if (user == null) {
+    return null;
+  }
+  return user.id;
+}
+
 export async function getAllAlbums(): Promise<AlbumData[]> {
+  const userId = await getUserIdFromSession();
+  if (userId == null) {
+    return [];
+  }
   const albums = await prisma.album.findMany({
     where: {
       collection: {
         name: {
           equals: await getCollection(),
         },
+        userId: userId,
       },
     },
     orderBy: {
