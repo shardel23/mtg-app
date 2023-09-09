@@ -12,19 +12,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { User } from "next-auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import CreateNewAlbumDialog from "./createNewAlbumDialog";
 import Hamburger from "./icons/hamburger";
+import SignOut from "./signOut";
 import { Label } from "./ui/label";
 import { ScrollArea } from "./ui/scroll-area";
 
 function HamburgerMenu({
+  user,
   sets,
   albums,
   collection,
 }: {
+  user: User | undefined;
   sets: SetData[];
   albums: AlbumData[];
   collection: string;
@@ -40,6 +44,11 @@ function HamburgerMenu({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
+        <div className="flex justify-between items-center">
+          {user && <DropdownMenuLabel>{user.name}</DropdownMenuLabel>}
+          <SignOut />
+        </div>
+        <DropdownMenuSeparator />
         <div className="flex justify-between items-center">
           <DropdownMenuLabel>My Albums</DropdownMenuLabel>
           <CreateNewAlbumDialog sets={sets} />

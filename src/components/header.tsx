@@ -4,7 +4,10 @@ import {
   getAllSets,
   getCollection,
 } from "@/actions/mtgActions";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth/next";
 import Link from "next/link";
+import Auth from "./auth";
 import CardSearch from "./cardSearch";
 import CollectionSelector from "./collectionSelector";
 import HamburgerMenu from "./hamburgerMenu";
@@ -15,10 +18,18 @@ async function Header() {
   const albums = await getAllAlbums();
   const collection = await getCollection();
   const collections = await getAllCollections();
+  const session = await getServerSession(authOptions);
+  const user = session?.user;
+
   return (
     <div className="flex w-full justify-between">
-      <div className="flex font-bold text-2xl w-24 md:text-4xl md:w-72">
-        <Link href={`/`}>MTG Collection</Link>
+      <div className="flex gap-x-8 items-center">
+        <div className="flex font-bold text-2xl md:text-4xl w-24 md:w-72">
+          <Link href={`/`}>MTG Collection</Link>
+        </div>
+        <div className="hidden md:flex">
+          <Auth />
+        </div>
       </div>
       <div className="flex flex-col gap-y-2">
         <div className="flex md:hidden justify-end text-xs">
@@ -35,6 +46,7 @@ async function Header() {
           </div>
           <div className="flex md:hidden">
             <HamburgerMenu
+              user={user}
               sets={sets}
               albums={albums}
               collection={collection}
