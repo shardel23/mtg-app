@@ -6,6 +6,8 @@ import DeleteAlbumDialog from "@/components/deleteAlbumDialog";
 import { Button } from "@/components/ui/button";
 import { useCallback, useMemo, useState } from "react";
 
+type Filter = (cardVersions: CardData[]) => boolean;
+
 function AlbumView({
   albumId,
   albumName,
@@ -15,28 +17,32 @@ function AlbumView({
   albumName: string;
   cards: Map<string, CardData[]>;
 }) {
-  const [cardToDisplay, setCardsToDisplay] =
-    useState<Map<string, CardData[]>>(cards);
   const [cardsPerRow, setCardsPerRow] = useState<number>(5);
+  const [filters, setFilters] = useState<Filter[]>([]);
+
+  const applyFilters = useCallback(() => {
+    if (filters.length === 0) {
+      return cards;
+    }
+    const filteredCards = new Map<string, CardData[]>();
+    Array.from(cards.keys())
+      .filter((cardName) => {
+        const cardVersions = cards.get(cardName)!;
+        return filters.every((filter) => filter(cardVersions));
+      })
+      .forEach((cardName) => {
+        filteredCards.set(cardName, cards.get(cardName)!);
+      });
+    return filteredCards;
+  }, [cards, filters]);
+
+  const filteredCards = applyFilters();
 
   const collectedCardsCount = useMemo(() => {
     return Array.from(cards.keys()).filter((cardName) => {
       const cardVersions = cards.get(cardName)!;
       return cardVersions.some((card) => card.isInCollection);
     }).length;
-  }, [cards]);
-
-  const showMissingCards = useCallback(() => {
-    const missingCards = new Map<string, CardData[]>();
-    Array.from(cards.keys())
-      .filter((cardName) => {
-        const cardVersions = cards.get(cardName)!;
-        return cardVersions.every((card) => !card.isInCollection);
-      })
-      .forEach((cardName) => {
-        missingCards.set(cardName, cards.get(cardName)!);
-      });
-    setCardsToDisplay(missingCards);
   }, [cards]);
 
   return (
@@ -50,7 +56,7 @@ function AlbumView({
           <Button
             variant="default"
             onClick={() => {
-              setCardsToDisplay(cards);
+              setFilters([]);
             }}
             className="text-xs px-1 w-24 md:text-sm md:w-32"
           >
@@ -59,7 +65,11 @@ function AlbumView({
           <Button
             variant="default"
             onClick={() => {
-              showMissingCards();
+              setFilters((curr) => [
+                ...curr,
+                (cardVersions) =>
+                  cardVersions.every((card) => !card.isInCollection),
+              ]);
             }}
             className="text-xs px-1 w-24 md:text-sm md:w-32"
           >
@@ -84,7 +94,7 @@ function AlbumView({
           </Button>
         </div>
       </div>
-      <CardGrid cards={cardToDisplay} cardsPerRow={cardsPerRow} />
+      <CardGrid cards={filteredCards} cardsPerRow={cardsPerRow} />
     </div>
   );
 }
