@@ -3,8 +3,9 @@
 import { CardData } from "@/actions/mtgActions";
 import CardGrid from "@/components/cardGrid";
 import DeleteAlbumDialog from "@/components/deleteAlbumDialog";
+import RaritySelector from "@/components/raritySelector";
 import { Button } from "@/components/ui/button";
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 type Filter = (cardVersions: CardData[]) => boolean;
 
@@ -18,25 +19,25 @@ function AlbumView({
   cards: Map<string, CardData[]>;
 }) {
   const [cardsPerRow, setCardsPerRow] = useState<number>(5);
-  const [filters, setFilters] = useState<Filter[]>([]);
+  const [filters, setFilters] = useState<Map<string, Filter>>(new Map());
 
-  const applyFilters = useCallback(() => {
-    if (filters.length === 0) {
+  const filteredCards = useMemo(() => {
+    if (filters.size === 0) {
       return cards;
     }
     const filteredCards = new Map<string, CardData[]>();
     Array.from(cards.keys())
       .filter((cardName) => {
         const cardVersions = cards.get(cardName)!;
-        return filters.every((filter) => filter(cardVersions));
+        return Array.from(filters.values()).every((filter) =>
+          filter(cardVersions)
+        );
       })
       .forEach((cardName) => {
         filteredCards.set(cardName, cards.get(cardName)!);
       });
     return filteredCards;
   }, [cards, filters]);
-
-  const filteredCards = applyFilters();
 
   const collectedCardsCount = useMemo(() => {
     return Array.from(cards.keys()).filter((cardName) => {
@@ -56,7 +57,11 @@ function AlbumView({
           <Button
             variant="default"
             onClick={() => {
-              setFilters([]);
+              setFilters((curr) => {
+                const newFilters = new Map(curr);
+                newFilters.delete("isInCollection");
+                return newFilters;
+              });
             }}
             className="text-xs px-1 w-24 md:text-sm md:w-32"
           >
@@ -65,11 +70,13 @@ function AlbumView({
           <Button
             variant="default"
             onClick={() => {
-              setFilters((curr) => [
-                ...curr,
-                (cardVersions) =>
-                  cardVersions.every((card) => !card.isInCollection),
-              ]);
+              setFilters((curr) => {
+                const newFilters = new Map(curr);
+                newFilters.set("isInCollection", (cardVersions) =>
+                  cardVersions.every((card) => !card.isInCollection)
+                );
+                return newFilters;
+              });
             }}
             className="text-xs px-1 w-24 md:text-sm md:w-32"
           >
@@ -93,6 +100,24 @@ function AlbumView({
             +
           </Button>
         </div>
+      </div>
+      <div className="flex items-center gap-x-4">
+        <span>Filters: </span>
+        <RaritySelector
+          onRareSelect={(newRarity: string) => {
+            setFilters((curr) => {
+              const newFilters = new Map(curr);
+              if (newRarity === "all") {
+                newFilters.delete("rarity");
+                return newFilters;
+              }
+              newFilters.set("rarity", (cardVersions) =>
+                cardVersions.some((card) => card.rarity === newRarity)
+              );
+              return newFilters;
+            });
+          }}
+        />
       </div>
       <CardGrid cards={filteredCards} cardsPerRow={cardsPerRow} />
     </div>
