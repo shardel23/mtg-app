@@ -31,20 +31,21 @@ const options = [
 ];
 
 export default function RaritySelector({
-  onRareSelect,
+  onRaritySelect,
 }: {
-  onRareSelect: (value: string) => void;
+  onRaritySelect: (value: string) => void;
 }) {
   return (
     <div className="flex flex-col w-32 gap-y-2">
       <Label> Rarity </Label>
       <Select
+        defaultValue="all"
         onValueChange={(value) => {
-          onRareSelect(value);
+          onRaritySelect(value);
         }}
       >
         <SelectTrigger id="rarity">
-          <SelectValue placeholder="Rarity..." />
+          <SelectValue />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup className="max-h-48">

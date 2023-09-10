@@ -3,11 +3,9 @@
 import { CardData } from "@/actions/mtgActions";
 import CardGrid from "@/components/cardGrid";
 import DeleteAlbumDialog from "@/components/deleteAlbumDialog";
-import RaritySelector from "@/components/raritySelector";
+import Filters, { Filter } from "@/components/filters";
 import { Button } from "@/components/ui/button";
 import { useMemo, useState } from "react";
-
-type Filter = (cardVersions: CardData[]) => boolean;
 
 function AlbumView({
   albumId,
@@ -101,24 +99,7 @@ function AlbumView({
           </Button>
         </div>
       </div>
-      <div className="flex items-center gap-x-4">
-        <span>Filters: </span>
-        <RaritySelector
-          onRareSelect={(newRarity: string) => {
-            setFilters((curr) => {
-              const newFilters = new Map(curr);
-              if (newRarity === "all") {
-                newFilters.delete("rarity");
-                return newFilters;
-              }
-              newFilters.set("rarity", (cardVersions) =>
-                cardVersions.some((card) => card.rarity === newRarity)
-              );
-              return newFilters;
-            });
-          }}
-        />
-      </div>
+      <Filters setFilters={setFilters} />
       <CardGrid cards={filteredCards} cardsPerRow={cardsPerRow} />
     </div>
   );
