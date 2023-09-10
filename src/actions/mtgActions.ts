@@ -26,7 +26,7 @@ export type CardData = {
   id: string;
   name: string;
   image: string | undefined;
-  isInCollection?: boolean;
+  isCollected?: boolean;
   albumId?: number;
   collectorNumber: string;
   setCode: string;
@@ -59,6 +59,19 @@ export async function getAllSets(): Promise<SetData[]> {
     )
     .filter((set) => set.digital === false)
     .map((set) => ({ name: set.name, id: set.id }));
+}
+
+async function getCardFromAPI(cardId: string): Promise<CardData> {
+  const card = await Scry.Cards.byId(cardId);
+  return {
+    id: card.id,
+    name: card.name,
+    image: getImageUri(card),
+    collectorNumber: card.collector_number,
+    setCode: card.set,
+    setIconUri: card.set_uri,
+    rarity: card.rarity,
+  };
 }
 
 export async function getAllCardsOfSet(setName: string): Promise<CardData[]> {
@@ -218,6 +231,11 @@ export async function getAlbumCards(
     },
     include: {
       cards: {
+        select: {
+          id: true,
+          isCollected: true,
+          albumId: true,
+        },
         orderBy: {
           collectorNumber: "asc",
         },
@@ -230,21 +248,16 @@ export async function getAlbumCards(
       cards: new Map(),
     };
   }
-  const cardsData: CardData[] =
-    album?.cards.map((card) => ({
-      id: card.id,
-      name: card.name,
-      image: card.imageUri,
-      isInCollection: card.isCollected,
-      albumId: albumId,
-      collectorNumber: card.collectorNumber.toString(),
-      setCode: card.setCode,
-      setIconUri: card.setIconSvgUri,
-      rarity: card.rarity,
-    })) ?? [];
+  const cardsDataFromAPI = await getAllCardsOfSet(album.setName!);
+  const cardsDataFromDB = album.cards;
+  const mergedCardsData = cardsDataFromDB.map((card) => ({
+    ...card,
+    ...cardsDataFromAPI.find((apiCard) => apiCard.id === card.id)!,
+  }));
+
   return {
     albumName: album.name,
-    cards: cardsArrayToMap(cardsData),
+    cards: cardsArrayToMap(mergedCardsData),
   };
 }
 
@@ -319,18 +332,16 @@ export async function searchCardInCollection(
       },
     },
   });
-  const results = cards.map((card) => ({
-    id: card.id,
-    name: card.name,
-    image: card.imageUri,
-    isInCollection: card.isCollected,
-    albumId: card.albumId!,
-    collectorNumber: card.collectorNumber.toString(),
-    setCode: card.setCode,
-    setIconUri: card.setIconSvgUri,
-    rarity: card.rarity,
+
+  const cardsDataFromAPI = await Promise.all(
+    cards.map(async (card) => await getCardFromAPI(card.id))
+  );
+  const mergedCardsData = cards.map((card) => ({
+    ...card,
+    ...cardsDataFromAPI.find((apiCard) => apiCard.id === card.id)!,
   }));
-  return cardsArrayToMap(results);
+
+  return cardsArrayToMap(mergedCardsData);
 }
 
 export async function getCollection() {

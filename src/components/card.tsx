@@ -12,14 +12,14 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
   const [cardVersionNumberToDisplay, setCardVersionNumberToDisplay] = useState(
     () => {
       const inCollectionIndex = cardVersions.findIndex(
-        (card) => card.isInCollection
+        (card) => card.isCollected
       );
       return inCollectionIndex === -1 ? 0 : inCollectionIndex;
     }
   );
   const [isVersionCollected, setIsVersionCollected] = useState<boolean[]>(
     () => {
-      return cardVersions.map((card) => card.isInCollection!);
+      return cardVersions.map((card) => card.isCollected!);
     }
   );
 

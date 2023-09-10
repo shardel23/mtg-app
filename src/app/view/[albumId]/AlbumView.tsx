@@ -40,7 +40,7 @@ function AlbumView({
   const collectedCardsCount = useMemo(() => {
     return Array.from(cards.keys()).filter((cardName) => {
       const cardVersions = cards.get(cardName)!;
-      return cardVersions.some((card) => card.isInCollection);
+      return cardVersions.some((card) => card.isCollected);
     }).length;
   }, [cards]);
 
@@ -71,7 +71,7 @@ function AlbumView({
               setFilters((curr) => {
                 const newFilters = new Map(curr);
                 newFilters.set("isInCollection", (cardVersions) =>
-                  cardVersions.every((card) => !card.isInCollection)
+                  cardVersions.every((card) => !card.isCollected)
                 );
                 return newFilters;
               });
