@@ -1,6 +1,8 @@
+import { getCollection } from "@/actions/mtgActions";
 import { CardData } from "@/types/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { prisma } from "./prisma";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -46,3 +48,21 @@ export const cardsArrayToMap = (cards: CardData[]): Map<string, CardData[]> => {
   });
   return cardNameToVersions;
 };
+
+export function endsWithNumber(text: string) {
+  return /\d$/.test(text);
+}
+
+export async function isSetExists(setName: string): Promise<boolean> {
+  const album = await prisma.album.findFirst({
+    where: {
+      name: setName,
+      collection: {
+        name: {
+          equals: await getCollection(),
+        },
+      },
+    },
+  });
+  return album != null;
+}

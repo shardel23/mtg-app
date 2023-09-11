@@ -2,7 +2,7 @@
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/lib/prisma";
-import { cardsArrayToMap } from "@/lib/utils";
+import { cardsArrayToMap, endsWithNumber, isSetExists } from "@/lib/utils";
 import {
   AlbumData,
   CardData,
@@ -14,14 +14,7 @@ import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import * as Scry from "scryfall-sdk";
-
-function getImageUri(card: Scry.Card): string {
-  return (
-    (card.card_faces.length > 1
-      ? card.card_faces[0].image_uris?.normal
-      : card.image_uris?.normal) ?? ""
-  );
-}
+import { getCardFromAPI, getImageUri, transformCards } from "./helpers";
 
 export async function getAllSets(): Promise<SetData[]> {
   const sets = await Scry.Sets.all();
@@ -35,19 +28,6 @@ export async function getAllSets(): Promise<SetData[]> {
     .map((set) => ({ name: set.name, id: set.id }));
 }
 
-async function getCardFromAPI(cardId: string): Promise<CardData> {
-  const card = await Scry.Cards.byId(cardId);
-  return {
-    id: card.id,
-    name: card.name,
-    image: getImageUri(card),
-    collectorNumber: card.collector_number,
-    setCode: card.set,
-    setIconUri: card.set_uri,
-    rarity: card.rarity,
-  };
-}
-
 export async function getAllCardsOfSet(set: Scry.Set): Promise<Scry.Card[]> {
   return (await set.getCards({ unique: "prints" }))
     .filter((card) => !card.digital)
@@ -57,18 +37,6 @@ export async function getAllCardsOfSet(set: Scry.Set): Promise<Scry.Card[]> {
         card.collector_number.endsWith("a") ||
         endsWithNumber(card.collector_number)
     );
-}
-
-function transformCards(cards: Scry.Card[], set: Scry.Set): CardData[] {
-  return cards.map((card) => ({
-    id: card.id,
-    name: card.name,
-    image: getImageUri(card),
-    collectorNumber: card.collector_number,
-    setCode: set.code,
-    setIconUri: set.icon_svg_uri,
-    rarity: card.rarity,
-  }));
 }
 
 async function getUserIdFromSession(): Promise<string | null> {
@@ -107,24 +75,6 @@ export async function getAllAlbums(): Promise<AlbumData[]> {
       setName: album.setName as string,
       setReleaseDate: album.setReleaseDate as string,
     }));
-}
-
-async function isSetExists(setName: string): Promise<boolean> {
-  const album = await prisma.album.findFirst({
-    where: {
-      name: setName,
-      collection: {
-        name: {
-          equals: await getCollection(),
-        },
-      },
-    },
-  });
-  return album != null;
-}
-
-function endsWithNumber(text: string) {
-  return /\d$/.test(text);
 }
 
 async function createAlbum(
