@@ -74,20 +74,27 @@ async function getCardFromAPI(cardId: string): Promise<CardData> {
   };
 }
 
-export async function getAllCardsOfSet(setName: string): Promise<CardData[]> {
-  const set = await Scry.Sets.byName(setName);
-  const cards = await set.getCards();
-  return cards
+export async function getAllCardsOfSet(set: Scry.Set): Promise<Scry.Card[]> {
+  return (await set.getCards({ unique: "prints" }))
     .filter((card) => !card.digital)
-    .map((card) => ({
-      id: card.id,
-      name: card.name,
-      image: getImageUri(card),
-      collectorNumber: card.collector_number,
-      setCode: set.code,
-      setIconUri: set.icon_svg_uri,
-      rarity: card.rarity,
-    }));
+    .filter(
+      (card) =>
+        card.layout === "normal" ||
+        card.collector_number.endsWith("a") ||
+        endsWithNumber(card.collector_number)
+    );
+}
+
+function transformCards(cards: Scry.Card[], set: Scry.Set): CardData[] {
+  return cards.map((card) => ({
+    id: card.id,
+    name: card.name,
+    image: getImageUri(card),
+    collectorNumber: card.collector_number,
+    setCode: set.code,
+    setIconUri: set.icon_svg_uri,
+    rarity: card.rarity,
+  }));
 }
 
 async function getUserIdFromSession(): Promise<string | null> {
@@ -166,14 +173,7 @@ async function createAlbum(
   if (collection == null) {
     return -1;
   }
-  const cards = (await set.getCards({ unique: "prints" }))
-    .filter((card) => !card.digital)
-    .filter(
-      (card) =>
-        card.layout === "normal" ||
-        card.collector_number.endsWith("a") ||
-        endsWithNumber(card.collector_number)
-    );
+  const cards = await getAllCardsOfSet(set);
   const album = await prisma.album.create({
     data: {
       collectionId: collection.id,
@@ -248,8 +248,10 @@ export async function getAlbumCards(
       cards: new Map(),
     };
   }
-  const cardsDataFromAPI = await getAllCardsOfSet(album.setName!);
+  const set = await Scry.Sets.byId(album.setId!);
+  const cardsDataFromAPI = transformCards(await getAllCardsOfSet(set), set);
   const cardsDataFromDB = album.cards;
+
   const mergedCardsData = cardsDataFromDB.map((card) => ({
     ...card,
     ...cardsDataFromAPI.find((apiCard) => apiCard.id === card.id)!,
