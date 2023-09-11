@@ -1,10 +1,10 @@
 "use client";
 
-import { CardData } from "@/actions/mtgActions";
 import CardGrid from "@/components/cardGrid";
 import DeleteAlbumDialog from "@/components/deleteAlbumDialog";
 import Filters, { Filter } from "@/components/filters";
 import { Button } from "@/components/ui/button";
+import { CardData } from "@/types/types";
 import { useMemo, useState } from "react";
 
 function AlbumView({

@@ -1,7 +1,7 @@
 "use client";
 
 import { setCollectionCookie } from "@/actions/cookieActions";
-import { CollectionData } from "@/actions/mtgActions";
+import { CollectionData } from "@/types/types";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import {

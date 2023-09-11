@@ -1,6 +1,7 @@
 "use client";
 
-import { CardData, markCardIsCollected } from "@/actions/mtgActions";
+import { markCardIsCollected } from "@/actions/mtgActions";
+import { CardData } from "@/types/types";
 import Image from "next/image";
 import { useCallback, useState, useTransition } from "react";
 import DeleteCardDialog from "./deleteCardDialog";

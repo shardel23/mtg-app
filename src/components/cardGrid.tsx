@@ -1,4 +1,4 @@
-import { CardData } from "@/actions/mtgActions";
+import { CardData } from "@/types/types";
 import Card from "./card";
 
 function CardGrid({

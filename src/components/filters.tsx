@@ -1,4 +1,4 @@
-import { CardData } from "@/actions/mtgActions";
+import { CardData } from "@/types/types";
 import { Dispatch, SetStateAction } from "react";
 import RaritySelector from "./raritySelector";
 

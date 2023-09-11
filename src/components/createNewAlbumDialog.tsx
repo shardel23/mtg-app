@@ -1,6 +1,7 @@
 "use client";
 
-import { SetData, createAlbumFromSetId } from "@/actions/mtgActions";
+import { createAlbumFromSetId } from "@/actions/mtgActions";
+import { SetData } from "@/types/types";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";

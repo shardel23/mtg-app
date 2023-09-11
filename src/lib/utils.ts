@@ -1,4 +1,4 @@
-import { CardData } from "@/actions/mtgActions";
+import { CardData } from "@/types/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
