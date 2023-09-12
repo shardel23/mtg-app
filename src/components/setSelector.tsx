@@ -1,6 +1,6 @@
 "use client";
 
-import { SetData } from "@/actions/mtgActions";
+import { SetData } from "@/types/types";
 import {
   Select,
   SelectContent,

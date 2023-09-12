@@ -28,7 +28,7 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
     setCardVersionNumberToDisplay(
       (currVersionNum) => (currVersionNum + 1) % cardVersions.length
     );
-  }, []);
+  }, [cardVersions.length]);
 
   const card = cardVersions[cardVersionNumberToDisplay];
 
@@ -91,12 +91,14 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
             />
           </div>
           <div className="flex justify-center items-center gap-x-1 pt-1 md:pt-2">
-            <img
+            <Image
               src={`/assets/${card.setCode}/${card.setCode}-${
                 card.rarity !== "common" ? card.rarity : `${card.rarity}-dark`
               }.svg`}
               alt={card.setCode}
               className="h-2.5 w-2.5 md:h-4 md:w-4"
+              width={16}
+              height={16}
             />
             <div className="text-xxs md:text-xs">
               {card.setCode.toUpperCase()}
