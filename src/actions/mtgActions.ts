@@ -265,11 +265,13 @@ export async function searchCardInCollection(
   });
 
   const cardsDataFromAPI = transformCards(
-    await Scry.Cards.search(cardName, { unique: "prints" }).waitForAll()
+    await Scry.Cards.search(`name:/${cardName}/`, {
+      unique: "prints",
+    }).waitForAll()
   ).filter((card) => cards.find((c) => c.id === card.id));
-  const mergedCardsData = cards.map((card) => ({
-    ...card,
-    ...cardsDataFromAPI.find((apiCard) => apiCard.id === card.id)!,
+  const mergedCardsData = cardsDataFromAPI.map((apiCard) => ({
+    ...apiCard,
+    ...cards.find((card) => apiCard.id === card.id)!,
   }));
 
   return cardsArrayToMap(mergedCardsData);

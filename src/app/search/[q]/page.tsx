@@ -17,11 +17,12 @@ export default async function SearchResultsPage({
       </>
     );
   }
-  const cards = await searchCardInCollection(params.q);
+  const searchQuery = params.q.replaceAll("%20", " ");
+  const cards = await searchCardInCollection(searchQuery);
   return (
     <>
       <RedirectIfNotLoggedIn />
-      <SearchResultsView results={cards} query={params.q} />
+      <SearchResultsView results={cards} query={searchQuery} />
     </>
   );
 }
