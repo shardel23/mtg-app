@@ -14,7 +14,7 @@ import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import * as Scry from "scryfall-sdk";
-import { getCardFromAPI, getImageUri, transformCards } from "./helpers";
+import { getImageUri, transformCards } from "./helpers";
 
 export async function getAllSets(): Promise<SetData[]> {
   const sets = await Scry.Sets.all();
@@ -257,11 +257,16 @@ export async function searchCardInCollection(
         },
       },
     },
+    select: {
+      id: true,
+      isCollected: true,
+      albumId: true,
+    },
   });
 
-  const cardsDataFromAPI = await Promise.all(
-    cards.map(async (card) => await getCardFromAPI(card.id))
-  );
+  const cardsDataFromAPI = transformCards(
+    await Scry.Cards.search(cardName, { unique: "prints" }).waitForAll()
+  ).filter((card) => cards.find((c) => c.id === card.id));
   const mergedCardsData = cards.map((card) => ({
     ...card,
     ...cardsDataFromAPI.find((apiCard) => apiCard.id === card.id)!,

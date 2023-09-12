@@ -1,7 +1,7 @@
 "use client";
 
-import { CardData } from "@/actions/mtgActions";
 import CardGrid from "@/components/cardGrid";
+import { CardData } from "@/types/types";
 
 function SearchResultsView({
   results,

@@ -15,12 +15,12 @@ export type SetData = { name: string; id: string };
 export type CardData = {
   id: string;
   name: string;
-  image: string | undefined;
+  image: string;
   isCollected?: boolean;
   albumId?: number;
   collectorNumber: string;
   setCode: string;
-  setIconUri: string;
+  setIconUri?: string;
   rarity: string;
 };
 

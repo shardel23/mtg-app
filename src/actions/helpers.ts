@@ -24,15 +24,15 @@ export async function getCardFromAPI(cardId: string): Promise<CardData> {
 
 export const transformCards = (
   cards: Scry.Card[],
-  set: Scry.Set
+  set?: Scry.Set
 ): CardData[] => {
   return cards.map((card) => ({
     id: card.id,
     name: card.name,
     image: getImageUri(card),
     collectorNumber: card.collector_number,
-    setCode: set.code,
-    setIconUri: set.icon_svg_uri,
+    setCode: card.set,
+    setIconUri: set?.icon_svg_uri,
     rarity: card.rarity,
   }));
 };
