@@ -56,6 +56,9 @@ dependencies:
   eslint-config-next:
     specifier: 13.4.15
     version: 13.4.15(eslint@8.47.0)(typescript@5.1.6)
+  export-to-csv:
+    specifier: ^1.0.0
+    version: 1.0.0
   ioredis:
     specifier: ^5.3.2
     version: 5.3.2
@@ -1924,6 +1927,10 @@ packages:
   /esutils@2.0.3:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
+    dev: false
+
+  /export-to-csv@1.0.0:
+    resolution: {integrity: sha512-PMwskctJEbZMXZ3sRWcJHlaobY5b9JvbpB7+jpJF5FGrIh1ASWWI0IB4JrooIK9Kv+7GE+czp+gHKFFGkk8/ig==}
     dev: false
 
   /fast-deep-equal@3.1.3:
