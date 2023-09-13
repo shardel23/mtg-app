@@ -11,7 +11,7 @@ export async function Sidebar() {
     <div className="md:w-1/4 overflow-x-auto hidden md:flex">
       <div className="md:space-y-4 py-4">
         <div className="md:px-3 flex items-center md:flex-col">
-          <div className="flex items-center justify-between gap-x-3 md:pb-4 md:pt-4">
+          <div className="flex items-center justify-between gap-x-3 md:pb-4 md:pt-4 w-full">
             <h2 className="md:px-4 text-sm md:text-lg font-semibold tracking-tight">
               My Albums
             </h2>
