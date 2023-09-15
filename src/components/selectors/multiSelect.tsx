@@ -63,14 +63,9 @@ function MultiSelect({
                 <div>all</div>
               ) : (
                 selected.map((item) => (
-                  <Badge
-                    variant="secondary"
-                    key={item}
-                    className="mr-1 mb-1"
-                    onClick={() => handleUnselect(item)}
-                  >
+                  <Badge variant="secondary" key={item} className="mr-1 mb-1">
                     {item}
-                    <button
+                    <div
                       className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                       onKeyDown={(e) => {
                         if (e.key === "Enter") {
@@ -83,8 +78,14 @@ function MultiSelect({
                       }}
                       onClick={() => handleUnselect(item)}
                     >
-                      <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
-                    </button>
+                      <X
+                        className="h-3 w-3 text-muted-foreground hover:text-foreground"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleUnselect(item);
+                        }}
+                      />
+                    </div>
                   </Badge>
                 ))
               )}
