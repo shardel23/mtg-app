@@ -1,66 +1,65 @@
 "use client";
 
-import { Label } from "../ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Color } from "scryfall-sdk";
+import { Filter } from "../filters";
+import { MultiSelect } from "./multiSelect";
 
 const options = [
-  { value: "all", displayName: "All" },
   {
     value: "W",
-    displayName: "White",
+    label: "White",
   },
   {
     value: "U",
-    displayName: "Blue",
+    label: "Blue",
   },
   {
     value: "B",
-    displayName: "Black",
+    label: "Black",
   },
   {
     value: "R",
-    displayName: "Red",
+    label: "Red",
   },
   {
     value: "G",
-    displayName: "Green",
+    label: "Green",
   },
 ];
 
 export default function ColorSelector({
-  onColorSelect,
+  setFilters,
 }: {
-  onColorSelect: (value: string) => void;
+  setFilters: Dispatch<SetStateAction<Map<string, Filter>>>;
 }) {
+  const [selected, setSelected] = useState<string[]>([]);
+
+  useEffect(() => {
+    setFilters((curr) => {
+      const newFilters = new Map(curr);
+      if (selected.length === 0) {
+        newFilters.delete("color");
+        return newFilters;
+      }
+      newFilters.set("color", (cardVersions) =>
+        cardVersions.some((card) =>
+          selected.some((color) => card.colors.includes(color as Color))
+        )
+      );
+      return newFilters;
+    });
+  }, [selected]);
+
   return (
-    <div className="flex flex-col w-32 gap-y-2">
-      <Label> Color </Label>
-      <Select
-        defaultValue="all"
-        onValueChange={(value) => {
-          onColorSelect(value);
-        }}
-      >
-        <SelectTrigger id="color">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup className="max-h-48">
-            {options.map((option, idx) => (
-              <SelectItem key={idx} value={option.value}>
-                {option.displayName}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-    </div>
+    <MultiSelect
+      label="Colors"
+      options={options}
+      selected={selected}
+      onChange={(newSelected) => {
+        setSelected(newSelected);
+      }}
+      className="w-32"
+    />
   );
 }

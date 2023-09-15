@@ -1,62 +1,58 @@
 "use client";
 
-import { Label } from "../ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Filter } from "../filters";
+import { MultiSelect } from "./multiSelect";
 
 const options = [
-  { value: "all", displayName: "All" },
   {
     value: "common",
-    displayName: "Common",
+    label: "Common",
   },
   {
     value: "uncommon",
-    displayName: "Uncommon",
+    label: "Uncommon",
   },
   {
     value: "rare",
-    displayName: "Rare",
+    label: "Rare",
   },
   {
     value: "mythic",
-    displayName: "Mythic",
+    label: "Mythic",
   },
 ];
 
 export default function RaritySelector({
-  onRaritySelect,
+  setFilters,
 }: {
-  onRaritySelect: (value: string) => void;
+  setFilters: Dispatch<SetStateAction<Map<string, Filter>>>;
 }) {
+  const [selected, setSelected] = useState<string[]>([]);
+
+  useEffect(() => {
+    setFilters((curr) => {
+      const newFilters = new Map(curr);
+      if (selected.length === 0) {
+        newFilters.delete("rarity");
+        return newFilters;
+      }
+      newFilters.set("rarity", (cardVersions) =>
+        cardVersions.some((card) => selected.includes(card.rarity))
+      );
+      return newFilters;
+    });
+  }, [selected]);
+
   return (
-    <div className="flex flex-col w-32 gap-y-2">
-      <Label> Rarity </Label>
-      <Select
-        defaultValue="all"
-        onValueChange={(value) => {
-          onRaritySelect(value);
-        }}
-      >
-        <SelectTrigger id="rarity">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup className="max-h-48">
-            {options.map((option, idx) => (
-              <SelectItem key={idx} value={option.value}>
-                {option.displayName}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-    </div>
+    <MultiSelect
+      label="Rarity"
+      options={options}
+      selected={selected}
+      onChange={(newSelected) => {
+        setSelected(newSelected);
+      }}
+      className="w-32"
+    />
   );
 }

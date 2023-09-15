@@ -7,7 +7,6 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
 } from "@/components/ui/command";
 import {
@@ -60,38 +59,41 @@ function MultiSelect({
             onClick={() => setOpen(!open)}
           >
             <div className="flex gap-1 flex-wrap">
-              {selected.map((item) => (
-                <Badge
-                  variant="secondary"
-                  key={item}
-                  className="mr-1 mb-1"
-                  onClick={() => handleUnselect(item)}
-                >
-                  {item}
-                  <button
-                    className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        handleUnselect(item);
-                      }
-                    }}
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }}
+              {selected.length === 0 ? (
+                <div>all</div>
+              ) : (
+                selected.map((item) => (
+                  <Badge
+                    variant="secondary"
+                    key={item}
+                    className="mr-1 mb-1"
                     onClick={() => handleUnselect(item)}
                   >
-                    <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
-                  </button>
-                </Badge>
-              ))}
+                    {item}
+                    <button
+                      className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleUnselect(item);
+                        }
+                      }}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      onClick={() => handleUnselect(item)}
+                    >
+                      <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
+                    </button>
+                  </Badge>
+                ))
+              )}
             </div>
             <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-full p-0">
           <Command className={className}>
-            <CommandInput placeholder="Search ..." />
             <CommandEmpty>No item found.</CommandEmpty>
             <CommandGroup className="max-h-64 overflow-auto">
               {options.map((option) => (
