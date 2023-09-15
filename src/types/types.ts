@@ -1,3 +1,5 @@
+import { Color } from "scryfall-sdk";
+
 export type CollectionData = {
   name: string;
 };
@@ -22,6 +24,7 @@ export type CardData = {
   setCode: string;
   setIconUri?: string;
   rarity: string;
+  colors: Color[];
 };
 
 export type createAlbumFromCSVInput = {

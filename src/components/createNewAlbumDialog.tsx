@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import CSVUploader from "./csvUploader";
 import PlusCircle from "./icons/plus-circle";
-import SetSelector from "./setSelector";
+import SetSelector from "./selectors/setSelector";
 import { Button } from "./ui/button";
 import {
   Dialog,

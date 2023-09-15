@@ -1,6 +1,8 @@
 import { CardData } from "@/types/types";
 import { Dispatch, SetStateAction } from "react";
-import RaritySelector from "./raritySelector";
+import { Color } from "scryfall-sdk";
+import ColorSelector from "./selectors/colorSelector";
+import RaritySelector from "./selectors/raritySelector";
 
 export type Filter = (cardVersions: CardData[]) => boolean;
 
@@ -22,6 +24,23 @@ export default function Filters({
             }
             newFilters.set("rarity", (cardVersions) =>
               cardVersions.some((card) => card.rarity === newRarity)
+            );
+            return newFilters;
+          });
+        }}
+      />
+      <ColorSelector
+        onColorSelect={(newColor: string) => {
+          setFilters((curr) => {
+            const newFilters = new Map(curr);
+            if (newColor === "all") {
+              newFilters.delete("color");
+              return newFilters;
+            }
+            newFilters.set("color", (cardVersions) =>
+              cardVersions.some((card) =>
+                card.colors.includes(newColor as Color)
+              )
             );
             return newFilters;
           });

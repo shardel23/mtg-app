@@ -19,6 +19,7 @@ export async function getCardFromAPI(cardId: string): Promise<CardData> {
     setCode: card.set,
     setIconUri: card.set_uri,
     rarity: card.rarity,
+    colors: getCardColors(card),
   };
 }
 
@@ -34,5 +35,17 @@ export const transformCards = (
     setCode: card.set,
     setIconUri: set?.icon_svg_uri,
     rarity: card.rarity,
+    colors: getCardColors(card),
   }));
 };
+
+function getCardColors(card: Scry.Card): Scry.Color[] {
+  return (
+    (card.card_faces.length > 0
+      ? card.card_faces.reduce(
+          (colors, face) => [...colors, ...(face.colors ?? [])],
+          [] as Scry.Color[]
+        )
+      : card.colors) ?? []
+  );
+}

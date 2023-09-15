@@ -9,8 +9,8 @@ import { getServerSession } from "next-auth/next";
 import Link from "next/link";
 import Auth from "./auth";
 import CardSearch from "./cardSearch";
-import CollectionSelector from "./collectionSelector";
 import HamburgerMenu from "./hamburgerMenu";
+import CollectionSelector from "./selectors/collectionSelector";
 import { Label } from "./ui/label";
 
 async function Header() {

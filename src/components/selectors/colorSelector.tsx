@@ -1,6 +1,6 @@
 "use client";
 
-import { Label } from "./ui/label";
+import { Label } from "../ui/label";
 import {
   Select,
   SelectContent,
@@ -8,43 +8,47 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "../ui/select";
 
 const options = [
   { value: "all", displayName: "All" },
   {
-    value: "common",
-    displayName: "Common",
+    value: "W",
+    displayName: "White",
   },
   {
-    value: "uncommon",
-    displayName: "Uncommon",
+    value: "U",
+    displayName: "Blue",
   },
   {
-    value: "rare",
-    displayName: "Rare",
+    value: "B",
+    displayName: "Black",
   },
   {
-    value: "mythic",
-    displayName: "Mythic",
+    value: "R",
+    displayName: "Red",
+  },
+  {
+    value: "G",
+    displayName: "Green",
   },
 ];
 
-export default function RaritySelector({
-  onRaritySelect,
+export default function ColorSelector({
+  onColorSelect,
 }: {
-  onRaritySelect: (value: string) => void;
+  onColorSelect: (value: string) => void;
 }) {
   return (
     <div className="flex flex-col w-32 gap-y-2">
-      <Label> Rarity </Label>
+      <Label> Color </Label>
       <Select
         defaultValue="all"
         onValueChange={(value) => {
-          onRaritySelect(value);
+          onColorSelect(value);
         }}
       >
-        <SelectTrigger id="rarity">
+        <SelectTrigger id="color">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
