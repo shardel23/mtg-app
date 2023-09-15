@@ -46,42 +46,17 @@ function AlbumView({
 
   return (
     <div className="pt-2 md:pt-0 space-y-2">
-      <div className="text-xl"> {albumName} </div>
-      <div className="text-sm">
-        {`Collected: ${collectedCardsCount}/${cards.size}`}{" "}
+      <div className="flex justify-between">
+        <div className="flex gap-x-4 items-center">
+          <div className="text-xl"> {albumName} </div>
+          <div className="text-sm">
+            {`Collected: ${collectedCardsCount}/${cards.size}`}
+          </div>
+        </div>
+        <DeleteAlbumDialog albumId={albumId} />
       </div>
       <div className="flex justify-between">
-        <div className="flex gap-x-2 items-center">
-          <Button
-            variant="default"
-            onClick={() => {
-              setFilters((curr) => {
-                const newFilters = new Map(curr);
-                newFilters.delete("isInCollection");
-                return newFilters;
-              });
-            }}
-            className="text-xs px-1 w-24 md:text-sm md:w-32"
-          >
-            Show all
-          </Button>
-          <Button
-            variant="default"
-            onClick={() => {
-              setFilters((curr) => {
-                const newFilters = new Map(curr);
-                newFilters.set("isInCollection", (cardVersions) =>
-                  cardVersions.every((card) => !card.isCollected)
-                );
-                return newFilters;
-              });
-            }}
-            className="text-xs px-1 w-24 md:text-sm md:w-32"
-          >
-            Show missing
-          </Button>
-          <DeleteAlbumDialog albumId={albumId} />
-        </div>
+        <Filters setFilters={setFilters} />
         <div className="gap-x-6 items-center hidden md:flex md:visible">
           <div>Cards per row:</div>
           <Button
@@ -99,7 +74,6 @@ function AlbumView({
           </Button>
         </div>
       </div>
-      <Filters setFilters={setFilters} />
       <CardGrid cards={filteredCards} cardsPerRow={cardsPerRow} />
     </div>
   );

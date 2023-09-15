@@ -60,7 +60,7 @@ function MultiSelect({
           >
             <div className="flex gap-1 flex-wrap">
               {selected.length === 0 ? (
-                <div>all</div>
+                <div>All</div>
               ) : (
                 selected.map((item) => (
                   <Badge variant="secondary" key={item} className="mr-1 mb-1">
