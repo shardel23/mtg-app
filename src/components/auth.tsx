@@ -1,7 +1,7 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
-import SignOut from "./signOut";
+import { UserNav } from "./userNav";
 
 export default async function Auth() {
   const session = await getServerSession(authOptions);
@@ -9,8 +9,7 @@ export default async function Auth() {
   if (user != null) {
     return (
       <div className="flex gap-x-2 items-center">
-        <span>{user.name}</span>
-        <SignOut />
+        <UserNav user={user} />
       </div>
     );
   }
