@@ -31,7 +31,7 @@ export default function IsCollectedSelector({
     <div className="flex flex-col w-32 gap-y-2">
       <Label> Is Collected </Label>
       <Select
-        defaultValue="All"
+        defaultValue="all"
         onValueChange={(value) => {
           setFilters((curr) => {
             const newFilters = new Map(curr);
