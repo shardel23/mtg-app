@@ -28,7 +28,7 @@ export default function IsCollectedSelector({
   setFilters: Dispatch<SetStateAction<Map<string, Filter>>>;
 }) {
   return (
-    <div className="flex flex-col w-32 gap-y-2">
+    <div className="flex flex-col gap-y-2">
       <Label> Is Collected </Label>
       <Select
         defaultValue="all"

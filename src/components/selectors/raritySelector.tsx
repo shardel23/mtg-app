@@ -52,7 +52,6 @@ export default function RaritySelector({
       onChange={(newSelected) => {
         setSelected(newSelected);
       }}
-      className="w-32"
     />
   );
 }

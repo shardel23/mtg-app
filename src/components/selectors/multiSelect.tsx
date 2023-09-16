@@ -45,7 +45,7 @@ function MultiSelect({
   };
 
   return (
-    <div className="flex flex-col w-32 gap-y-2">
+    <div className="flex flex-col gap-y-2">
       <Label> {label} </Label>
       <Popover open={open} onOpenChange={setOpen} {...props}>
         <PopoverTrigger asChild>

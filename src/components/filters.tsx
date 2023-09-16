@@ -2,9 +2,7 @@
 
 import { CardData } from "@/types/types";
 import { Dispatch, SetStateAction } from "react";
-import ColorSelector from "./selectors/colorSelector";
-import IsCollectedSelector from "./selectors/isCollectedSelector";
-import RaritySelector from "./selectors/raritySelector";
+import FilterDialog from "./selectors/filterDialog";
 
 export type Filter = (cardVersions: CardData[]) => boolean;
 
@@ -15,9 +13,7 @@ export default function Filters({
 }) {
   return (
     <div className="flex items-center gap-x-4 max-w-screen-sm">
-      <IsCollectedSelector setFilters={setFilters} />
-      <RaritySelector setFilters={setFilters} />
-      <ColorSelector setFilters={setFilters} />
+      <FilterDialog setFilters={setFilters} />
     </div>
   );
 }
