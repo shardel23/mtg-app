@@ -56,7 +56,12 @@ function AlbumView({
         <DeleteAlbumDialog albumId={albumId} />
       </div>
       <div className="flex justify-between">
-        <Filters filters={filters} setFilters={setFilters} />
+        <div className="flex gap-x-2">
+          <Filters filters={filters} setFilters={setFilters} />
+          {filters.size !== 0 && (
+            <Button onClick={() => setFilters(new Map())}>Clear filters</Button>
+          )}
+        </div>
         <div className="gap-x-6 items-center hidden md:flex md:visible">
           <div>Cards per row:</div>
           <Button

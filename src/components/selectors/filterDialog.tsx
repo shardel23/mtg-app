@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Filter } from "../filters";
 import { Button } from "../ui/button";
 import {
@@ -32,6 +32,10 @@ export default function FilterDialog({
     setIsDialogOpen(false);
     setFilters(localFilters);
   };
+
+  useEffect(() => {
+    setLocalFilters(filters);
+  }, [filters]);
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
