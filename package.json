@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "npx prisma migrate deploy && prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint && npm run typecheck",
+    "typecheck": "tsc --noEmit --pretty" 
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",
