@@ -56,10 +56,34 @@ function AlbumView({
         <DeleteAlbumDialog albumId={albumId} />
       </div>
       <div className="flex justify-between">
-        <div className="flex gap-x-2">
-          <Filters filters={filters} setFilters={setFilters} />
-          {filters.size !== 0 && (
-            <Button onClick={() => setFilters(new Map())}>Clear filters</Button>
+        <div className="flex flex-col gap-y-2">
+          <div className="flex gap-x-2">
+            <Filters filters={filters} setFilters={setFilters} />
+            {filters.size !== 0 && (
+              <Button onClick={() => setFilters(new Map())}>
+                Clear filters
+              </Button>
+            )}
+          </div>
+          {Array.from(filters.keys()).length !== 0 && (
+            <div className="flex gap-x-2 items-center">
+              <div>Active filters:</div>
+              {Array.from(filters.keys()).map((filterName) => (
+                <Button
+                  key={filterName}
+                  variant="ghost"
+                  onClick={() => {
+                    setFilters((curr) => {
+                      const newFilters = new Map(curr);
+                      newFilters.delete(filterName);
+                      return newFilters;
+                    });
+                  }}
+                >
+                  {`${filterName}: ${filters.get(filterName)?.inputValues}`}
+                </Button>
+              ))}
+            </div>
           )}
         </div>
         <div className="gap-x-6 items-center hidden md:flex md:visible">
