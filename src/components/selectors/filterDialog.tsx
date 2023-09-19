@@ -38,7 +38,13 @@ export default function FilterDialog({
   }, [filters]);
 
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    <Dialog
+      open={isDialogOpen}
+      onOpenChange={(newValue) => {
+        setIsDialogOpen(newValue);
+        setLocalFilters(filters);
+      }}
+    >
       <DialogTrigger asChild>
         <Button>Filters</Button>
       </DialogTrigger>
