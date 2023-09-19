@@ -26,7 +26,7 @@ interface MultiSelectProps {
   label: string;
   options: OptionType[];
   selected: string[];
-  onChange: React.Dispatch<React.SetStateAction<string[]>>;
+  onChange: (newSelected: string[]) => void;
   className?: string;
 }
 
@@ -56,7 +56,6 @@ function MultiSelect({
             className={`w-full justify-between ${
               selected.length > 1 ? "h-full" : "h-10"
             }`}
-            onClick={() => setOpen(!open)}
           >
             <div className="flex gap-1 flex-wrap">
               {selected.length === 0 ? (
@@ -76,7 +75,6 @@ function MultiSelect({
                         e.preventDefault();
                         e.stopPropagation();
                       }}
-                      onClick={() => handleUnselect(item)}
                     >
                       <X
                         className="h-3 w-3 text-muted-foreground hover:text-foreground"
@@ -106,7 +104,6 @@ function MultiSelect({
                         ? selected.filter((item) => item !== option.value)
                         : [...selected, option.value]
                     );
-                    setOpen(true);
                   }}
                 >
                   <Check

@@ -23,15 +23,17 @@ const options = [
 ];
 
 export default function IsCollectedSelector({
+  selected,
   setFilters,
 }: {
+  selected: string[];
   setFilters: Dispatch<SetStateAction<Map<string, Filter>>>;
 }) {
   return (
     <div className="flex flex-col gap-y-2">
       <Label> Is Collected </Label>
       <Select
-        defaultValue="all"
+        value={selected[0] || "all"}
         onValueChange={(value) => {
           setFilters((curr) => {
             const newFilters = new Map(curr);
@@ -40,14 +42,18 @@ export default function IsCollectedSelector({
               return newFilters;
             }
             if (value === "collected") {
-              newFilters.set("isCollected", (cardVersions) =>
-                cardVersions.some((card) => card.isCollected)
-              );
+              newFilters.set("isCollected", {
+                inputValues: ["collected"],
+                filterLogic: (cardVersions) =>
+                  cardVersions.some((card) => card.isCollected),
+              });
               return newFilters;
             }
-            newFilters.set("isCollected", (cardVersions) =>
-              cardVersions.every((card) => !card.isCollected)
-            );
+            newFilters.set("isCollected", {
+              inputValues: ["missing"],
+              filterLogic: (cardVersions) =>
+                cardVersions.every((card) => !card.isCollected),
+            });
             return newFilters;
           });
         }}

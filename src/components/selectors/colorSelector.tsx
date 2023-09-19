@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { Color } from "scryfall-sdk";
 import { Filter } from "../filters";
 import { MultiSelect } from "./multiSelect";
@@ -29,35 +29,35 @@ const options = [
 ];
 
 export default function ColorSelector({
+  selected,
   setFilters,
 }: {
+  selected: string[];
   setFilters: Dispatch<SetStateAction<Map<string, Filter>>>;
 }) {
-  const [selected, setSelected] = useState<string[]>([]);
-
-  useEffect(() => {
-    setFilters((curr) => {
-      const newFilters = new Map(curr);
-      if (selected.length === 0) {
-        newFilters.delete("color");
-        return newFilters;
-      }
-      newFilters.set("color", (cardVersions) =>
-        cardVersions.some((card) =>
-          selected.some((color) => card.colors.includes(color as Color))
-        )
-      );
-      return newFilters;
-    });
-  }, [selected]);
-
   return (
     <MultiSelect
       label="Colors"
       options={options}
       selected={selected}
       onChange={(newSelected) => {
-        setSelected(newSelected);
+        setFilters((curr) => {
+          const newFilters = new Map(curr);
+          if (newSelected.length === 0) {
+            newFilters.delete("color");
+            return newFilters;
+          }
+          newFilters.set("color", {
+            inputValues: newSelected,
+            filterLogic: (cardVersions) =>
+              cardVersions.some((card) =>
+                newSelected.some((color) =>
+                  card.colors.includes(color as Color)
+                )
+              ),
+          });
+          return newFilters;
+        });
       }}
       className="w-32"
     />

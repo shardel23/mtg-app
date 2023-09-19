@@ -1,3 +1,5 @@
+"use client";
+
 import { Dispatch, SetStateAction, useState } from "react";
 import { Filter } from "../filters";
 import { Button } from "../ui/button";
@@ -15,8 +17,10 @@ import IsCollectedSelector from "./isCollectedSelector";
 import RaritySelector from "./raritySelector";
 
 export default function FilterDialog({
+  filters,
   setFilters,
 }: {
+  filters: Map<string, Filter>;
   setFilters: Dispatch<SetStateAction<Map<string, Filter>>>;
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
@@ -40,9 +44,18 @@ export default function FilterDialog({
           <DialogDescription>Select filters</DialogDescription>
         </DialogHeader>
         <div className="grid grid-cols-2 gap-6">
-          <IsCollectedSelector setFilters={setLocalFilters} />
-          <RaritySelector setFilters={setLocalFilters} />
-          <ColorSelector setFilters={setLocalFilters} />
+          <IsCollectedSelector
+            selected={localFilters.get("isCollected")?.inputValues || []}
+            setFilters={setLocalFilters}
+          />
+          <RaritySelector
+            selected={localFilters.get("rarity")?.inputValues || []}
+            setFilters={setLocalFilters}
+          />
+          <ColorSelector
+            selected={localFilters.get("color")?.inputValues || []}
+            setFilters={setLocalFilters}
+          />
         </div>
         <DialogFooter>
           <Button

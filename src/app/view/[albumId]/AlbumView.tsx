@@ -28,7 +28,7 @@ function AlbumView({
       .filter((cardName) => {
         const cardVersions = cards.get(cardName)!;
         return Array.from(filters.values()).every((filter) =>
-          filter(cardVersions)
+          filter.filterLogic(cardVersions)
         );
       })
       .forEach((cardName) => {
@@ -56,7 +56,7 @@ function AlbumView({
         <DeleteAlbumDialog albumId={albumId} />
       </div>
       <div className="flex justify-between">
-        <Filters setFilters={setFilters} />
+        <Filters filters={filters} setFilters={setFilters} />
         <div className="gap-x-6 items-center hidden md:flex md:visible">
           <div>Cards per row:</div>
           <Button
