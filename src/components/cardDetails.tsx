@@ -20,33 +20,35 @@ export default function CardDetails({
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   card: CardData;
 }) {
-  const [cardFace, setCardFace] = useState<"front" | "back">("front");
+  const [cardFaceIndex, setCardFaceIndex] = useState<number>(0);
+  const cardFaces = card.cardFaces || [];
+  const isMultiFaced = cardFaces.length > 1;
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="max-w-xs md:max-w-lg">
         <DialogHeader>
-          <DialogTitle className="flex justify-center">{card.name}</DialogTitle>
+          <DialogTitle className="flex justify-center">
+            {isMultiFaced ? cardFaces[cardFaceIndex].name : card.name}
+          </DialogTitle>
         </DialogHeader>
         <div className="flex justify-center">
           <div className="flex flex-col gap-y-4">
             <Image
               unoptimized
-              src={cardFace === "front" ? card.image : card.backFace?.image!}
-              alt={cardFace === "front" ? card.name : card.backFace?.name!}
+              src={isMultiFaced ? cardFaces[cardFaceIndex].image : card.image}
+              alt={isMultiFaced ? cardFaces[cardFaceIndex].name : card.name}
               height={400}
               width={300}
               placeholder="blur"
               blurDataURL="/assets/card-back.jpg"
             />
             <div className="flex justify-center">
-              {card.backFace && (
+              {isMultiFaced && (
                 <Button
                   variant={"secondary"}
                   className="w-12"
                   onClick={() => {
-                    setCardFace((curr) =>
-                      curr === "front" ? "back" : "front"
-                    );
+                    setCardFaceIndex((curr) => (curr + 1) % cardFaces.length);
                   }}
                 >
                   <ArrowUTurnRight />

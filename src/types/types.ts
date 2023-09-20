@@ -25,10 +25,10 @@ export type CardData = {
   setIconUri?: string;
   rarity: string;
   colors: Color[];
-  backFace?: {
+  cardFaces?: {
     name: string;
     image: string;
-  };
+  }[];
 };
 
 export type createAlbumFromCSVInput = {
