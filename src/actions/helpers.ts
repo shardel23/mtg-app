@@ -36,6 +36,13 @@ export const transformCards = (
     setIconUri: set?.icon_svg_uri,
     rarity: card.rarity,
     colors: getCardColors(card),
+    backFace:
+      card.card_faces.length > 1
+        ? {
+            name: card.card_faces[1].name,
+            image: card.card_faces[1].image_uris?.normal ?? "",
+          }
+        : undefined,
   }));
 };
 

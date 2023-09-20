@@ -4,6 +4,7 @@ import { markCardIsCollected } from "@/actions/mtgActions";
 import { CardData } from "@/types/types";
 import Image from "next/image";
 import { useCallback, useState, useTransition } from "react";
+import CardDetails from "./cardDetails";
 import DeleteCardDialog from "./deleteCardDialog";
 import ArrowRightLeft from "./icons/arrow-right-left";
 import CheckCircle from "./icons/check-circle";
@@ -23,6 +24,7 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
       return cardVersions.map((card) => card.isCollected!);
     }
   );
+  const [isCardDialogOpen, setIsCardDialogOpen] = useState(false);
 
   const changeCardVersion = useCallback(() => {
     setCardVersionNumberToDisplay(
@@ -50,6 +52,7 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
               width={300}
               placeholder="blur"
               blurDataURL="/assets/card-back.jpg"
+              onClick={() => setIsCardDialogOpen(true)}
             />
             <CheckCircle
               className={
@@ -109,6 +112,11 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
           </div>
         </div>
       )}
+      <CardDetails
+        isOpen={isCardDialogOpen}
+        setIsOpen={setIsCardDialogOpen}
+        card={card}
+      />
     </div>
   );
 }
