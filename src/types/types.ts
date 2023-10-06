@@ -25,11 +25,17 @@ export type CardData = {
   setIconUri?: string;
   rarity: string;
   colors: Color[];
+  manaCost: ManaCost;
+  cmc: number;
   cardFaces?: {
     name: string;
     image: string;
+    manaCost: ManaCost;
+    cmc: number;
   }[];
 };
+
+export type ManaCost = string | null | undefined;
 
 export type createAlbumFromCSVInput = {
   cardName: string;
