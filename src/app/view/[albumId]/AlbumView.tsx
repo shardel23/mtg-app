@@ -3,8 +3,10 @@
 import CardGrid from "@/components/cardGrid";
 import DeleteAlbumDialog from "@/components/deleteAlbumDialog";
 import Filters, { Filter } from "@/components/filters";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CardData } from "@/types/types";
+import { X } from "lucide-react";
 import { useMemo, useState } from "react";
 
 function AlbumView({
@@ -69,19 +71,23 @@ function AlbumView({
             <div className="flex gap-x-2 items-center">
               <div>Active filters:</div>
               {Array.from(filters.keys()).map((filterName) => (
-                <Button
+                <Badge
+                  variant="secondary"
                   key={filterName}
-                  variant="ghost"
-                  onClick={() => {
-                    setFilters((curr) => {
-                      const newFilters = new Map(curr);
-                      newFilters.delete(filterName);
-                      return newFilters;
-                    });
-                  }}
+                  className="mr-1 mb-1 gap-x-2"
                 >
                   {`${filterName}: ${filters.get(filterName)?.inputValues}`}
-                </Button>
+                  <X
+                    className="h-3 w-3 text-muted-foreground hover:text-foreground hover:cursor-pointer"
+                    onClick={() => {
+                      setFilters((curr) => {
+                        const newFilters = new Map(curr);
+                        newFilters.delete(filterName);
+                        return newFilters;
+                      });
+                    }}
+                  />
+                </Badge>
               ))}
             </div>
           )}
