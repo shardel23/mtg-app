@@ -15,6 +15,7 @@ import {
 import ColorSelector from "./colorSelector";
 import IsCollectedSelector from "./isCollectedSelector";
 import RaritySelector from "./raritySelector";
+import ManaValueSelector from "./manaValueSelector";
 
 export default function FilterDialog({
   filters,
@@ -64,6 +65,10 @@ export default function FilterDialog({
           />
           <ColorSelector
             selected={localFilters.get("color")?.inputValues || []}
+            setFilters={setLocalFilters}
+          />
+          <ManaValueSelector
+            selected={localFilters.get("manaValue")?.inputValues || []}
             setFilters={setLocalFilters}
           />
         </div>
