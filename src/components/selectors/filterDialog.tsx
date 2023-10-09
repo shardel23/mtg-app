@@ -17,6 +17,25 @@ import IsCollectedSelector from "./isCollectedSelector";
 import RaritySelector from "./raritySelector";
 import ManaValueSelector from "./manaValueSelector";
 
+const filterSelectors = [
+  {
+    key: "isCollected",
+    selector: IsCollectedSelector,
+  },
+  {
+    key: "rarity",
+    selector: RaritySelector,
+  },
+  {
+    key: "color",
+    selector: ColorSelector,
+  },
+  {
+    key: "manaValue",
+    selector: ManaValueSelector,
+  },
+];
+
 export default function FilterDialog({
   filters,
   setFilters,
@@ -55,22 +74,13 @@ export default function FilterDialog({
           <DialogDescription>Select filters</DialogDescription>
         </DialogHeader>
         <div className="grid grid-cols-2 gap-6">
-          <IsCollectedSelector
-            selected={localFilters.get("isCollected")?.inputValues || []}
-            setFilters={setLocalFilters}
-          />
-          <RaritySelector
-            selected={localFilters.get("rarity")?.inputValues || []}
-            setFilters={setLocalFilters}
-          />
-          <ColorSelector
-            selected={localFilters.get("color")?.inputValues || []}
-            setFilters={setLocalFilters}
-          />
-          <ManaValueSelector
-            selected={localFilters.get("manaValue")?.inputValues || []}
-            setFilters={setLocalFilters}
-          />
+          {filterSelectors.map(({ key, selector: Selector }) => (
+            <Selector
+              key={key}
+              selected={localFilters.get(key)?.inputValues || []}
+              setFilters={setLocalFilters}
+            />
+          ))}
         </div>
         <DialogFooter>
           <Button
