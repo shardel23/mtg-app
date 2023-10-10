@@ -25,7 +25,7 @@ export async function Sidebar() {
                 variant="ghost"
                 className="w-full justify-start"
               >
-                <Link href={`/view/${album.id}`}>{album.name}</Link>
+                <Link href={`/album/${album.id}`}>{album.name}</Link>
               </Button>
             ))}
           </div>
