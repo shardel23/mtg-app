@@ -10,6 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./ui/dialog";
+import { isCardMultiFace } from "@/actions/helpers";
 
 export default function CardDetails({
   isOpen,
@@ -22,7 +23,7 @@ export default function CardDetails({
 }) {
   const [cardFaceIndex, setCardFaceIndex] = useState<number>(0);
   const cardFaces = card.cardFaces || [];
-  const isMultiFaced = cardFaces.length > 1;
+  const isMultiFaced = isCardMultiFace(card);
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="max-w-xs md:max-w-lg">

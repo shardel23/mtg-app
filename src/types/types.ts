@@ -1,4 +1,4 @@
-import { Color } from "scryfall-sdk";
+import { Color, Layout } from "scryfall-sdk";
 
 export type CollectionData = {
   name: string;
@@ -27,6 +27,7 @@ export type CardData = {
   colors: Color[];
   manaCost: ManaCost;
   cmc: number;
+  layout: keyof typeof Layout;
   cardFaces?: {
     name: string;
     image: string;

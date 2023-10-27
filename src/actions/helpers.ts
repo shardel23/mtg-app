@@ -22,16 +22,31 @@ export const transformCards = (
     setIconUri: set?.icon_svg_uri,
     rarity: card.rarity,
     colors: getCardColors(card),
-    manaCost: card.mana_cost ,
+    manaCost: card.mana_cost,
     cmc: card.cmc,
+    layout: card.layout,
     cardFaces: card.card_faces.map((face) => ({
       name: face.name,
       image: face.image_uris?.normal ?? "",
       manaCost: face.mana_cost,
-      cmc: getCardCMC(face.mana_cost)
+      cmc: getCardCMC(face.mana_cost),
     })),
   }));
 };
+
+export function isCardMultiFace(card: CardData): boolean {
+  return (
+    (card.cardFaces ?? []).length > 1 &&
+    [
+      "transform",
+      "modal_dfc",
+      "flip",
+      "modal_dfc",
+      "saga",
+      "double_sided",
+    ].includes(card.layout)
+  );
+}
 
 function getCardColors(card: Scry.Card): Scry.Color[] {
   return (
