@@ -28,11 +28,13 @@ export type CardData = {
   manaCost: ManaCost;
   cmc: number;
   layout: keyof typeof Layout;
+  types: string[];
   cardFaces?: {
     name: string;
     image: string;
     manaCost: ManaCost;
     cmc: number;
+    types: string[];
   }[];
 };
 

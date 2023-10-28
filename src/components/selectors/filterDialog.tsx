@@ -16,6 +16,7 @@ import ColorSelector from "./colorSelector";
 import IsCollectedSelector from "./isCollectedSelector";
 import RaritySelector from "./raritySelector";
 import ManaValueSelector from "./manaValueSelector";
+import TypeSelector from "./typeSelector";
 
 const filterSelectors = [
   {
@@ -34,6 +35,7 @@ const filterSelectors = [
     key: "manaValue",
     selector: ManaValueSelector,
   },
+  { key: "type", selector: TypeSelector },
 ];
 
 export default function FilterDialog({

@@ -25,11 +25,13 @@ export const transformCards = (
     manaCost: card.mana_cost,
     cmc: card.cmc,
     layout: card.layout,
+    types: card.type_line.split(" ").map((type) => type.toLowerCase()),
     cardFaces: card.card_faces.map((face) => ({
       name: face.name,
       image: face.image_uris?.normal ?? "",
       manaCost: face.mana_cost,
       cmc: getCardCMC(face.mana_cost),
+      types: face.type_line.split(" ").map((type) => type.toLowerCase()),
     })),
   }));
 };
