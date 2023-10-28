@@ -62,7 +62,7 @@ function HamburgerMenu({
                 key={album.id}
                 className="w-full justify-start"
               >
-                <Link href={`/view/${album.id}`}>{album.name}</Link>
+                <Link href={`/album/${album.id}`}>{album.name}</Link>
               </DropdownMenuItem>
             ))}
           </ScrollArea>
