@@ -14,8 +14,8 @@ import {
 } from "../ui/dialog";
 import ColorSelector from "./colorSelector";
 import IsCollectedSelector from "./isCollectedSelector";
-import RaritySelector from "./raritySelector";
 import ManaValueSelector from "./manaValueSelector";
+import RaritySelector from "./raritySelector";
 import TypeSelector from "./typeSelector";
 
 const filterSelectors = [

@@ -1,3 +1,4 @@
+import { isCardMultiFace } from "@/actions/helpers";
 import { CardData } from "@/types/types";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -10,7 +11,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./ui/dialog";
-import { isCardMultiFace } from "@/actions/helpers";
 
 export default function CardDetails({
   isOpen,
