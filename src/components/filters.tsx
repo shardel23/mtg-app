@@ -17,7 +17,7 @@ export default function Filters({
   setFilters: Dispatch<SetStateAction<Map<string, Filter>>>;
 }) {
   return (
-    <div className="flex items-center gap-x-4 max-w-screen-sm">
+    <div className="flex max-w-screen-sm items-center gap-x-4">
       <FilterDialog filters={filters} setFilters={setFilters} />
     </div>
   );

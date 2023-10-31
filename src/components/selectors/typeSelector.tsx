@@ -61,7 +61,7 @@ export default function TypeSelector({
               cardVersions.some(
                 (card) =>
                   newSelected.filter((type) => card.types.includes(type))
-                    .length !== 0
+                    .length !== 0,
               ),
           });
           return newFilters;

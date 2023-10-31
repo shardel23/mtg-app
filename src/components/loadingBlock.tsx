@@ -6,6 +6,6 @@ type LoadingBlockProps = {
 
 export default function LoadingBlock({ className }: LoadingBlockProps) {
   return (
-    <div className={cn(className, `animate-pulse bg-slate-800 rounded`)} />
+    <div className={cn(className, `animate-pulse rounded bg-slate-800`)} />
   );
 }

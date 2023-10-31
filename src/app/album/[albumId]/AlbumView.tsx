@@ -30,7 +30,7 @@ function AlbumView({
       .filter((cardName) => {
         const cardVersions = cards.get(cardName)!;
         return Array.from(filters.values()).every((filter) =>
-          filter.filterLogic(cardVersions)
+          filter.filterLogic(cardVersions),
         );
       })
       .forEach((cardName) => {
@@ -47,9 +47,9 @@ function AlbumView({
   }, [cards]);
 
   return (
-    <div className="pt-2 md:pt-0 space-y-2">
+    <div className="space-y-2 pt-2 md:pt-0">
       <div className="flex justify-between">
-        <div className="flex gap-x-4 items-center">
+        <div className="flex items-center gap-x-4">
           <div className="text-xl"> {albumName} </div>
           <div className="text-sm">
             {`Collected: ${collectedCardsCount}/${cards.size}`}
@@ -68,17 +68,17 @@ function AlbumView({
             )}
           </div>
           {Array.from(filters.keys()).length !== 0 && (
-            <div className="flex gap-x-2 items-center">
+            <div className="flex items-center gap-x-2">
               <div>Active filters:</div>
               {Array.from(filters.keys()).map((filterName) => (
                 <Badge
                   variant="secondary"
                   key={filterName}
-                  className="mr-1 mb-1 gap-x-2"
+                  className="mb-1 mr-1 gap-x-2"
                 >
                   {`${filterName}: ${filters.get(filterName)?.inputValues}`}
                   <X
-                    className="h-3 w-3 text-muted-foreground hover:text-foreground hover:cursor-pointer"
+                    className="h-3 w-3 text-muted-foreground hover:cursor-pointer hover:text-foreground"
                     onClick={() => {
                       setFilters((curr) => {
                         const newFilters = new Map(curr);
@@ -92,7 +92,7 @@ function AlbumView({
             </div>
           )}
         </div>
-        <div className="gap-x-6 items-center hidden md:flex md:visible">
+        <div className="hidden items-center gap-x-6 md:visible md:flex">
           <div>Cards per row:</div>
           <Button
             variant="ghost"

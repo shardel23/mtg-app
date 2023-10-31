@@ -40,7 +40,7 @@ function ManaValueSelector({
                 ? cardVersions.some((card) => card.cmc >= 7)
                 : false;
               const res2 = cardVersions.some((card) =>
-                newSelected.includes(card.cmc.toString())
+                newSelected.includes(card.cmc.toString()),
               );
               return res1 || res2;
             },

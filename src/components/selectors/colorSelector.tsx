@@ -52,8 +52,8 @@ export default function ColorSelector({
             filterLogic: (cardVersions) =>
               cardVersions.some((card) =>
                 newSelected.some((color) =>
-                  card.colors.includes(color as Color)
-                )
+                  card.colors.includes(color as Color),
+                ),
               ),
           });
           return newFilters;

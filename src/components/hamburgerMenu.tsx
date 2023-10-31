@@ -44,12 +44,12 @@ function HamburgerMenu({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           {user && <DropdownMenuLabel>{user.name}</DropdownMenuLabel>}
           <SignOut />
         </div>
         <DropdownMenuSeparator />
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <DropdownMenuLabel>My Albums</DropdownMenuLabel>
           <CreateNewAlbumDialog sets={sets} />
         </div>

@@ -14,28 +14,28 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
   const [cardVersionNumberToDisplay, setCardVersionNumberToDisplay] = useState(
     () => {
       const inCollectionIndex = cardVersions.findIndex(
-        (card) => card.isCollected
+        (card) => card.isCollected,
       );
       return inCollectionIndex === -1 ? 0 : inCollectionIndex;
-    }
+    },
   );
   const [isVersionCollected, setIsVersionCollected] = useState<boolean[]>(
     () => {
       return cardVersions.map((card) => card.isCollected!);
-    }
+    },
   );
   const [isCardDialogOpen, setIsCardDialogOpen] = useState(false);
 
   const changeCardVersion = useCallback(() => {
     setCardVersionNumberToDisplay(
-      (currVersionNum) => (currVersionNum + 1) % cardVersions.length
+      (currVersionNum) => (currVersionNum + 1) % cardVersions.length,
     );
   }, [cardVersions.length]);
 
   const card = cardVersions[cardVersionNumberToDisplay];
 
   return (
-    <div className="shadow-md rounded p-1">
+    <div className="rounded p-1 shadow-md">
       {card.image && (
         <div>
           <div className="relative">
@@ -56,7 +56,7 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
             />
             <CheckCircle
               className={
-                "absolute top-1/10 left-1/10 cursor-pointer " +
+                "absolute left-1/10 top-1/10 cursor-pointer " +
                 (isVersionCollected[cardVersionNumberToDisplay]
                   ? "text-green-400 "
                   : "text-slate-400 ") +
@@ -75,14 +75,14 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
                   markCardIsCollected(
                     card.albumId as number,
                     card.id,
-                    !isVersionCollected[cardVersionNumberToDisplay]
+                    !isVersionCollected[cardVersionNumberToDisplay],
                   );
                 });
               }}
             />
             {cardVersions.length > 1 && (
               <ArrowRightLeft
-                className="absolute top-1/10 right-1/10 text-slate-400 md:hover:text-red-500 cursor-pointer"
+                className="absolute right-1/10 top-1/10 cursor-pointer text-slate-400 md:hover:text-red-500"
                 onClick={() => {
                   changeCardVersion();
                 }}
@@ -93,7 +93,7 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
               cardName={card.name}
             />
           </div>
-          <div className="flex justify-center items-center gap-x-1 pt-1 md:pt-2">
+          <div className="flex items-center justify-center gap-x-1 pt-1 md:pt-2">
             <Image
               src={`/assets/${card.setCode}/${card.setCode}-${
                 card.rarity !== "common" ? card.rarity : `${card.rarity}-dark`
@@ -106,7 +106,7 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
             <div className="text-xxs md:text-xs">
               {card.setCode.toUpperCase()}
             </div>
-            <div className="text-gray-400 text-xxxs md:text-xxs">
+            <div className="text-xxxs text-gray-400 md:text-xxs">
               #{card.collectorNumber}
             </div>
           </div>

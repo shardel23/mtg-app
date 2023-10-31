@@ -25,7 +25,7 @@ export default async function RootLayout({
     <html lang="en" className="dark w-full">
       <body className={inter.className + " w-full"}>
         {isLogged && (
-          <div className="flex-1 space-y-4 p-3 md:p-8 md:pt-6 w-full">
+          <div className="w-full flex-1 space-y-4 p-3 md:p-8 md:pt-6">
             <Header />
             <div className="flex w-full flex-col md:flex-row">
               <Sidebar />
@@ -34,7 +34,7 @@ export default async function RootLayout({
           </div>
         )}
         {!isLogged && (
-          <div className="flex justify-center items-center h-screen">
+          <div className="flex h-screen items-center justify-center">
             {children}
           </div>
         )}

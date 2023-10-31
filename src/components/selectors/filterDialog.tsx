@@ -47,7 +47,7 @@ export default function FilterDialog({
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [localFilters, setLocalFilters] = useState<Map<string, Filter>>(
-    new Map()
+    new Map(),
   );
 
   const applyFilters = () => {

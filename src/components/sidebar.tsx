@@ -8,11 +8,11 @@ export async function Sidebar() {
   const sets = await getAllSets();
   const albums = await getAllAlbums();
   return (
-    <div className="md:w-1/4 overflow-x-auto hidden md:flex">
-      <div className="md:space-y-4 py-4">
-        <div className="md:px-3 flex items-center md:flex-col">
-          <div className="flex items-center justify-between gap-x-3 md:pb-4 md:pt-4 w-full">
-            <h2 className="md:px-4 text-sm md:text-lg font-semibold tracking-tight">
+    <div className="hidden overflow-x-auto md:flex md:w-1/4">
+      <div className="py-4 md:space-y-4">
+        <div className="flex items-center md:flex-col md:px-3">
+          <div className="flex w-full items-center justify-between gap-x-3 md:pb-4 md:pt-4">
+            <h2 className="text-sm font-semibold tracking-tight md:px-4 md:text-lg">
               My Albums
             </h2>
             <CreateNewAlbumDialog sets={sets} />
@@ -29,12 +29,12 @@ export async function Sidebar() {
               </Button>
             ))}
           </div>
-          <div className="flex items-center justify-start md:pb-4 md:pt-4 w-full">
-            <h2 className="md:px-4 text-sm md:text-lg font-semibold tracking-tight">
+          <div className="flex w-full items-center justify-start md:pb-4 md:pt-4">
+            <h2 className="text-sm font-semibold tracking-tight md:px-4 md:text-lg">
               Options
             </h2>
           </div>
-          <div className="flex flex-row md:flex-col md:space-y-1 w-full">
+          <div className="flex w-full flex-row md:flex-col md:space-y-1">
             <ExportCollectionButton />
           </div>
         </div>

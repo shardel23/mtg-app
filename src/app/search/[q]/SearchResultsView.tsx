@@ -12,7 +12,7 @@ function SearchResultsView({
 }) {
   return (
     <div className="flex flex-col">
-      <div className="pt-2 pb-2 border-t border-b text-xxs text-center md:text-left md:pl-4">{`Displaying ${results.size} cards where the name includes "${query}"`}</div>
+      <div className="border-b border-t pb-2 pt-2 text-center text-xxs md:pl-4 md:text-left">{`Displaying ${results.size} cards where the name includes "${query}"`}</div>
       <CardGrid cards={results} cardsPerRow={5} />
     </div>
   );

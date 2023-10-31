@@ -23,8 +23,8 @@ async function Header() {
 
   return (
     <div className="flex w-full justify-between">
-      <div className="flex gap-x-8 items-center">
-        <div className="flex font-bold text-2xl md:text-4xl w-24 md:w-72">
+      <div className="flex items-center gap-x-8">
+        <div className="flex w-24 text-2xl font-bold md:w-72 md:text-4xl">
           <Link href={`/`}>MTG Collection</Link>
         </div>
         <div className="hidden md:flex">
@@ -32,12 +32,12 @@ async function Header() {
         </div>
       </div>
       <div className="flex flex-col gap-y-2">
-        <div className="flex md:hidden justify-end text-xs">
+        <div className="flex justify-end text-xs md:hidden">
           {`Collection: ${collection}`}
         </div>
         <div className="flex items-center justify-end md:gap-x-8">
           <CardSearch />
-          <div className="w-48 hidden md:flex items-center gap-x-4">
+          <div className="hidden w-48 items-center gap-x-4 md:flex">
             <Label>Collection: </Label>
             <CollectionSelector
               collections={collections}

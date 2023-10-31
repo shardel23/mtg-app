@@ -51,7 +51,7 @@ function CSVUploader({
   };
 
   return (
-    <div className="flex text-center justify-between items-center">
+    <div className="flex items-center justify-between text-center">
       <div>
         <Input
           type={"file"}

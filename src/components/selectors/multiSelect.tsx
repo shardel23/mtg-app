@@ -57,15 +57,15 @@ function MultiSelect({
               selected.length > 1 ? "h-full" : "h-10"
             }`}
           >
-            <div className="flex gap-1 flex-wrap">
+            <div className="flex flex-wrap gap-1">
               {selected.length === 0 ? (
                 <div>All</div>
               ) : (
                 selected.map((item) => (
-                  <Badge variant="secondary" key={item} className="mr-1 mb-1">
+                  <Badge variant="secondary" key={item} className="mb-1 mr-1">
                     {item}
                     <div
-                      className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                      className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
                       onKeyDown={(e) => {
                         if (e.key === "Enter") {
                           handleUnselect(item);
@@ -102,7 +102,7 @@ function MultiSelect({
                     onChange(
                       selected.includes(option.value)
                         ? selected.filter((item) => item !== option.value)
-                        : [...selected, option.value]
+                        : [...selected, option.value],
                     );
                   }}
                 >
@@ -111,7 +111,7 @@ function MultiSelect({
                       "mr-2 h-4 w-4",
                       selected.includes(option.value)
                         ? "opacity-100"
-                        : "opacity-0"
+                        : "opacity-0",
                     )}
                   />
                   {option.label}

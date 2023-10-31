@@ -21,8 +21,8 @@ export async function getAllSets(): Promise<SetData[]> {
   return sets
     .filter((set) =>
       ["core", "expansion", "masters", "draft_innovation"].includes(
-        set.set_type
-      )
+        set.set_type,
+      ),
     )
     .filter((set) => set.digital === false)
     .map((set) => ({ name: set.name, id: set.id }));
@@ -35,7 +35,7 @@ export async function getAllCardsOfSet(set: Scry.Set): Promise<Scry.Card[]> {
       (card) =>
         card.layout === "normal" ||
         card.collector_number.endsWith("a") ||
-        endsWithNumber(card.collector_number)
+        endsWithNumber(card.collector_number),
     );
 }
 
@@ -79,7 +79,7 @@ export async function getAllAlbums(): Promise<AlbumData[]> {
 
 async function createAlbum(
   setIdentifier: { setId?: string; setCode?: string },
-  collectedCards?: Map<string, boolean>
+  collectedCards?: Map<string, boolean>,
 ): Promise<number> {
   const set =
     setIdentifier.setId != null
@@ -113,7 +113,7 @@ async function createAlbum(
           collectorNumber: parseInt(
             endsWithNumber(card.collector_number)
               ? card.collector_number
-              : card.collector_number.slice(0, -1)
+              : card.collector_number.slice(0, -1),
           ),
           setName: set.name,
           setId: set.id,
@@ -134,7 +134,7 @@ export async function createAlbumFromSetId(setId: string): Promise<number> {
 }
 
 export async function createAlbumFromCSV(
-  input: createAlbumFromCSVInput
+  input: createAlbumFromCSVInput,
 ): Promise<number> {
   const importedCards = new Map(input.map((row) => [row.cardId, true]));
   const setCode = input[0].setCode;
@@ -142,7 +142,7 @@ export async function createAlbumFromCSV(
 }
 
 export async function getAlbumCards(
-  albumId: number
+  albumId: number,
 ): Promise<{ albumName: string; cards: Map<string, CardData[]> }> {
   const album = await prisma.album.findUnique({
     where: {
@@ -190,7 +190,7 @@ export async function getAlbumCards(
 export async function markCardIsCollected(
   albumId: number,
   cardId: string,
-  isCollected: boolean
+  isCollected: boolean,
 ): Promise<void> {
   await prisma.card.update({
     where: {
@@ -226,7 +226,7 @@ export async function deleteAlbum(albumId: number): Promise<void> {
 
 export async function deleteCardFromAlbum(
   albumId: number,
-  cardName: string
+  cardName: string,
 ): Promise<void> {
   await prisma.card.deleteMany({
     where: {
@@ -238,7 +238,7 @@ export async function deleteCardFromAlbum(
 }
 
 export async function searchCardInCollection(
-  cardName: string
+  cardName: string,
 ): Promise<Map<string, CardData[]>> {
   if (cardName.length < 2) {
     return new Map();
@@ -267,7 +267,7 @@ export async function searchCardInCollection(
   const cardsDataFromAPI = transformCards(
     await Scry.Cards.search(`name:/${cardName}/`, {
       unique: "prints",
-    }).waitForAll()
+    }).waitForAll(),
   ).filter((card) => cards.find((c) => c.id === card.id));
   const mergedCardsData = cardsDataFromAPI.map((apiCard) => ({
     ...apiCard,

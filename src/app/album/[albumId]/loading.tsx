@@ -3,7 +3,7 @@ import LoadingGrid from "@/components/loadingGrid";
 
 export default function AlbumPageLoading() {
   return (
-    <div className="space-y-4 animate-pulse">
+    <div className="animate-pulse space-y-4">
       <LoadingBlock className="h-6 w-72" />
       <LoadingBlock className="h-4 w-24" />
       <div className="flex justify-between">

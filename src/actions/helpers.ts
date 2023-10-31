@@ -11,7 +11,7 @@ export const getImageUri = (card: Scry.Card): string => {
 
 export const transformCards = (
   cards: Scry.Card[],
-  set?: Scry.Set
+  set?: Scry.Set,
 ): CardData[] => {
   return cards.map((card) => ({
     id: card.id,
@@ -55,7 +55,7 @@ function getCardColors(card: Scry.Card): Scry.Color[] {
     (card.card_faces.length > 0
       ? card.card_faces.reduce(
           (colors, face) => [...colors, ...(face.colors ?? [])],
-          [] as Scry.Color[]
+          [] as Scry.Color[],
         )
       : card.colors) ?? []
   );

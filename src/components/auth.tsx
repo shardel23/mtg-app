@@ -8,7 +8,7 @@ export default async function Auth() {
   const user = session?.user;
   if (user != null) {
     return (
-      <div className="flex gap-x-2 items-center">
+      <div className="flex items-center gap-x-2">
         <UserNav user={user} />
       </div>
     );

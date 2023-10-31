@@ -29,7 +29,7 @@ export const csvFileToArray = (string: string) => {
         object[header] = values[index];
         return object;
       },
-      {}
+      {},
     );
     return obj;
   });
