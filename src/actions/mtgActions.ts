@@ -235,7 +235,26 @@ export async function deleteAlbum(albumId: number): Promise<void> {
 export async function deleteCardFromAlbum(
   albumId: number,
   cardName: string,
-): Promise<void> {
+): Promise<boolean> {
+  const userId = await getUserIdFromSession();
+  if (userId == null) {
+    return false;
+  }
+  const res = await prisma.album.findUnique({
+    where: {
+      id: albumId,
+    },
+    select: {
+      collection: {
+        select: {
+          userId: true,
+        },
+      },
+    },
+  });
+  if (res?.collection?.userId !== userId) {
+    return false;
+  }
   await prisma.card.deleteMany({
     where: {
       albumId: albumId,
@@ -243,6 +262,7 @@ export async function deleteCardFromAlbum(
     },
   });
   revalidatePath(`/album/{albumId}`);
+  return true;
 }
 
 export async function searchCardInCollection(
