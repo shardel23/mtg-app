@@ -33,7 +33,8 @@ function DeleteCardDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            Are you sure you want to delete '{cardName}' from this album?
+            Are you sure you want to delete {"'" + cardName + "'"} from this
+            album?
           </DialogTitle>
           <DialogDescription>
             This action is irreversible. You will lose all the data associated
