@@ -4,6 +4,27 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 
 import GitHubProvider from "next-auth/providers/github";
 
+const prismaAdapter = PrismaAdapter(prisma);
+// @ts-ignore
+prismaAdapter.createUser = async (userData) => {
+  const user = await prisma.user.create({
+    data: {
+      ...userData,
+    },
+  });
+  await prisma.collection.create({
+    data: {
+      name: "Default",
+      User: {
+        connect: {
+          id: user.id,
+        },
+      },
+    },
+  });
+  return user;
+};
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GitHubProvider({
@@ -28,7 +49,7 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/auth/signin",
   },
-  adapter: PrismaAdapter(prisma),
+  adapter: prismaAdapter,
 };
 
 const handler = NextAuth(authOptions);
