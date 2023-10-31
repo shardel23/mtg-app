@@ -251,6 +251,10 @@ export async function searchCardInCollection(
   if (cardName.length < 2) {
     return new Map();
   }
+  const userId = await getUserIdFromSession();
+  if (userId == null) {
+    return new Map();
+  }
   const cards = await prisma.card.findMany({
     where: {
       name: {
@@ -262,6 +266,7 @@ export async function searchCardInCollection(
           name: {
             equals: await getCollection(),
           },
+          userId: userId,
         },
       },
     },
