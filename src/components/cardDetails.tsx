@@ -2,6 +2,7 @@ import { isCardMultiFace } from "@/actions/helpers";
 import { CardData } from "@/types/types";
 import Image from "next/image";
 import React, { useState } from "react";
+import DeleteCardDialog from "./deleteCardDialog";
 import ArrowUTurnRight from "./icons/arrow-uturn-right";
 import { Button } from "./ui/button";
 import {
@@ -58,7 +59,12 @@ export default function CardDetails({
             </div>
           </div>
         </div>
-        <DialogFooter></DialogFooter>
+        <DialogFooter>
+          <DeleteCardDialog
+            albumId={card.albumId as number}
+            cardName={card.name}
+          />
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

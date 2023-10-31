@@ -5,7 +5,6 @@ import { CardData } from "@/types/types";
 import Image from "next/image";
 import { useCallback, useState, useTransition } from "react";
 import CardDetails from "./cardDetails";
-import DeleteCardDialog from "./deleteCardDialog";
 import ArrowRightLeft from "./icons/arrow-right-left";
 import CheckCircle from "./icons/check-circle";
 
@@ -88,10 +87,9 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
                 }}
               />
             )}
-            <DeleteCardDialog
-              albumId={card.albumId as number}
-              cardName={card.name}
-            />
+            <div className="absolute right-0 bottom-0 bg-opacity-50 bg-black rounded-full text-xs px-2 py-1">
+              ${card.price ?? "--"}
+            </div>
           </div>
           <div className="flex items-center justify-center gap-x-1 pt-1 md:pt-2">
             <Image

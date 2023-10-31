@@ -25,7 +25,7 @@ function DeleteCardDialog({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <Trash
-        className="invisible absolute bottom-1/10 right-1/10 md:visible md:cursor-pointer md:hover:text-red-500"
+        className="invisible md:visible md:cursor-pointer md:hover:text-red-500"
         onClick={() => setIsDialogOpen(true)}
       />
       <DialogContent>

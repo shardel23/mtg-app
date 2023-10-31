@@ -36,6 +36,7 @@ export type CardData = {
     cmc: number;
     types: string[];
   }[];
+  price: string | null | undefined;
 };
 
 export type ManaCost = string | null | undefined;

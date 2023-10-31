@@ -33,6 +33,7 @@ export const transformCards = (
       cmc: getCardCMC(face.mana_cost),
       types: face.type_line.split(" ").map((type) => type.toLowerCase()),
     })),
+    price: card.prices?.usd,
   }));
 };
 
