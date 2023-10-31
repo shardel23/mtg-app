@@ -80,6 +80,9 @@ dependencies:
   next-auth:
     specifier: ^4.24.4
     version: 4.24.4(next@14.0.1)(react-dom@18.2.0)(react@18.2.0)
+  next-axiom:
+    specifier: ^1.1.0
+    version: 1.1.0(next@14.0.1)(react@18.2.0)
   postcss:
     specifier: 8.4.27
     version: 8.4.27
@@ -2999,6 +3002,18 @@ packages:
       uuid: 8.3.2
     dev: false
 
+  /next-axiom@1.1.0(next@14.0.1)(react@18.2.0):
+    resolution: {integrity: sha512-/Fh8MOM7gzeR58SA0HfF2ZyNp4WY3cv0hbH3XW3e0u3FG4IGPfFoRuNtpWx3qv4YCqm3jmoR3CVP/dc0VF6xMQ==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      next: '>=13.4'
+      react: '>=18.0.0'
+    dependencies:
+      next: 14.0.1(react-dom@18.2.0)(react@18.2.0)
+      react: 18.2.0
+      whatwg-fetch: 3.6.19
+    dev: false
+
   /next@14.0.1(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-s4YaLpE4b0gmb3ggtmpmV+wt+lPRuGtANzojMQ2+gmBpgX9w5fTbjsy6dXByBuENsdCX5pukZH/GxdFgO62+pA==}
     engines: {node: '>=18.17.0'}
@@ -4061,6 +4076,10 @@ packages:
     dependencies:
       glob-to-regexp: 0.4.1
       graceful-fs: 4.2.11
+    dev: false
+
+  /whatwg-fetch@3.6.19:
+    resolution: {integrity: sha512-d67JP4dHSbm2TrpFj8AbO8DnL1JXL5J9u0Kq2xW6d0TFDbCA3Muhdt8orXC22utleTVj7Prqt82baN6RBvnEgw==}
     dev: false
 
   /which-boxed-primitive@1.0.2:

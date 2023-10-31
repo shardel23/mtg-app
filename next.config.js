@@ -12,4 +12,6 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+const { withAxiom } = require('next-axiom');
+
+module.exports = withAxiom(nextConfig);

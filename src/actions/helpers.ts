@@ -1,4 +1,6 @@
 import { CardData, ManaCost } from "@/types/types";
+import { Logger } from "next-axiom";
+import { LogLevel } from "next-axiom/dist/logger";
 import * as Scry from "scryfall-sdk";
 
 export const getImageUri = (card: Scry.Card): string => {
@@ -75,4 +77,10 @@ function getCardCMC(manaCost: ManaCost): number {
     const manaSymbolNumber = parseInt(manaSymbol);
     return sum + (isNaN(manaSymbolNumber) ? 1 : manaSymbolNumber);
   }, 0);
+}
+
+export async function log(logLevel: LogLevel, message: string) {
+  const log = new Logger();
+  log._log(logLevel, message);
+  await log.flush();
 }

@@ -11,10 +11,11 @@ import {
   createAlbumFromCSVInput,
 } from "@/types/types";
 import { getServerSession } from "next-auth";
+import { LogLevel } from "next-axiom/dist/logger";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import * as Scry from "scryfall-sdk";
-import { getImageUri, transformCards } from "./helpers";
+import { getImageUri, log, transformCards } from "./helpers";
 
 export async function getAllSets(): Promise<SetData[]> {
   const sets = await Scry.Sets.all();
@@ -238,6 +239,7 @@ export async function deleteCardFromAlbum(
 ): Promise<boolean> {
   const userId = await getUserIdFromSession();
   if (userId == null) {
+    log(LogLevel.warn, "User is not logged in");
     return false;
   }
   const res = await prisma.album.findUnique({
@@ -253,6 +255,7 @@ export async function deleteCardFromAlbum(
     },
   });
   if (res?.collection?.userId !== userId) {
+    log(LogLevel.warn, "User is not the owner of the album");
     return false;
   }
   await prisma.card.deleteMany({
@@ -262,6 +265,7 @@ export async function deleteCardFromAlbum(
     },
   });
   revalidatePath(`/album/{albumId}`);
+  log(LogLevel.info, "Card deleted from album");
   return true;
 }
 

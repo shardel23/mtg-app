@@ -2,6 +2,7 @@ import Header from "@/components/header";
 import { Sidebar } from "@/components/sidebar";
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth/next";
+import { AxiomWebVitals } from "next-axiom";
 import { Inter } from "next/font/google";
 import { authOptions } from "./api/auth/[...nextauth]/route";
 import "./globals.css";
@@ -24,6 +25,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className="dark w-full">
       <body className={inter.className + " w-full"}>
+        <AxiomWebVitals />
         {isLogged && (
           <div className="w-full flex-1 space-y-4 p-3 md:p-8 md:pt-6">
             <Header />
