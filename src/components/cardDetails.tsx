@@ -60,10 +60,12 @@ export default function CardDetails({
           </div>
         </div>
         <DialogFooter>
-          <DeleteCardDialog
-            albumId={card.albumId as number}
-            cardName={card.name}
-          />
+          <div className="flex justify-end">
+            <DeleteCardDialog
+              albumId={card.albumId as number}
+              cardName={card.name}
+            />
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

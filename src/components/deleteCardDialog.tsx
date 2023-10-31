@@ -10,6 +10,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "./ui/dialog";
 
 function DeleteCardDialog({
@@ -24,15 +25,19 @@ function DeleteCardDialog({
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <Trash
-        className="invisible md:visible md:cursor-pointer md:hover:text-red-500"
-        onClick={() => setIsDialogOpen(true)}
-      />
+      <DialogTrigger asChild>
+        <Button variant="destructive" size={"icon"}>
+          <Trash />
+        </Button>
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Are you sure you want to delete {cardName}?</DialogTitle>
+          <DialogTitle>
+            Are you sure you want to delete '{cardName}' from this album?
+          </DialogTitle>
           <DialogDescription>
             This action is irreversible. You will lose all the data associated
+            to this card.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
