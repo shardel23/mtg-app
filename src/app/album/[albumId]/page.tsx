@@ -13,7 +13,7 @@ export default async function AlbumPage({
     return (
       <>
         <RedirectIfNotLoggedIn />
-        <div className="text-center">Album not found</div>
+        <div className="text-center">Album not found in your collection</div>
       </>
     );
   }

@@ -144,6 +144,13 @@ export async function createAlbumFromCSV(
 export async function getAlbumCards(
   albumId: number,
 ): Promise<{ albumName: string; cards: Map<string, CardData[]> }> {
+  const userId = await getUserIdFromSession();
+  if (userId == null) {
+    return {
+      albumName: "",
+      cards: new Map(),
+    };
+  }
   const album = await prisma.album.findUnique({
     where: {
       id: albumId,
@@ -151,6 +158,7 @@ export async function getAlbumCards(
         name: {
           equals: await getCollection(),
         },
+        userId: userId,
       },
     },
     include: {
