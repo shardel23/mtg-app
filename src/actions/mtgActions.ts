@@ -203,7 +203,7 @@ export async function markCardIsCollected(
       isCollected: isCollected,
     },
   });
-  revalidatePath(`/view/{albumId}`);
+  revalidatePath(`/album/{albumId}`);
 }
 
 export async function deleteAlbum(albumId: number): Promise<void> {
@@ -234,7 +234,7 @@ export async function deleteCardFromAlbum(
       name: cardName,
     },
   });
-  revalidatePath(`/view/{albumId}`);
+  revalidatePath(`/album/{albumId}`);
 }
 
 export async function searchCardInCollection(

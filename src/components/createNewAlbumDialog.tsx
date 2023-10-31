@@ -55,7 +55,7 @@ function CreateNewAlbumDialog({ sets }: { sets: Array<SetData> }) {
                 const albumId = await createAlbumFromSetId(selectedSetId);
                 setIsDialogOpen(false);
                 if (albumId !== -1) {
-                  router.push(`/view/${albumId}`);
+                  router.push(`/album/${albumId}`);
                 }
               });
             }}
@@ -71,7 +71,7 @@ function CreateNewAlbumDialog({ sets }: { sets: Array<SetData> }) {
           onUploadSuccess={(albumId: number) => {
             setIsDialogOpen(false);
             if (albumId !== -1) {
-              router.push(`/view/${albumId}`);
+              router.push(`/album/${albumId}`);
             }
           }}
         />
