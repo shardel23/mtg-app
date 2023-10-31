@@ -87,7 +87,7 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
                 }}
               />
             )}
-            <div className="absolute right-0 bottom-0 bg-opacity-50 bg-black rounded-full text-xs px-2 py-1">
+            <div className="absolute bottom-0 right-0 rounded-full bg-black bg-opacity-50 px-1 py-0.5 text-xxs md:px-2 md:py-1 md:text-xs">
               ${card.price ?? "--"}
             </div>
           </div>
