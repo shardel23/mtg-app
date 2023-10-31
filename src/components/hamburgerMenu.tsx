@@ -36,6 +36,8 @@ function HamburgerMenu({
   const [_, startTransition] = useTransition();
   const router = useRouter();
 
+  const collections = ["Default"];
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -77,38 +79,24 @@ function HamburgerMenu({
           <DropdownMenuLabel>Collection</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <ScrollArea viewportClassName="max-h-36">
-            <DropdownMenuItem>
-              <Label
-                className="mr-2"
-                onClick={() => {
-                  startTransition(async () => {
-                    await setCollectionCookie("Default");
-                    router.push("/");
-                  });
-                }}
-              >
-                Default
-              </Label>
-              {collection === "Default" && (
-                <span className="text-green-500">✓</span>
-              )}
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Label
-                className="mr-2"
-                onClick={() => {
-                  startTransition(async () => {
-                    await setCollectionCookie("Test");
-                    router.push("/");
-                  });
-                }}
-              >
-                Test
-              </Label>
-              {collection === "Test" && (
-                <span className="text-green-500">✓</span>
-              )}
-            </DropdownMenuItem>
+            {collections.map((collectionName) => (
+              <DropdownMenuItem key={collectionName}>
+                <Label
+                  className="mr-2"
+                  onClick={() => {
+                    startTransition(async () => {
+                      await setCollectionCookie(collectionName);
+                      router.push("/");
+                    });
+                  }}
+                >
+                  {collectionName}
+                </Label>
+                {collection === collectionName && (
+                  <span className="text-green-500">✓</span>
+                )}
+              </DropdownMenuItem>
+            ))}
           </ScrollArea>
         </DropdownMenuGroup>
       </DropdownMenuContent>
