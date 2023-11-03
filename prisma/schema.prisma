@@ -9,21 +9,122 @@ datasource db {
 }
 
 model Card {
-  id              String
-  name            String
-  setId           String
-  setName         String
-  setCode         String
-  setIconSvgUri   String
-  rarity          String
-  collectorNumber Int
-  imageUri        String
-  isCollected     Boolean @default(false)
-  isFoil          Boolean @default(false)
-  albumId         Int
-  Album           Album   @relation(fields: [albumId], references: [id])
+  arena_id            Int?
+  id                  String
+  lang                String
+  mtgo_id             Int?
+  mtgo_foil_id        Int?
+  multiverse_ids      Int[]
+  tcgplayer_id        Int?
+  tcgplayer_etched_id Int?
+  cardmarket_id       Int?
+  oracle_id           String
+  prints_search_uri   String
+  rulings_uri         String
+  scryfall_uri        String
+  uri                 String
+  card_faces          CardFace[]
+  cmc                 Int
+  color_identity      String[]
+  color_indicator     String[]
+  colors              String[]
+  edhrec_rank         Int?
+  hand_modifier       String?
+  keywords            String[]
+  layout              String
+  life_modifier       String?
+  loyalty             String?
+  mana_cost           String?
+  name                String
+  oracle_text         String?
+  oversized           Boolean
+  power               String?
+  produced_mana       String[]
+  reserved            Boolean
+  toughness           String?
+  type_line           String
+  artist              String?
+  booster             Boolean
+  border_color        String
+  card_back_id        String
+  collector_number    String
+  content_warning     Boolean?
+  digital             Boolean
+  finishes            String[]
+  flavor_name         String?
+  flavor_text         String?
+  frame_effects       String[]
+  frame               String
+  full_art            Boolean
+  games               String[]
+  highres_image       Boolean
+  illustration_id     String?
+  image_status        String
+  smallImageURI       String?
+  normalImageURI      String?
+  largeImageURI       String?
+  pngImageURI         String?
+  art_cropImageURI    String?
+  border_cropImageURI String?
+  printed_name        String?
+  printed_text        String?
+  printed_type_line   String?
+  promo               Boolean
+  promo_types         String?
+  rarity              String
+  released_at         String
+  reprint             Boolean
+  scryfall_set_uri    String
+  set_name            String
+  set_search_uri      String
+  set_type            String
+  set_uri             String
+  set                 String
+  set_id              String
+  story_spotlight     Boolean
+  textless            Boolean
+  variation           Boolean
+  variation_of        String?
+  security_stamp      String[]
+  watermark           String?
+  isCollected         Boolean    @default(false)
+  isFoil              Boolean    @default(false)
+  albumId             Int
+  Album               Album      @relation(fields: [albumId], references: [id])
 
   @@id([id, albumId])
+}
+
+model CardFace {
+  id                  Int      @id @default(autoincrement())
+  artist              String?
+  cmc                 Int?
+  color_indicator     String?
+  colors              String[]
+  flavor_text         String?
+  illustration_id     String?
+  smallImageURI       String?
+  normalImageURI      String?
+  largeImageURI       String?
+  pngImageURI         String?
+  art_cropImageURI    String?
+  border_cropImageURI String?
+  layout              String?
+  loyalty             String?
+  mana_cost           String?
+  name                String
+  oracle_id           String?
+  oracle_text         String?
+  power               String?
+  printed_name        String?
+  printed_text        String?
+  printed_type_line   String?
+  toughness           String?
+  type_line           String
+  watermark           String?
+  Card                Card?    @relation(fields: [cardId, cardAlbumId], references: [id, albumId])
+  cardId              String?
+  cardAlbumId         Int?
 }
 
 model Album {
