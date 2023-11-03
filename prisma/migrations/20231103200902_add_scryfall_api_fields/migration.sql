@@ -47,7 +47,7 @@ ADD COLUMN     "printed_type_line" TEXT,
 ADD COLUMN     "prints_search_uri" TEXT,
 ADD COLUMN     "produced_mana" TEXT[],
 ADD COLUMN     "promo" BOOLEAN,
-ADD COLUMN     "promo_types" TEXT,
+ADD COLUMN     "promo_types" TEXT[],
 ADD COLUMN     "released_at" TEXT,
 ADD COLUMN     "reprint" BOOLEAN,
 ADD COLUMN     "reserved" BOOLEAN,
@@ -71,15 +71,14 @@ ADD COLUMN     "type_line" TEXT,
 ADD COLUMN     "uri" TEXT,
 ADD COLUMN     "variation" BOOLEAN,
 ADD COLUMN     "variation_of" TEXT,
-ADD COLUMN     "watermark" TEXT,
-ALTER COLUMN "collectorNumber" SET DATA TYPE TEXT;
+ADD COLUMN     "watermark" TEXT;
 
 -- CreateTable
 CREATE TABLE "CardFace" (
     "id" SERIAL NOT NULL,
     "artist" TEXT,
     "cmc" INTEGER,
-    "color_indicator" TEXT,
+    "color_indicator" TEXT[],
     "colors" TEXT[],
     "flavor_text" TEXT,
     "illustration_id" TEXT,

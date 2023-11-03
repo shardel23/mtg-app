@@ -47,7 +47,7 @@ model Card {
   booster             Boolean?
   border_color        String?
   card_back_id        String?
-  collectorNumber     String
+  collectorNumber     Int
   content_warning     Boolean?
   digital             Boolean?
   finishes            String[]
@@ -71,7 +71,7 @@ model Card {
   printed_text        String?
   printed_type_line   String?
   promo               Boolean?
-  promo_types         String?
+  promo_types         String[]
   rarity              String
   released_at         String?
   reprint             Boolean?
@@ -104,7 +104,7 @@ model CardFace {
   id                  Int      @id @default(autoincrement())
   artist              String?
   cmc                 Int?
-  color_indicator     String?
+  color_indicator     String[]
   colors              String[]
   flavor_text         String?
   illustration_id     String?

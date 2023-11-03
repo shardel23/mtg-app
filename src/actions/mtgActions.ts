@@ -30,7 +30,7 @@ export async function getAllSets(): Promise<SetData[]> {
 }
 
 export async function getAllCardsOfSet(set: Scry.Set): Promise<Scry.Card[]> {
-  return (await set.getCards({ unique: "prints" }))
+  const cards = (await set.getCards({ unique: "prints" }))
     .filter((card) => !card.digital)
     .filter(
       (card) =>
@@ -38,6 +38,146 @@ export async function getAllCardsOfSet(set: Scry.Set): Promise<Scry.Card[]> {
         card.collector_number.endsWith("a") ||
         endsWithNumber(card.collector_number),
     );
+
+  const card = await prisma.card.findFirst({
+    where: {
+      name: set.name,
+    },
+    select: {
+      lang: true,
+    },
+  });
+  if (card?.lang != null) {
+    return cards;
+  }
+
+  const album = await prisma.album.findFirst({
+    where: {
+      name: set.name,
+      collection: {
+        name: {
+          equals: await getCollection(),
+        },
+      },
+    },
+    select: {
+      id: true,
+    },
+  });
+  if (album == null) {
+    return [];
+  }
+
+  const actions = cards.map((card) =>
+    prisma.card.update({
+      where: {
+        id_albumId: {
+          id: card.id,
+          albumId: album.id,
+        },
+      },
+      data: {
+        arena_id: card.arena_id,
+        lang: card.lang,
+        mtgo_id: card.mtgo_id,
+        mtgo_foil_id: card.mtgo_foil_id,
+        multiverse_ids: card.multiverse_ids ?? [],
+        tcgplayer_id: card.tcgplayer_id,
+        tcgplayer_etched_id: card.tcgplayer_etched_id,
+        cardmarket_id: card.cardmarket_id,
+        oracle_id: card.oracle_id,
+        prints_search_uri: card.prints_search_uri,
+        rulings_uri: card.rulings_uri,
+        scryfall_uri: card.scryfall_uri,
+        uri: card.uri,
+        card_faces: {
+          create: card.card_faces.map((face) => ({
+            artist: face.artist,
+            color_indicator: face.color_indicator ?? [],
+            colors: face.colors ?? [],
+            flavor_text: face.flavor_text,
+            illustration_id: face.illustration_id,
+            image_uris: face.image_uris,
+            loyalty: face.loyalty,
+            mana_cost: face.mana_cost,
+            name: face.name,
+            oracle_text: face.oracle_text,
+            power: face.power,
+            printed_name: face.printed_name,
+            printed_text: face.printed_text,
+            printed_type_line: face.printed_type_line,
+            toughness: face.toughness,
+            type_line: face.type_line,
+          })),
+        },
+        cmc: card.cmc,
+        color_identity: card.color_identity,
+        color_indicator: card.color_indicator ?? [],
+        colors: card.colors ?? [],
+        edhrec_rank: card.edhrec_rank,
+        hand_modifier: card.hand_modifier,
+        keywords: card.keywords,
+        layout: card.layout,
+        life_modifier: card.life_modifier,
+        loyalty: card.loyalty,
+        mana_cost: card.mana_cost,
+        name: card.name,
+        oracle_text: card.oracle_text,
+        oversized: card.oversized,
+        power: card.power,
+        produced_mana: card.produced_mana ?? [],
+        reserved: card.reserved,
+        toughness: card.toughness,
+        type_line: card.type_line,
+        artist: card.artist,
+        booster: card.booster,
+        border_color: card.border_color,
+        card_back_id: card.card_back_id,
+        content_warning: card.content_warning,
+        digital: card.digital,
+        finishes: card.finishes,
+        flavor_name: card.flavor_name,
+        flavor_text: card.flavor_text,
+        frame_effects: card.frame_effects ?? [],
+        frame: card.frame,
+        full_art: card.full_art,
+        games: card.games,
+        highres_image: card.highres_image,
+        illustration_id: card.illustration_id,
+        image_status: card.image_status,
+        smallImageURI: card.image_uris?.small,
+        normalImageURI: card.image_uris?.normal,
+        largeImageURI: card.image_uris?.large,
+        pngImageURI: card.image_uris?.png,
+        art_cropImageURI: card.image_uris?.art_crop,
+        border_cropImageURI: card.image_uris?.border_crop,
+        printed_name: card.printed_name,
+        printed_text: card.printed_text,
+        printed_type_line: card.printed_type_line,
+        promo: card.promo,
+        promo_types: card.promo_types ?? [],
+        released_at: card.released_at,
+        reprint: card.reprint,
+        scryfall_set_uri: card.scryfall_set_uri,
+        set_name: card.set_name,
+        set_search_uri: card.set_search_uri,
+        set_type: card.set_type,
+        set_uri: card.set_uri,
+        set: card.set,
+        set_id: card.set_id,
+        story_spotlight: card.story_spotlight,
+        textless: card.textless,
+        variation: card.variation,
+        variation_of: card.variation_of,
+        security_stamp: card.security_stamp ?? [],
+        watermark: card.watermark,
+      },
+    }),
+  );
+
+  await prisma.$transaction(actions);
+
+  return cards;
 }
 
 async function getUserIdFromSession(): Promise<string | null> {
