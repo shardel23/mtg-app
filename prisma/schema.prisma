@@ -11,55 +11,56 @@ datasource db {
 model Card {
   arena_id            Int?
   id                  String
-  lang                String
+  lang                String?
   mtgo_id             Int?
   mtgo_foil_id        Int?
   multiverse_ids      Int[]
   tcgplayer_id        Int?
   tcgplayer_etched_id Int?
   cardmarket_id       Int?
-  oracle_id           String
-  prints_search_uri   String
-  rulings_uri         String
-  scryfall_uri        String
-  uri                 String
+  oracle_id           String?
+  prints_search_uri   String?
+  rulings_uri         String?
+  scryfall_uri        String?
+  uri                 String?
   card_faces          CardFace[]
-  cmc                 Int
+  cmc                 Int?
   color_identity      String[]
   color_indicator     String[]
   colors              String[]
   edhrec_rank         Int?
   hand_modifier       String?
   keywords            String[]
-  layout              String
+  layout              String?
   life_modifier       String?
   loyalty             String?
   mana_cost           String?
   name                String
   oracle_text         String?
-  oversized           Boolean
+  oversized           Boolean?
   power               String?
   produced_mana       String[]
-  reserved            Boolean
+  reserved            Boolean?
   toughness           String?
-  type_line           String
+  type_line           String?
   artist              String?
-  booster             Boolean
-  border_color        String
-  card_back_id        String
-  collector_number    String
+  booster             Boolean?
+  border_color        String?
+  card_back_id        String?
+  collectorNumber     String
   content_warning     Boolean?
-  digital             Boolean
+  digital             Boolean?
   finishes            String[]
   flavor_name         String?
   flavor_text         String?
   frame_effects       String[]
-  frame               String
-  full_art            Boolean
+  frame               String?
+  full_art            Boolean?
   games               String[]
-  highres_image       Boolean
+  highres_image       Boolean?
   illustration_id     String?
-  image_status        String
+  image_status        String?
+  imageUris           String
   smallImageURI       String?
   normalImageURI      String?
   largeImageURI       String?
@@ -69,21 +70,25 @@ model Card {
   printed_name        String?
   printed_text        String?
   printed_type_line   String?
-  promo               Boolean
+  promo               Boolean?
   promo_types         String?
   rarity              String
-  released_at         String
-  reprint             Boolean
-  scryfall_set_uri    String
-  set_name            String
-  set_search_uri      String
-  set_type            String
-  set_uri             String
-  set                 String
-  set_id              String
-  story_spotlight     Boolean
-  textless            Boolean
-  variation           Boolean
+  released_at         String?
+  reprint             Boolean?
+  scryfall_set_uri    String?
+  setCode             String
+  setName             String
+  setIconSvgUri       String
+  set_name            String?
+  set_search_uri      String?
+  set_type            String?
+  set_uri             String?
+  set                 String?
+  setId               String
+  set_id              String?
+  story_spotlight     Boolean?
+  textless            Boolean?
+  variation           Boolean?
   variation_of        String?
   security_stamp      String[]
   watermark           String?
