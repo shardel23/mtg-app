@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { cardsArrayToMap, endsWithNumber, isSetExists } from "@/lib/utils";
 import {
   AlbumData,
+  AlbumStats,
   CardData,
   CollectionData,
   SetData,
@@ -482,6 +483,107 @@ export async function searchCardInCollection(
   }));
 
   return cardsArrayToMap(mergedCardsData);
+}
+
+export async function getCollectionStats(): Promise<AlbumStats[]> {
+  const userId = await getUserIdFromSession();
+  if (userId == null) {
+    return [];
+  }
+  const albums = await prisma.album.findMany({
+    where: {
+      collection: {
+        name: {
+          equals: await getCollection(),
+        },
+        userId: userId,
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+      setId: true,
+      cards: {
+        select: {
+          id: true,
+          isCollected: true,
+          rarity: true,
+        },
+      },
+    },
+  });
+  const stats = await Promise.all(
+    albums.map(async (album) => {
+      const set = await Scry.Sets.byId(album.setId!);
+      const cardsDataFromAPI = transformCards(await getAllCardsOfSet(set), set);
+      const cardsDataFromDB = album.cards;
+
+      const mergedCardsData = cardsDataFromDB.map((card) => ({
+        ...card,
+        ...cardsDataFromAPI.find((apiCard) => apiCard.id === card.id)!,
+      }));
+
+      const cards = cardsArrayToMap(mergedCardsData);
+
+      const stats = {
+        name: album.name,
+        total: {
+          collected: 0,
+          missing: 0,
+          total: cards.size,
+        },
+        common: {
+          collected: 0,
+          missing: 0,
+          total: 0,
+        },
+        uncommon: {
+          collected: 0,
+          missing: 0,
+          total: 0,
+        },
+        rare: {
+          collected: 0,
+          missing: 0,
+          total: 0,
+        },
+        mythic: {
+          collected: 0,
+          missing: 0,
+          total: 0,
+        },
+      };
+      cards.forEach((card) => {
+        const isCollected = card.some((ver) => ver.isCollected);
+        stats.total.collected += isCollected ? 1 : 0;
+        stats.total.missing += isCollected ? 0 : 1;
+        switch (card[0].rarity) {
+          case "common":
+            stats.common.total += 1;
+            stats.common.collected += isCollected ? 1 : 0;
+            stats.common.missing += isCollected ? 0 : 1;
+            break;
+          case "uncommon":
+            stats.uncommon.total += 1;
+            stats.uncommon.collected += isCollected ? 1 : 0;
+            stats.uncommon.missing += isCollected ? 0 : 1;
+            break;
+          case "rare":
+            stats.rare.total += 1;
+            stats.rare.collected += isCollected ? 1 : 0;
+            stats.rare.missing += isCollected ? 0 : 1;
+            break;
+          case "mythic":
+            stats.mythic.total += 1;
+            stats.mythic.collected += isCollected ? 1 : 0;
+            stats.mythic.missing += isCollected ? 0 : 1;
+            break;
+        }
+      });
+      return stats;
+    }),
+  );
+  return stats;
 }
 
 export async function getCollection() {
