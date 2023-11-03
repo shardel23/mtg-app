@@ -29,7 +29,10 @@ export async function getAllSets(): Promise<SetData[]> {
     .map((set) => ({ name: set.name, id: set.id }));
 }
 
-export async function getAllCardsOfSet(set: Scry.Set): Promise<Scry.Card[]> {
+export async function getAllCardsOfSet(
+  set: Scry.Set,
+  isCreate = true,
+): Promise<Scry.Card[]> {
   const cards = (await set.getCards({ unique: "prints" }))
     .filter((card) => !card.digital)
     .filter(
@@ -39,9 +42,13 @@ export async function getAllCardsOfSet(set: Scry.Set): Promise<Scry.Card[]> {
         endsWithNumber(card.collector_number),
     );
 
+  if (isCreate) {
+    return cards;
+  }
+
   const card = await prisma.card.findFirst({
     where: {
-      name: set.name,
+      set_name: set.name,
     },
     select: {
       lang: true,
@@ -97,7 +104,12 @@ export async function getAllCardsOfSet(set: Scry.Set): Promise<Scry.Card[]> {
             colors: face.colors ?? [],
             flavor_text: face.flavor_text,
             illustration_id: face.illustration_id,
-            image_uris: face.image_uris,
+            smallImageURI: face.image_uris?.small,
+            normalImageURI: face.image_uris?.normal,
+            largeImageURI: face.image_uris?.large,
+            pngImageURI: face.image_uris?.png,
+            art_cropImageURI: face.image_uris?.art_crop,
+            border_cropImageURI: face.image_uris?.border_crop,
             loyalty: face.loyalty,
             mana_cost: face.mana_cost,
             name: face.name,
@@ -169,7 +181,7 @@ export async function getAllCardsOfSet(set: Scry.Set): Promise<Scry.Card[]> {
         textless: card.textless,
         variation: card.variation,
         variation_of: card.variation_of,
-        security_stamp: card.security_stamp ?? [],
+        security_stamp: card.security_stamp as unknown as string | null,
         watermark: card.watermark,
       },
     }),
@@ -322,7 +334,10 @@ export async function getAlbumCards(
     };
   }
   const set = await Scry.Sets.byId(album.setId!);
-  const cardsDataFromAPI = transformCards(await getAllCardsOfSet(set), set);
+  const cardsDataFromAPI = transformCards(
+    await getAllCardsOfSet(set, false),
+    set,
+  );
   const cardsDataFromDB = album.cards;
 
   const mergedCardsData = cardsDataFromDB.map((card) => ({

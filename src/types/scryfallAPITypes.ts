@@ -78,7 +78,7 @@ export interface Card {
   textless: boolean;
   variation: boolean;
   variation_of?: string | null;
-  security_stamp?: (keyof typeof Scry.CardSecurityStamp)[] | null;
+  security_stamp?: keyof typeof Scry.CardSecurityStamp | null;
   watermark?: string | null;
   preview?: Scry.Preview | null;
 }

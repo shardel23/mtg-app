@@ -90,7 +90,7 @@ model Card {
   textless            Boolean?
   variation           Boolean?
   variation_of        String?
-  security_stamp      String[]
+  security_stamp      String?
   watermark           String?
   isCollected         Boolean    @default(false)
   isFoil              Boolean    @default(false)
