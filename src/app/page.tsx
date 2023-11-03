@@ -4,7 +4,6 @@ import RedirectIfNotLoggedIn from "@/components/redirect";
 
 export default async function Home() {
   const collectionData = await getCollectionStats();
-  console.log(collectionData);
   return (
     <div>
       <RedirectIfNotLoggedIn />
