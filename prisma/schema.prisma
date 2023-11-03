@@ -60,7 +60,7 @@ model Card {
   highres_image       Boolean?
   illustration_id     String?
   image_status        String?
-  imageUris           String
+  imageUri            String
   smallImageURI       String?
   normalImageURI      String?
   largeImageURI       String?
