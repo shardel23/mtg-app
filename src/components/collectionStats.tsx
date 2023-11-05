@@ -1,7 +1,9 @@
 "use client";
 
 import { AlbumStats, CollectedMissingStats } from "@/types/types";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { isMobile } from "react-device-detect";
 
 interface CollectionStatsProps {
   collectionData: AlbumStats[];
@@ -39,7 +41,7 @@ const CollectionDetails: React.FC<CollectionDetailsProps> = ({ stats }) => {
       <div className="text-2xl text-center">{stats.name}</div>
       <div className="flex flex-col">
         {Object.entries(stats).map(([key, value]) => {
-          if (key === "name" || key === "total") {
+          if (["common", "uncommon", "rare", "mythic"].indexOf(key) === -1) {
             return;
           }
           const rarityStats = value as CollectedMissingStats;
@@ -79,6 +81,8 @@ const CollectionGrid: React.FC<CollectionGridProps> = ({
   chosenAlbum,
   setChosenAlbum,
 }) => {
+  const router = useRouter();
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {collectionData.map((album) => {
@@ -92,7 +96,11 @@ const CollectionGrid: React.FC<CollectionGridProps> = ({
               (isChosenAlbum ? "border-slate-200" : "")
             }
             onClick={() => {
-              setChosenAlbum(album);
+              if (isMobile) {
+                router.push(`/album/${album.id}`);
+              } else {
+                setChosenAlbum(album);
+              }
             }}
           >
             <h2 className="text-lg font-medium mb-2 truncate">{album.name}</h2>

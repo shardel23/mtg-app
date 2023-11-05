@@ -500,6 +500,7 @@ export async function getCollectionStats(): Promise<AlbumStats[]> {
       },
     },
     select: {
+      id: true,
       name: true,
       cards: {
         select: {
@@ -517,6 +518,7 @@ export async function getCollectionStats(): Promise<AlbumStats[]> {
   const stats = albums.map((album) => {
     const cardsMap = cardsArrayToMap(album.cards);
     const stats = {
+      id: album.id,
       name: album.name,
       total: {
         collected: 0,
