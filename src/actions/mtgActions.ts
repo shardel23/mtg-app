@@ -500,12 +500,9 @@ export async function getCollectionStats(): Promise<AlbumStats[]> {
       },
     },
     select: {
-      id: true,
       name: true,
-      setId: true,
       cards: {
         select: {
-          id: true,
           name: true,
           isCollected: true,
           rarity: true,
