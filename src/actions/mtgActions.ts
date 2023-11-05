@@ -509,6 +509,9 @@ export async function getCollectionStats(): Promise<AlbumStats[]> {
         },
       },
     },
+    orderBy: {
+      setReleaseDate: "desc",
+    },
   });
 
   const stats = albums.map((album) => {
