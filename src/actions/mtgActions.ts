@@ -58,6 +58,21 @@ export async function getAllCardsOfSet(
     return cards;
   }
 
+  const cardIds = cards.map((card) => card.id);
+  const cardsInDB = await prisma.card.findMany({
+    where: {
+      id: {
+        in: cardIds,
+      },
+    },
+    select: {
+      id: true,
+    },
+  });
+  const cardsData = cards.filter((card) =>
+    cardsInDB.find((c) => c.id === card.id),
+  );
+
   const album = await prisma.album.findFirst({
     where: {
       name: set.name,
@@ -75,7 +90,7 @@ export async function getAllCardsOfSet(
     return [];
   }
 
-  const actions = cards.map((card) =>
+  const actions = cardsData.map((card) =>
     prisma.card.update({
       where: {
         id_albumId: {
