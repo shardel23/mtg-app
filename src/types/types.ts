@@ -48,7 +48,7 @@ export type createAlbumFromCSVInput = {
   cardId: string;
 }[];
 
-type CollectedMissingStats = {
+export type CollectedMissingStats = {
   collected: number;
   missing: number;
   total: number;
