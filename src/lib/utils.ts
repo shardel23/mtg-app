@@ -1,5 +1,4 @@
 import { getCollection } from "@/actions/mtgActions";
-import { CardData } from "@/types/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { prisma } from "./prisma";
@@ -37,8 +36,14 @@ export const csvFileToArray = (string: string) => {
   return array;
 };
 
-export const cardsArrayToMap = (cards: CardData[]): Map<string, CardData[]> => {
-  const cardNameToVersions = new Map<string, CardData[]>();
+export const cardsArrayToMap = <
+  T extends {
+    name: string;
+  },
+>(
+  cards: T[],
+): Map<string, T[]> => {
+  const cardNameToVersions = new Map<string, T[]>();
   cards.forEach((card) => {
     if (cardNameToVersions.has(card.name)) {
       cardNameToVersions.get(card.name)?.push(card);
