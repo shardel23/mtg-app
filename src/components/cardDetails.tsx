@@ -33,7 +33,7 @@ export default function CardDetails({
       .then((data) => {
         setPrice(data.price);
       });
-  }, []);
+  }, [card.id]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
