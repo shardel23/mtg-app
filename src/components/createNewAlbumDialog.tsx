@@ -65,8 +65,8 @@ function CreateNewAlbumDialog({ sets }: { sets: Array<SetData> }) {
             </Button>
           </form>
         </div>
-        <div>Or</div>
-        {/* <CSVUploader
+        {/* <div>Or</div>
+        <CSVUploader
           onUploadSuccess={(albumId: number) => {
             setIsDialogOpen(false);
             if (albumId !== -1) {
