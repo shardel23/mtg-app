@@ -95,6 +95,9 @@ dependencies:
   react-dom:
     specifier: 18.2.0
     version: 18.2.0(react@18.2.0)
+  react-fetch-hook:
+    specifier: ^1.9.5
+    version: 1.9.5(react@18.2.0)
   scryfall-sdk:
     specifier: ^4.1.1
     version: 4.1.1
@@ -3475,6 +3478,14 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+    dev: false
+
+  /react-fetch-hook@1.9.5(react@18.2.0):
+    resolution: {integrity: sha512-LhTwUk0iYQ4SUl2laQr5Jc2fk/K4B6ezntDWWBNdlag/cB3n2RYshofIL3bOghE5FEfkoDi6BqGD/YIwqW1/8w==}
+    peerDependencies:
+      react: '>=16.8.0 <19.0.0'
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react-is@16.13.1:
