@@ -265,6 +265,11 @@ export async function getAlbumCards(
   };
 }
 
+export async function getCardPrice(cardId: string): Promise<string | null> {
+  const card = await API.getCard(cardId);
+  return card.prices?.usd ?? null;
+}
+
 export async function markCardIsCollected(
   albumId: number,
   cardId: string,

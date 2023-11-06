@@ -10,6 +10,7 @@ const nextConfig = {
       },
     ],
   },
+  reactStrictMode: false,
 };
 
 const { withAxiom } = require('next-axiom');

@@ -110,11 +110,13 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
           </div>
         </div>
       )}
-      <CardDetails
-        isOpen={isCardDialogOpen}
-        setIsOpen={setIsCardDialogOpen}
-        card={card}
-      />
+      {isCardDialogOpen && (
+        <CardDetails
+          isOpen={isCardDialogOpen}
+          setIsOpen={setIsCardDialogOpen}
+          card={card}
+        />
+      )}
     </div>
   );
 }

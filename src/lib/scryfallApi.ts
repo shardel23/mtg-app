@@ -42,3 +42,7 @@ export async function getCardsOfSet(setIdentifier: {
     );
   return cards;
 }
+
+export async function getCard(cardId: string): Promise<Scry.Card> {
+  return await Scry.Cards.byId(cardId);
+}
