@@ -5,7 +5,6 @@ import { SetData } from "@/types/types";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import CSVUploader from "./csvUploader";
 import PlusCircle from "./icons/plus-circle";
 import SetSelector from "./selectors/setSelector";
 import { Button } from "./ui/button";
@@ -67,14 +66,14 @@ function CreateNewAlbumDialog({ sets }: { sets: Array<SetData> }) {
           </form>
         </div>
         <div>Or</div>
-        <CSVUploader
+        {/* <CSVUploader
           onUploadSuccess={(albumId: number) => {
             setIsDialogOpen(false);
             if (albumId !== -1) {
               router.push(`/album/${albumId}`);
             }
           }}
-        />
+        /> */}
         <DialogFooter></DialogFooter>
       </DialogContent>
     </Dialog>

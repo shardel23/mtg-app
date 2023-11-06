@@ -1,5 +1,3 @@
-import { Color, Layout } from "scryfall-sdk";
-
 export type CollectionData = {
   name: string;
 };
@@ -24,10 +22,10 @@ export type CardData = {
   setCode: string;
   setIconUri?: string;
   rarity: string;
-  colors: Color[];
+  colors: string[];
   manaCost: ManaCost;
   cmc: number;
-  layout: keyof typeof Layout;
+  layout: string;
   types: string[];
   cardFaces?: {
     name: string;

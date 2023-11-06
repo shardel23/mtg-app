@@ -58,10 +58,10 @@ export function endsWithNumber(text: string) {
   return /\d$/.test(text);
 }
 
-export async function isSetExists(setName: string): Promise<boolean> {
+export async function isSetExists(setId: string): Promise<boolean> {
   const album = await prisma.album.findFirst({
     where: {
-      name: setName,
+      setId: setId,
       collection: {
         name: {
           equals: await getCollection(),
