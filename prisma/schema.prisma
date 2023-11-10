@@ -8,7 +8,7 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-model Card {
+model CardDetails {
   arena_id            Int?
   id                  String
   lang                String?
@@ -101,7 +101,7 @@ model Card {
 }
 
 model CardFace {
-  id                  Int      @id @default(autoincrement())
+  id                  Int          @id @default(autoincrement())
   artist              String?
   cmc                 Int?
   color_indicator     String[]
@@ -127,19 +127,19 @@ model CardFace {
   toughness           String?
   type_line           String
   watermark           String?
-  Card                Card?    @relation(fields: [cardId, cardAlbumId], references: [id, albumId])
+  Card                CardDetails? @relation(fields: [cardId, cardAlbumId], references: [id, albumId])
   cardId              String?
   cardAlbumId         Int?
 }
 
 model Album {
-  id             Int         @id @default(autoincrement())
+  id             Int           @id @default(autoincrement())
   name           String
   setId          String?
   setName        String?
   setReleaseDate String?
-  cards          Card[]
-  collection     Collection? @relation(fields: [collectionId], references: [id])
+  cards          CardDetails[]
+  collection     Collection?   @relation(fields: [collectionId], references: [id])
   collectionId   Int?
 }
 
