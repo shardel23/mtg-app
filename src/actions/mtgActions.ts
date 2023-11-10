@@ -275,7 +275,7 @@ export async function markCardIsCollected(
   cardId: string,
   isCollected: boolean,
 ): Promise<void> {
-  await prisma.card.update({
+  await prisma.cardDetails.update({
     where: {
       id_albumId: {
         id: cardId,
@@ -290,7 +290,7 @@ export async function markCardIsCollected(
 }
 
 export async function deleteAlbum(albumId: number): Promise<void> {
-  const deleteCards = prisma.card.deleteMany({
+  const deleteCards = prisma.cardDetails.deleteMany({
     where: {
       albumId: albumId,
     },
@@ -332,7 +332,7 @@ export async function deleteCardFromAlbum(
     log(LogLevel.warn, "User is not the owner of the album");
     return false;
   }
-  await prisma.card.deleteMany({
+  await prisma.cardDetails.deleteMany({
     where: {
       albumId: albumId,
       name: cardName,
@@ -353,7 +353,7 @@ export async function searchCardInCollection(
   if (userId == null) {
     return new Map();
   }
-  const cards = await prisma.card.findMany({
+  const cards = await prisma.cardDetails.findMany({
     where: {
       name: {
         contains: cardName,

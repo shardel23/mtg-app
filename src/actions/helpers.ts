@@ -3,7 +3,7 @@ import { Prisma } from "@prisma/client";
 import { Logger } from "next-axiom";
 import { LogLevel } from "next-axiom/dist/logger";
 import * as Scry from "scryfall-sdk";
-type CardWithCardFaces = Prisma.CardGetPayload<{
+type CardWithCardFaces = Prisma.CardDetailsGetPayload<{
   include: { card_faces: true };
 }>;
 
