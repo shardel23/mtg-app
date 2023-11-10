@@ -30,7 +30,7 @@ const CollectionStats: React.FC<CollectionStatsProps> = ({
         chosenAlbum={chosenAlbum}
         setChosenAlbum={setChosenAlbum}
       />
-      <CollectionDetails stats={chosenAlbum} />
+      {chosenAlbum != null && <CollectionDetails stats={chosenAlbum} />}
     </div>
   );
 };
