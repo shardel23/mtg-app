@@ -6,7 +6,7 @@ import { CsvOutput } from "export-to-csv";
 import { getCollection } from "./mtgActions";
 
 export async function exportCollectionToCSV(): Promise<CsvOutput> {
-  const cards = await prisma.cardDetails.findMany({
+  const cards = await prisma.card.findMany({
     where: {
       Album: {
         collection: {

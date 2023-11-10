@@ -3,8 +3,12 @@ import { Prisma } from "@prisma/client";
 import { Logger } from "next-axiom";
 import { LogLevel } from "next-axiom/dist/logger";
 import * as Scry from "scryfall-sdk";
-type CardWithCardFaces = Prisma.CardDetailsGetPayload<{
-  include: { card_faces: true };
+type CardWithCardDetails = Prisma.CardGetPayload<{
+  include: {
+    CardDetails: {
+      include: { card_faces: true };
+    };
+  };
 }>;
 
 export const getImageUri = (card: Scry.Card): string => {
@@ -44,24 +48,30 @@ export const transformCards = (
 };
 
 export const transformCardsFromDB = (
-  cards: CardWithCardFaces[],
+  cards: CardWithCardDetails[],
 ): CardData[] => {
   return cards.map((card) => ({
     id: card.id,
-    name: card.name,
-    albumId: card.albumId,
     isCollected: card.isCollected,
-    image: card.normalImageURI ?? card.card_faces[0].normalImageURI ?? "",
-    collectorNumber: card.collectorNumber.toString(),
-    setCode: card.set ?? "",
-    setIconUri: card.setIconSvgUri,
-    rarity: card.rarity,
+    name: card.CardDetails.name,
+    albumId: card.albumId,
+    image:
+      card.CardDetails.normalImageURI ??
+      card.CardDetails.card_faces[0].normalImageURI ??
+      "",
+    collectorNumber: card.CardDetails.collectorNumber.toString(),
+    setCode: card.CardDetails.set ?? "",
+    setIconUri: card.CardDetails.setIconSvgUri,
+    rarity: card.CardDetails.rarity,
     colors: getDBCardColors(card),
-    manaCost: card.mana_cost,
-    cmc: card.cmc ?? 0,
-    layout: card.layout ?? "",
-    types: card.type_line?.split(" ").map((type) => type.toLowerCase()) ?? [],
-    cardFaces: card.card_faces.map((face) => ({
+    manaCost: card.CardDetails.mana_cost,
+    cmc: card.CardDetails.cmc ?? 0,
+    layout: card.CardDetails.layout ?? "",
+    types:
+      card.CardDetails.type_line
+        ?.split(" ")
+        .map((type) => type.toLowerCase()) ?? [],
+    cardFaces: card.CardDetails.card_faces.map((face) => ({
       name: face.name,
       image: face.normalImageURI ?? "",
       manaCost: face.mana_cost,
@@ -97,14 +107,14 @@ function getAPICardColors(card: Scry.Card): Scry.Color[] {
   );
 }
 
-function getDBCardColors(card: CardWithCardFaces): string[] {
+function getDBCardColors(card: CardWithCardDetails): string[] {
   return (
-    (card.card_faces.length > 0
-      ? card.card_faces.reduce(
+    (card.CardDetails.card_faces.length > 0
+      ? card.CardDetails.card_faces.reduce(
           (colors, face) => [...colors, ...(face.colors ?? [])],
           [] as string[],
         )
-      : card.colors) ?? []
+      : card.CardDetails.colors) ?? []
   );
 }
 
