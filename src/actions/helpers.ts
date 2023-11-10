@@ -49,6 +49,7 @@ export const transformCardsFromDB = (
   return cards.map((card) => ({
     id: card.id,
     name: card.name,
+    albumId: card.albumId,
     isCollected: card.isCollected,
     image: card.normalImageURI ?? card.card_faces[0].normalImageURI ?? "",
     collectorNumber: card.collectorNumber.toString(),
