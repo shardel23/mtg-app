@@ -8,9 +8,20 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
+model Card {
+  id          String
+  isCollected Boolean     @default(false)
+  isFoil      Boolean     @default(false)
+  albumId     Int
+  Album       Album       @relation(fields: [albumId], references: [id])
+  CardDetails CardDetails @relation(fields: [id], references: [id])
+
+  @@id([id, albumId])
+}
+
 model CardDetails {
   arena_id            Int?
-  id                  String
+  id                  String     @id
   lang                String?
   mtgo_id             Int?
   mtgo_foil_id        Int?
@@ -92,16 +103,15 @@ model CardDetails {
   variation_of        String?
   security_stamp      String?
   watermark           String?
-  isCollected         Boolean    @default(false)
-  isFoil              Boolean    @default(false)
-  albumId             Int
-  Album               Album      @relation(fields: [albumId], references: [id])
+  Card                Card[]
 
-  @@id([id, albumId])
+  isCollected Boolean @default(false)
+  isFoil      Boolean @default(false)
+  albumId     Int
 }
 
 model CardFace {
-  id                  Int          @id @default(autoincrement())
+  id                  Int         @id @default(autoincrement())
   artist              String?
   cmc                 Int?
   color_indicator     String[]
@@ -127,19 +137,18 @@ model CardFace {
   toughness           String?
   type_line           String
   watermark           String?
-  Card                CardDetails? @relation(fields: [cardId, cardAlbumId], references: [id, albumId])
-  cardId              String?
-  cardAlbumId         Int?
+  Card                CardDetails @relation(fields: [cardId], references: [id])
+  cardId              String
 }
 
 model Album {
-  id             Int           @id @default(autoincrement())
+  id             Int         @id @default(autoincrement())
   name           String
   setId          String?
   setName        String?
   setReleaseDate String?
-  cards          CardDetails[]
-  collection     Collection?   @relation(fields: [collectionId], references: [id])
+  cards          Card[]
+  collection     Collection? @relation(fields: [collectionId], references: [id])
   collectionId   Int?
 }
 
