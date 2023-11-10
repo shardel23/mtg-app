@@ -116,7 +116,7 @@ async function createAlbum(
           scryfall_uri: card.scryfall_uri,
           uri: card.uri,
           card_faces: {
-            create: card.card_faces.map((face) => ({
+            create: card.card_faces.length > 1 ? card.card_faces.map((face) => ({
               artist: face.artist,
               color_indicator: face.color_indicator ?? [],
               colors: face.colors ?? [],
@@ -138,7 +138,7 @@ async function createAlbum(
               printed_type_line: face.printed_type_line,
               toughness: face.toughness,
               type_line: face.type_line,
-            })),
+            })) : undefined,
           },
           cmc: card.cmc,
           color_identity: card.color_identity,
