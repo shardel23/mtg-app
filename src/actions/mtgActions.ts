@@ -264,11 +264,11 @@ export async function getAlbumCards(
   const albumCards = await prisma.cardDetails.findMany({
     where: {
       albumId: albumId,
-      },
-      select: {
-        id: true,
-        isCollected: true,
-      },
+    },
+    select: {
+      id: true,
+      isCollected: true,
+    },
   });
 
   const cardFaces = await prisma.cardFace.findMany({
@@ -279,19 +279,21 @@ export async function getAlbumCards(
     },
     select: {
       id: true,
+      faceNumber: true,
     },
   });
   for (let i = 0; i < cardFaces.length; i++) {
     let cardFace = cardFaces[i];
-    await prisma.cardFace.update({
-      where: {
-        id: cardFace.id,
-        faceNumber: null,
-      },
-      data: {
-        faceNumber: cardFace.id,
-      },
-    });
+    if (cardFace.faceNumber != null) {
+      await prisma.cardFace.update({
+        where: {
+          id: cardFace.id,
+        },
+        data: {
+          faceNumber: cardFace.id,
+        },
+      });
+    }
   }
 
   const album = await prisma.album.findUnique({
