@@ -276,7 +276,11 @@ export async function getAlbumCards(
         include: {
           CardDetails: {
             include: {
-              card_faces: true,
+              card_faces: {
+                orderBy: {
+                  faceNumber: "asc",
+                },
+              },
             },
           },
         },
