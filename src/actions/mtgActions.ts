@@ -270,23 +270,6 @@ export async function getAlbumCards(
         isCollected: true,
       },
   });
-  for (let i = 0; i < albumCards.length; i++) {
-    let card = albumCards[i];
-    await prisma.card.upsert({
-      where: {
-        id_albumId: {
-          id: card.id,
-          albumId: albumId,
-        },
-      },
-      create: {
-        albumId: albumId,
-        id: card.id,
-        isCollected: card.isCollected,
-      },
-      update: {},
-    });
-  }
 
   const cardFaces = await prisma.cardFace.findMany({
     where: {
@@ -303,6 +286,7 @@ export async function getAlbumCards(
     await prisma.cardFace.update({
       where: {
         id: cardFace.id,
+        faceNumber: null,
       },
       data: {
         faceNumber: cardFace.id,
