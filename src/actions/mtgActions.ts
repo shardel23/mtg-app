@@ -261,41 +261,6 @@ export async function getAlbumCards(
     };
   }
 
-  const albumCards = await prisma.cardDetails.findMany({
-    where: {
-      albumId: albumId,
-    },
-    select: {
-      id: true,
-      isCollected: true,
-    },
-  });
-
-  const cardFaces = await prisma.cardFace.findMany({
-    where: {
-      cardId: {
-        in: albumCards.map((card) => card.id),
-      },
-    },
-    select: {
-      id: true,
-      faceNumber: true,
-    },
-  });
-  for (let i = 0; i < cardFaces.length; i++) {
-    let cardFace = cardFaces[i];
-    if (cardFace.faceNumber != null) {
-      await prisma.cardFace.update({
-        where: {
-          id: cardFace.id,
-        },
-        data: {
-          faceNumber: cardFace.id,
-        },
-      });
-    }
-  }
-
   const album = await prisma.album.findUnique({
     where: {
       id: albumId,
