@@ -260,6 +260,7 @@ export async function getAlbumCards(
       cards: new Map(),
     };
   }
+
   const album = await prisma.album.findUnique({
     where: {
       id: albumId,
@@ -294,6 +295,43 @@ export async function getAlbumCards(
     };
   }
   const cards = transformCardsFromDB(album.cards);
+
+  for (let i=0; i<album.cards.length; i++) {
+    let card = album.cards[i];
+    await prisma.card.update({
+      where: {
+        id_albumId: {
+          id: card.id,
+          albumId: albumId,
+        },
+      },
+      data: {
+        isCollected: card.isCollected,
+      },
+    });
+  }
+
+  const cardFaces = await prisma.cardFace.findMany({
+    where: {
+      cardId: {
+        in: cards.map((card) => card.id),
+      }
+    },
+    select: {
+      id: true,
+    }
+  });
+  for (let i=0; i<cardFaces.length; i++) {
+    let cardFace = cardFaces[i];
+    await prisma.cardFace.update({
+      where: {
+        id: cardFace.id,
+      },
+      data: {
+        faceNumber: cardFace.id,
+      },
+    });
+  }
 
   return {
     albumName: album.name,
