@@ -1,1 +1,1 @@
-ALTER TABLE "CardFace" ADD COLUMN     "faceNumber" INTEGER NOT NULL;
+ALTER TABLE "CardFace" ADD COLUMN     "faceNumber" INTEGER;
