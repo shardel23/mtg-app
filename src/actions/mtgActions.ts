@@ -296,18 +296,21 @@ export async function getAlbumCards(
   }
   const cards = transformCardsFromDB(album.cards);
 
-  for (let i=0; i<album.cards.length; i++) {
+  for (let i = 0; i < album.cards.length; i++) {
     let card = album.cards[i];
-    await prisma.card.update({
+    await prisma.card.upsert({
       where: {
         id_albumId: {
           id: card.id,
           albumId: albumId,
         },
       },
-      data: {
+      create: {
+        albumId: albumId,
+        id: card.id,
         isCollected: card.isCollected,
       },
+      update: {},
     });
   }
 
@@ -315,13 +318,13 @@ export async function getAlbumCards(
     where: {
       cardId: {
         in: cards.map((card) => card.id),
-      }
+      },
     },
     select: {
       id: true,
-    }
+    },
   });
-  for (let i=0; i<cardFaces.length; i++) {
+  for (let i = 0; i < cardFaces.length; i++) {
     let cardFace = cardFaces[i];
     await prisma.cardFace.update({
       where: {
