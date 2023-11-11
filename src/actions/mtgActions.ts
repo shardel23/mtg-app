@@ -261,6 +261,33 @@ export async function getAlbumCards(
     };
   }
 
+  const albumCards = await prisma.cardDetails.findMany({
+    where: {
+      albumId: albumId,
+      },
+      select: {
+        id: true,
+        isCollected: true,
+      },
+  });
+  for (let i = 0; i < albumCards.length; i++) {
+    let card = albumCards[i];
+    await prisma.card.upsert({
+      where: {
+        id_albumId: {
+          id: card.id,
+          albumId: albumId,
+        },
+      },
+      create: {
+        albumId: albumId,
+        id: card.id,
+        isCollected: card.isCollected,
+      },
+      update: {},
+    });
+  }
+
   const album = await prisma.album.findUnique({
     where: {
       id: albumId,
@@ -295,24 +322,6 @@ export async function getAlbumCards(
     };
   }
   const cards = transformCardsFromDB(album.cards);
-
-  for (let i = 0; i < album.cards.length; i++) {
-    let card = album.cards[i];
-    await prisma.card.upsert({
-      where: {
-        id_albumId: {
-          id: card.id,
-          albumId: albumId,
-        },
-      },
-      create: {
-        albumId: albumId,
-        id: card.id,
-        isCollected: card.isCollected,
-      },
-      update: {},
-    });
-  }
 
   const cardFaces = await prisma.cardFace.findMany({
     where: {
