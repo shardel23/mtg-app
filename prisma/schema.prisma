@@ -111,6 +111,7 @@ model CardDetails {
 }
 
 model CardFace {
+  id                  Int      @id @default(autoincrement())
   artist              String?
   cmc                 Int?
   color_indicator     String[]
@@ -138,9 +139,9 @@ model CardFace {
   watermark           String?
   Card                CardDetails @relation(fields: [cardId], references: [id])
   cardId              String
-  faceNumber          Int
+  faceNumber          Int?
 
-  @@id([cardId, faceNumber])
+  // @@id([cardId, faceNumber])
 }
 
 model Album {
