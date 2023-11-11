@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Card" ADD COLUMN     "numCollected" INTEGER NOT NULL DEFAULT 0,
+ALTER COLUMN "isCollected" DROP NOT NULL,
+ALTER COLUMN "isCollected" DROP DEFAULT;

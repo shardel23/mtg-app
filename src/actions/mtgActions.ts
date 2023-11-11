@@ -231,6 +231,7 @@ async function createAlbum(
       id: card.id,
       albumId: album.id,
       isCollected: collectedCards ? collectedCards.has(card.id) : false,
+      numCollected: collectedCards ? (collectedCards.has(card.id) ? 1 : 0) : 0,
     })),
   });
 
@@ -325,6 +326,7 @@ export async function markCardIsCollected(
     },
     data: {
       isCollected: isCollected,
+      numCollected: isCollected ? 1 : 0,
     },
   });
   revalidatePath(`/album/{albumId}`);
@@ -443,6 +445,7 @@ export async function getCollectionStats(): Promise<AlbumStats[]> {
       cards: {
         select: {
           isCollected: true,
+          numCollected: true,
           CardDetails: {
             select: {
               name: true,
@@ -461,7 +464,7 @@ export async function getCollectionStats(): Promise<AlbumStats[]> {
     const cardsMap = cardsArrayToMap(
       album.cards.map((c) => ({
         name: c.CardDetails.name,
-        isCollected: c.isCollected,
+        isCollected: c.isCollected ?? c.numCollected > 0,
         rarity: c.CardDetails.rarity,
       })),
     );

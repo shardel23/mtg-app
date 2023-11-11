@@ -9,12 +9,13 @@ datasource db {
 }
 
 model Card {
-  id          String
-  isCollected Boolean     @default(false)
-  isFoil      Boolean     @default(false)
-  albumId     Int
-  Album       Album       @relation(fields: [albumId], references: [id])
-  CardDetails CardDetails @relation(fields: [id], references: [id])
+  id           String
+  isCollected  Boolean?
+  numCollected Int         @default(0)
+  isFoil       Boolean     @default(false)
+  albumId      Int
+  Album        Album       @relation(fields: [albumId], references: [id])
+  CardDetails  CardDetails @relation(fields: [id], references: [id])
 
   @@id([id, albumId])
 }
@@ -111,7 +112,7 @@ model CardDetails {
 }
 
 model CardFace {
-  id                  Int      @id @default(autoincrement())
+  id                  Int         @id @default(autoincrement())
   artist              String?
   cmc                 Int?
   color_indicator     String[]
