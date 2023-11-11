@@ -288,6 +288,28 @@ export async function getAlbumCards(
     });
   }
 
+  const cardFaces = await prisma.cardFace.findMany({
+    where: {
+      cardId: {
+        in: albumCards.map((card) => card.id),
+      },
+    },
+    select: {
+      id: true,
+    },
+  });
+  for (let i = 0; i < cardFaces.length; i++) {
+    let cardFace = cardFaces[i];
+    await prisma.cardFace.update({
+      where: {
+        id: cardFace.id,
+      },
+      data: {
+        faceNumber: cardFace.id,
+      },
+    });
+  }
+
   const album = await prisma.album.findUnique({
     where: {
       id: albumId,
@@ -322,28 +344,6 @@ export async function getAlbumCards(
     };
   }
   const cards = transformCardsFromDB(album.cards);
-
-  const cardFaces = await prisma.cardFace.findMany({
-    where: {
-      cardId: {
-        in: cards.map((card) => card.id),
-      },
-    },
-    select: {
-      id: true,
-    },
-  });
-  for (let i = 0; i < cardFaces.length; i++) {
-    let cardFace = cardFaces[i];
-    await prisma.cardFace.update({
-      where: {
-        id: cardFace.id,
-      },
-      data: {
-        faceNumber: cardFace.id,
-      },
-    });
-  }
 
   return {
     albumName: album.name,
