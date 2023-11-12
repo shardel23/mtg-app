@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { prisma } from "../../src/lib/prisma";
 
 export const numCollectedMigration = async () => {

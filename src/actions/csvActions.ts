@@ -18,7 +18,7 @@ export async function exportCollectionToCSV(): Promise<CsvOutput> {
     },
     select: {
       id: true,
-      isCollected: true,
+      numCollected: true,
       Album: {
         select: {
           id: true,
@@ -30,7 +30,7 @@ export async function exportCollectionToCSV(): Promise<CsvOutput> {
 
   const dataToExport = cards.map((card) => ({
     cardScryfallId: card.id,
-    isCollected: card.isCollected,
+    numCollected: card.numCollected,
     albumId: card.Album.id,
     albumName: card.Album.name,
   }));

@@ -52,7 +52,7 @@ export const transformCardsFromDB = (
 ): CardData[] => {
   return cards.map((card) => ({
     id: card.id,
-    isCollected: card.isCollected ?? card.numCollected > 0,
+    isCollected: card.numCollected > 0,
     name: card.CardDetails.name,
     albumId: card.albumId,
     image:

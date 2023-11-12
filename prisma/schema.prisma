@@ -10,7 +10,7 @@ datasource db {
 
 model Card {
   id           String
-  isCollected  Boolean?
+  isCollected  Boolean?    @ignore
   numCollected Int         @default(0)
   isFoil       Boolean     @default(false)
   albumId      Int
@@ -106,8 +106,8 @@ model CardDetails {
   watermark           String?
   Card                Card[]
 
-  isCollected Boolean @default(false)
-  isFoil      Boolean @default(false)
+  isCollected Boolean @default(false) @ignore
+  isFoil      Boolean @default(false) @ignore
   albumId     Int
 }
 
