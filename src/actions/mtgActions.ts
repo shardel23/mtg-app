@@ -302,15 +302,47 @@ export async function markCardIsCollected(
 }
 
 export async function deleteAlbum(albumId: number): Promise<void> {
-  const deleteCards = prisma.cardDetails.deleteMany({
+  const userId = await getUserIdFromSession();
+  if (userId == null) {
+    log(LogLevel.warn, "User is not logged in");
+    return;
+  }
+
+  const album = await prisma.album.findUnique({
     where: {
-      albumId: albumId,
+      id: albumId,
+      collection: {
+        userId: userId,
+      },
+    },
+    select: {
+      cards: {
+        select: {
+          id: true,
+        },
+      },
+    },
+  });
+
+  if (album == null) {
+    log(LogLevel.warn, "Attempt to delete album that does not exist");
+    return;
+  }
+
+  const deleteCards = prisma.card.deleteMany({
+    where: {
+      id: {
+        in: album.cards.map((c) => c.id),
+      },
     },
   });
 
   const deleteAlbum = prisma.album.delete({
     where: {
       id: albumId,
+      collection: {
+        userId: userId,
+      },
     },
   });
 
