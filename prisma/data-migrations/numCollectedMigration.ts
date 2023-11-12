@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "../../src/lib/prisma";
 
 export const numCollectedMigration = async () => {
   await prisma.card.updateMany({
@@ -10,3 +10,7 @@ export const numCollectedMigration = async () => {
     },
   });
 };
+
+numCollectedMigration().then(() => {
+  console.log("numCollectedMigration complete");
+});
