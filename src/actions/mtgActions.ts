@@ -1,6 +1,7 @@
 "use server";
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import * as DB from "@/lib/db";
 import { prisma } from "@/lib/prisma";
 import * as API from "@/lib/scryfallApi";
 import { cardsArrayToMap, endsWithNumber, isSetExists } from "@/lib/utils";
@@ -260,44 +261,15 @@ export async function getAlbumCards(
       cards: new Map(),
     };
   }
-
-  const album = await prisma.album.findUnique({
-    where: {
-      id: albumId,
-      collection: {
-        name: {
-          equals: await getCollection(),
-        },
-        userId: userId,
-      },
-    },
-    include: {
-      cards: {
-        include: {
-          CardDetails: {
-            include: {
-              card_faces: {
-                orderBy: {
-                  faceNumber: "asc",
-                },
-              },
-            },
-          },
-        },
-        orderBy: {
-          CardDetails: {
-            collectorNumber: "asc",
-          },
-        },
-      },
-    },
-  });
+  const collection = await getCollection();
+  const album = await DB.getCardsFromAlbum(userId, collection, albumId);
   if (album == null) {
     return {
       albumName: "",
       cards: new Map(),
     };
   }
+
   const cards = transformCardsFromDB(album.cards);
 
   return {
@@ -394,31 +366,8 @@ export async function searchCardInCollection(
   if (userId == null) {
     return new Map();
   }
-  const cards = await prisma.card.findMany({
-    where: {
-      CardDetails: {
-        name: {
-          contains: cardName,
-          mode: "insensitive",
-        },
-      },
-      Album: {
-        collection: {
-          name: {
-            equals: await getCollection(),
-          },
-          userId: userId,
-        },
-      },
-    },
-    include: {
-      CardDetails: {
-        include: {
-          card_faces: true,
-        },
-      },
-    },
-  });
+  const collection = await getCollection();
+  const cards = await DB.searchCardsInCollection(userId, collection, cardName);
 
   return cardsArrayToMap(transformCardsFromDB(cards));
 }
