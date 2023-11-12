@@ -230,7 +230,6 @@ async function createAlbum(
     data: cards.map((card) => ({
       id: card.id,
       albumId: album.id,
-      isCollected: collectedCards ? collectedCards.has(card.id) : false,
       numCollected: collectedCards ? (collectedCards.has(card.id) ? 1 : 0) : 0,
     })),
   });
