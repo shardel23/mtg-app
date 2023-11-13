@@ -12,6 +12,7 @@ import {
   CollectionData,
   SetData,
   createAlbumFromCSVInput,
+  createAlbumsFromCSVInput,
 } from "@/types/types";
 import { getServerSession } from "next-auth";
 import { LogLevel } from "next-axiom/dist/logger";
@@ -19,7 +20,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { getImageUri, log, transformCardsFromDB } from "./helpers";
 
-async function getUserIdFromSession(): Promise<string | null> {
+export async function getUserIdFromSession(): Promise<string | null> {
   const session = await getServerSession(authOptions);
   const user = session?.user;
   if (user == null) {
@@ -64,7 +65,7 @@ export async function getAllAlbums(): Promise<AlbumData[]> {
 
 async function createAlbum(
   setIdentifier: { setId?: string; setCode?: string },
-  collectedCards?: Map<string, boolean>,
+  collectedCards?: Map<string, number>,
 ): Promise<number> {
   const set = await API.getSet(setIdentifier);
   const isSetInDB = await isSetExists(set.name);
@@ -230,7 +231,11 @@ async function createAlbum(
     data: cards.map((card) => ({
       id: card.id,
       albumId: album.id,
-      numCollected: collectedCards ? (collectedCards.has(card.id) ? 1 : 0) : 0,
+      numCollected: collectedCards
+        ? collectedCards.has(card.id)
+          ? collectedCards.get(card.id)
+          : 0
+        : 0,
     })),
   });
 
@@ -242,10 +247,35 @@ export async function createAlbumFromSetId(setId: string): Promise<number> {
   return await createAlbum({ setId });
 }
 
+export async function createAlbumsFromCSV(
+  input: createAlbumsFromCSVInput,
+): Promise<boolean> {
+  const setIds = new Set<string>();
+  const collectedCards = new Map<string, number>();
+  input.forEach((row) => {
+    if (row.numCollected > 0) {
+      setIds.add(row.setId);
+      if (collectedCards.has(row.cardId)) {
+        collectedCards.set(row.cardId, collectedCards.get(row.cardId)! + 1);
+      } else {
+        collectedCards.set(row.cardId, 1);
+      }
+    }
+  });
+
+  setIds.forEach(async (setId) => {
+    const set = await API.getSet({ setId });
+    await createAlbum({ setId }, collectedCards);
+  });
+
+  revalidatePath("/");
+  return true;
+}
+
 export async function createAlbumFromCSV(
   input: createAlbumFromCSVInput,
 ): Promise<number> {
-  const importedCards = new Map(input.map((row) => [row.cardId, true]));
+  const importedCards = new Map(input.map((row) => [row.cardId, 1]));
   const setCode = input[0].setCode;
   return await createAlbum({ setCode }, importedCards);
 }

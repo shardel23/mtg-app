@@ -2,6 +2,7 @@ import { getAllAlbums, getAllSets } from "@/actions/mtgActions";
 import Link from "next/link";
 import CreateNewAlbumDialog from "./createNewAlbumDialog";
 import ExportCollectionButton from "./exportCollectionButton";
+import ImportCollectionButton from "./importCollectionButton";
 import { Button } from "./ui/button";
 
 export async function Sidebar() {
@@ -36,6 +37,9 @@ export async function Sidebar() {
           </div>
           <div className="flex w-full flex-row md:flex-col md:space-y-1">
             <ExportCollectionButton />
+          </div>
+          <div className="flex w-full flex-row md:flex-col md:space-y-1">
+            <ImportCollectionButton />
           </div>
         </div>
       </div>

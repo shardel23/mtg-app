@@ -39,6 +39,12 @@ export type CardData = {
 
 export type ManaCost = string | null | undefined;
 
+export type createAlbumsFromCSVInput = {
+  cardId: string;
+  setId: string;
+  numCollected: number;
+}[];
+
 export type createAlbumFromCSVInput = {
   cardName: string;
   setCode: string;
