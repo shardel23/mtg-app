@@ -68,8 +68,9 @@ async function createAlbum(
   collectedCards?: Map<string, number>,
 ): Promise<number> {
   const set = await API.getSet(setIdentifier);
-  const isSetInDB = await isSetExists(set.name);
+  const isSetInDB = await isSetExists(set.id);
   if (isSetInDB) {
+    logWithTimestamp("Set " + set.name + " already exists in DB");
     return -1;
   }
   const collection = await prisma.collection.findFirst({
@@ -88,9 +89,11 @@ async function createAlbum(
       name: set.name,
       setId: set.id,
       setName: set.name,
+
       setReleaseDate: set.released_at,
     },
   });
+  logWithTimestamp("Album " + album.name + " created");
 
   const isCardDetailsInDB = await prisma.cardDetails.findFirst({
     where: {
@@ -224,6 +227,7 @@ async function createAlbum(
           watermark: card.watermark,
         },
       });
+      logWithTimestamp("Card " + card.name + " created");
     }
   }
 
@@ -238,6 +242,7 @@ async function createAlbum(
         : 0,
     })),
   });
+  logWithTimestamp("Created cards for album " + album.name);
 
   revalidatePath("/");
   return album.id;
@@ -263,13 +268,18 @@ export async function createAlbumsFromCSV(
     }
   });
 
-  setIds.forEach(async (setId) => {
-    const set = await API.getSet({ setId });
+  for (const setId of setIds) {
+    logWithTimestamp("Creating album for set " + setId);
     await createAlbum({ setId }, collectedCards);
-  });
+    logWithTimestamp("Album created for set " + setId);
+  }
 
   revalidatePath("/");
   return true;
+}
+
+function logWithTimestamp(message: string) {
+  console.log(new Date().toLocaleString(), message);
 }
 
 export async function createAlbumFromCSV(

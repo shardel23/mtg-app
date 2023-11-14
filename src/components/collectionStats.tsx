@@ -87,7 +87,7 @@ const CollectionGrid: React.FC<CollectionGridProps> = ({
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {collectionData.map((album) => {
         const percentage = (album.total.collected / album.total.total) * 100;
-        const isChosenAlbum = album.name === chosenAlbum.name;
+        const isChosenAlbum = album.name === chosenAlbum?.name;
         return (
           <div
             key={album.name}

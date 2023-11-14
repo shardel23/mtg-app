@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 import {
   ChangeEventHandler,
   MouseEventHandler,
+  useEffect,
   useState,
   useTransition,
 } from "react";
@@ -15,7 +16,11 @@ import { Input } from "./ui/input";
 export default function ImportCollectionButton() {
   const [isPending, startTransition] = useTransition();
   const [file, setFile] = useState<File>();
-  const [fileReader, _] = useState<FileReader>(new FileReader());
+  const [fileReader, setFileReader] = useState<FileReader>();
+
+  useEffect(() => {
+    setFileReader(new FileReader());
+  }, []);
 
   const handleOnChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setFile(e.target.files![0]);
@@ -23,7 +28,7 @@ export default function ImportCollectionButton() {
 
   const handleOnSubmit: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
-    if (file) {
+    if (file && fileReader) {
       fileReader.onload = function (event) {
         const text = event.target?.result as string;
         const array = csvFileToArray(text);
@@ -34,7 +39,6 @@ export default function ImportCollectionButton() {
             numCollected: Number.parseInt(row["numCollected"]),
           };
         });
-        console.log(cards);
         startTransition(async () => {
           await createAlbumsFromCSV(cards);
         });
