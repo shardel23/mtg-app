@@ -29,7 +29,7 @@ export default async function RootLayout({
         {isLogged && (
           <div className="w-full flex-1 space-y-4">
             <Header />
-            <div className="flex w-full flex-col md:flex-row p-3 md:p-8 md:pt-20 md:pl-80">
+            <div className="flex w-full flex-col p-3 md:flex-row md:p-8 md:pl-80 md:pt-20">
               <Sidebar />
               <div className="w-full">{children}</div>
             </div>

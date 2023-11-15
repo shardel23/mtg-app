@@ -9,7 +9,7 @@ export async function Sidebar() {
   const sets = await getAllSets();
   const albums = await getAllAlbums();
   return (
-    <div className="hidden overflow-x-auto overflow-y-auto md:flex md:w-1/4 fixed left-0">
+    <div className="fixed left-0 hidden h-[85%] overflow-x-auto overflow-y-scroll no-scrollbar md:flex md:w-1/4">
       <div className="py-4 md:space-y-4">
         <div className="flex items-center md:flex-col md:px-3">
           <div className="flex w-full items-center justify-between gap-x-3 md:pb-4 md:pt-4">
