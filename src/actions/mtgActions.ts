@@ -81,7 +81,15 @@ async function createAlbum(
   if (collection == null) {
     return -1;
   }
+
   const cards = await API.getCardsOfSet(setIdentifier);
+
+  // Avoid adding cards which are not in boosters
+  const cardsInBoosters = cards.filter((c) => c.booster);
+  const cardNamesInBoosters = new Set<string>(
+    cardsInBoosters.map((c) => c.name),
+  );
+  const cardsToAdd = cards.filter((c) => cardNamesInBoosters.has(c.name));
 
   const album = await prisma.album.create({
     data: {
@@ -89,7 +97,6 @@ async function createAlbum(
       name: set.name,
       setId: set.id,
       setName: set.name,
-
       setReleaseDate: set.released_at,
     },
   });
@@ -97,7 +104,7 @@ async function createAlbum(
 
   const isCardDetailsInDB = await prisma.cardDetails.findFirst({
     where: {
-      id: cards[0].id,
+      id: cardsToAdd[0].id,
     },
     select: {
       id: true,
@@ -105,8 +112,8 @@ async function createAlbum(
   });
 
   if (!isCardDetailsInDB) {
-    for (let i = 0; i < cards.length; i++) {
-      let card = cards[i];
+    for (let i = 0; i < cardsToAdd.length; i++) {
+      let card = cardsToAdd[i];
       await prisma.cardDetails.create({
         data: {
           id: card.id,
@@ -232,7 +239,7 @@ async function createAlbum(
   }
 
   await prisma.card.createMany({
-    data: cards.map((card) => ({
+    data: cardsToAdd.map((card) => ({
       id: card.id,
       albumId: album.id,
       numCollected: collectedCards
