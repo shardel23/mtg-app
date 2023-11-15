@@ -13,7 +13,7 @@ async function Header() {
   const user = session?.user;
 
   return (
-    <div className="flex w-full justify-between">
+    <div className="flex w-full justify-between fixed top-0 z-10 p-3 md:p-8 md:pt-6 bg-slate-950">
       <div className="flex items-center gap-x-8">
         <div className="flex w-24 text-2xl font-bold md:w-72 md:text-4xl">
           <Link href={`/`}>MTG Collection</Link>
