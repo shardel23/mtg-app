@@ -33,6 +33,8 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
 
   const card = cardVersions[cardVersionNumberToDisplay];
 
+  const [numCollected, setNumCollected] = useState<number>(card.numCollected);
+
   return (
     <div className="rounded p-1 shadow-md">
       {card.image && (
@@ -116,6 +118,10 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
           setIsOpen={setIsCardDialogOpen}
           card={card}
           cardVersions={cardVersions}
+          amountCollected={numCollected}
+          setAmountCollected={setNumCollected}
+          onAmountCollectedChange={setIsVersionCollected}
+          cardVersionIndex={cardVersionNumberToDisplay}
         />
       )}
     </div>

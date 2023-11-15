@@ -1,10 +1,13 @@
 import { isCardMultiFace } from "@/actions/helpers";
+import { updateAmountCollected } from "@/actions/mtgActions";
 import { CardData } from "@/types/types";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import useFetch from "react-fetch-hook";
 import DeleteCardDialog from "./deleteCardDialog";
 import ArrowUTurnRight from "./icons/arrow-uturn-right";
+import Minus from "./icons/minus";
+import Plus from "./icons/plus";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -19,12 +22,21 @@ export default function CardDetails({
   setIsOpen,
   card,
   cardVersions,
+  amountCollected,
+  setAmountCollected,
+  onAmountCollectedChange,
+  cardVersionIndex,
 }: {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   card: CardData;
   cardVersions: CardData[];
+  amountCollected: number;
+  setAmountCollected: React.Dispatch<React.SetStateAction<number>>;
+  onAmountCollectedChange: React.Dispatch<React.SetStateAction<boolean[]>>;
+  cardVersionIndex: number;
 }) {
+  const [isPending, startTransition] = useTransition();
   const [cardFaceIndex, setCardFaceIndex] = useState<number>(0);
   const cardFaces = card.cardFaces || [];
   const isMultiFaced = isCardMultiFace(card);
@@ -56,7 +68,7 @@ export default function CardDetails({
                 {isLoading ? <CardPriceLoading /> : `$${data?.price ?? "--"}`}
               </div>
             </div>
-            <div className="flex justify-center">
+            <div className="flex justify-center gap-x-4">
               {isMultiFaced && (
                 <Button
                   variant={"secondary"}
@@ -68,6 +80,52 @@ export default function CardDetails({
                   <ArrowUTurnRight />
                 </Button>
               )}
+              <div className="flex items-center gap-x-2">
+                <Button
+                  variant={"secondary"}
+                  className="w-12"
+                  onClick={() => {
+                    startTransition(() => {
+                      updateAmountCollected(
+                        card.albumId!,
+                        card.id,
+                        Math.max(0, amountCollected - 1),
+                      );
+                    });
+                    onAmountCollectedChange((curr) => {
+                      const newIsVersionCollected = [...curr];
+                      newIsVersionCollected[cardVersionIndex] =
+                        amountCollected > 1;
+                      return newIsVersionCollected;
+                    });
+                    setAmountCollected((curr) => Math.max(0, curr - 1));
+                  }}
+                >
+                  <Minus />
+                </Button>
+                <span className="px-2">{amountCollected}</span>
+                <Button
+                  variant={"secondary"}
+                  className="w-12"
+                  onClick={() => {
+                    startTransition(() => {
+                      updateAmountCollected(
+                        card.albumId!,
+                        card.id,
+                        amountCollected + 1,
+                      );
+                    });
+                    onAmountCollectedChange((curr) => {
+                      const newIsVersionCollected = [...curr];
+                      newIsVersionCollected[cardVersionIndex] = true;
+                      return newIsVersionCollected;
+                    });
+                    setAmountCollected((curr) => curr + 1);
+                  }}
+                >
+                  <Plus />
+                </Button>
+              </div>
             </div>
           </div>
         </div>

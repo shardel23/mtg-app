@@ -338,7 +338,24 @@ export async function markCardIsCollected(
       numCollected: isCollected ? 1 : 0,
     },
   });
-  revalidatePath(`/album/{albumId}`);
+}
+
+export async function updateAmountCollected(
+  albumId: number,
+  cardId: string,
+  amount: number,
+): Promise<void> {
+  await prisma.card.update({
+    where: {
+      id_albumId: {
+        id: cardId,
+        albumId: albumId,
+      },
+    },
+    data: {
+      numCollected: amount,
+    },
+  });
 }
 
 export async function deleteAlbum(albumId: number): Promise<void> {

@@ -17,6 +17,7 @@ export type CardData = {
   name: string;
   image: string;
   isCollected?: boolean;
+  numCollected: number;
   albumId?: number;
   collectorNumber: string;
   setCode: string;
