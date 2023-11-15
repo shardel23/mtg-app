@@ -16,9 +16,11 @@ import {
 function DeleteCardDialog({
   albumId,
   cardName,
+  cardIds,
 }: {
   albumId: number;
   cardName: string;
+  cardIds: string[];
 }) {
   const [isPending, startTransition] = useTransition();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
@@ -33,8 +35,8 @@ function DeleteCardDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            Are you sure you want to delete {"'" + cardName + "'"} from this
-            album?
+            Are you sure you want to delete {"'" + cardName + "'"} and all
+            versions of it from this album?
           </DialogTitle>
           <DialogDescription>
             This action is irreversible. You will lose all the data associated
@@ -46,7 +48,7 @@ function DeleteCardDialog({
             action={async () => {
               startTransition(async () => {
                 // TODO: Add optimistic update
-                await deleteCardFromAlbum(albumId, cardName);
+                await deleteCardFromAlbum(albumId, cardIds);
                 setIsDialogOpen(false);
               });
             }}

@@ -115,6 +115,7 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
           isOpen={isCardDialogOpen}
           setIsOpen={setIsCardDialogOpen}
           card={card}
+          cardVersions={cardVersions}
         />
       )}
     </div>

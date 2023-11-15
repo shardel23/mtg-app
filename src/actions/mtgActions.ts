@@ -393,7 +393,7 @@ export async function deleteAlbum(albumId: number): Promise<void> {
 
 export async function deleteCardFromAlbum(
   albumId: number,
-  cardName: string,
+  cardIds: string[],
 ): Promise<boolean> {
   const userId = await getUserIdFromSession();
   if (userId == null) {
@@ -416,10 +416,12 @@ export async function deleteCardFromAlbum(
     log(LogLevel.warn, "User is not the owner of the album");
     return false;
   }
-  await prisma.cardDetails.deleteMany({
+  await prisma.card.deleteMany({
     where: {
       albumId: albumId,
-      name: cardName,
+      id: {
+        in: cardIds,
+      },
     },
   });
   revalidatePath(`/album/{albumId}`);

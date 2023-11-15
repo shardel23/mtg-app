@@ -18,10 +18,12 @@ export default function CardDetails({
   isOpen,
   setIsOpen,
   card,
+  cardVersions,
 }: {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   card: CardData;
+  cardVersions: CardData[];
 }) {
   const [cardFaceIndex, setCardFaceIndex] = useState<number>(0);
   const cardFaces = card.cardFaces || [];
@@ -74,6 +76,7 @@ export default function CardDetails({
             <DeleteCardDialog
               albumId={card.albumId as number}
               cardName={card.name}
+              cardIds={cardVersions.map((card) => card.id)}
             />
           </div>
         </DialogFooter>
