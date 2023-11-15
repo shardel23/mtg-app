@@ -8,11 +8,16 @@ function SearchResultsView({
   query,
 }: {
   results: Map<string, CardData[]>;
-  query: string;
+  query?: string;
 }) {
+  const displayMessage = query
+    ? `Displaying ${results.size} cards where the name includes "${query}"`
+    : `Displaying ${results.size} cards available for trade`;
   return (
     <div className="flex flex-col">
-      <div className="border-b border-t pb-2 pt-2 text-center text-xxs md:pl-4 md:text-left">{`Displaying ${results.size} cards where the name includes "${query}"`}</div>
+      <div className="border-b border-t pb-2 pt-2 text-center text-xxs md:pl-4 md:text-left">
+        {displayMessage}
+      </div>
       <CardGrid cards={results} cardsPerRow={5} />
     </div>
   );

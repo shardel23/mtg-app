@@ -1,6 +1,6 @@
 import { searchCardInCollection } from "@/actions/mtgActions";
 import RedirectIfNotLoggedIn from "@/components/redirect";
-import SearchResultsView from "./SearchResultsView";
+import SearchResultsView from "../../../components/SearchResultsView";
 
 export default async function SearchResultsPage({
   params,

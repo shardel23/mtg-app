@@ -462,6 +462,19 @@ export async function searchCardInCollection(
   return cardsArrayToMap(transformCardsFromDB(cards));
 }
 
+export async function getCardsAvailableForTrade(): Promise<
+  Map<string, CardData[]>
+> {
+  const userId = await getUserIdFromSession();
+  if (userId == null) {
+    return new Map();
+  }
+  const collection = await getCollection();
+  const cards = await DB.getCardsAvailableForTrade(userId, collection);
+
+  return cardsArrayToMap(transformCardsFromDB(cards));
+}
+
 export async function getCollectionStats(): Promise<AlbumStats[]> {
   const userId = await getUserIdFromSession();
   if (userId == null) {

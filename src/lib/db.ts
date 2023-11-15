@@ -118,3 +118,57 @@ export const searchCardsInCollection = async (
     },
   });
 };
+
+export const getCardsAvailableForTrade = (
+  userId: string,
+  collection: string,
+) => {
+  return prisma.card.findMany({
+    where: {
+      numCollected: {
+        gt: 1,
+      },
+      Album: {
+        collection: {
+          name: {
+            equals: collection,
+          },
+          userId: userId,
+        },
+      },
+    },
+    select: {
+      id: true,
+      numCollected: true,
+      albumId: true,
+      CardDetails: {
+        select: {
+          name: true,
+          collectorNumber: true,
+          normalImageURI: true,
+          set: true,
+          setIconSvgUri: true,
+          rarity: true,
+          colors: true,
+          mana_cost: true,
+          cmc: true,
+          layout: true,
+          type_line: true,
+          card_faces: {
+            select: {
+              name: true,
+              faceNumber: true,
+              normalImageURI: true,
+              colors: true,
+              mana_cost: true,
+              type_line: true,
+            },
+            orderBy: {
+              faceNumber: "asc",
+            },
+          },
+        },
+      },
+    },
+  });
+};
