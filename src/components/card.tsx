@@ -89,9 +89,6 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
                 }}
               />
             )}
-            {/* <div className="absolute bottom-0 right-0 rounded-full bg-black bg-opacity-50 px-1 py-0.5 text-xxs md:px-2 md:py-1 md:text-xs">
-              ${card.price ?? "--"}
-            </div> */}
           </div>
           <div className="flex items-center justify-center gap-x-1 pt-1 md:pt-2">
             <Image
