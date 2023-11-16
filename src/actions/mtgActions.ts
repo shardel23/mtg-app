@@ -285,7 +285,9 @@ export async function createAlbumsFromCSV(
 }
 
 function logWithTimestamp(message: string) {
-  console.log(new Date().toLocaleString(), message);
+  if (process.env.NODE_ENV === "development") {
+    console.log(new Date().toLocaleString(), message);
+  }
 }
 
 export async function createAlbumFromCSV(
