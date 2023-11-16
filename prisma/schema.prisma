@@ -132,7 +132,7 @@ model CardFace {
   toughness           String?
   type_line           String
   watermark           String?
-  Card                CardDetails @relation(fields: [cardId], references: [id])
+  Card                CardDetails @relation(fields: [cardId], references: [id], onDelete: Cascade)
   cardId              String
   faceNumber          Int
 
