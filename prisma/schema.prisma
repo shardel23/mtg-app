@@ -104,11 +104,9 @@ model CardDetails {
   security_stamp      String?
   watermark           String?
   Card                Card[]
-  albumId             Int        @ignore
 }
 
 model CardFace {
-  id                  Int         @ignore
   artist              String?
   cmc                 Int?
   color_indicator     String[]
