@@ -117,7 +117,6 @@ async function createAlbum(
       await prisma.cardDetails.create({
         data: {
           id: card.id,
-          albumId: album.id,
           name: card.name,
           imageUri: getImageUri(card),
           collectorNumber: parseInt(
