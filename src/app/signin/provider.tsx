@@ -7,8 +7,6 @@ export default function Provider({
 }: {
   provider: ClientSafeProvider;
 }) {
-  // const searchParams = useSearchParams();
-  // const callbackUrl = searchParams.get("callbackUrl");
   return (
     <div className="rounded border p-4">
       <button onClick={() => signIn(provider.id, { callbackUrl: "/" })}>

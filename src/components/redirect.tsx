@@ -10,7 +10,7 @@ export default async function RedirectIfNotLoggedIn() {
   const session = await getServerSession(authOptions);
   const isLogged = session?.user != null;
   if (!isLogged) {
-    redirect(`/api/auth/signin?callbackUrl=${activePath}`);
+    redirect(`/signin`);
   }
   return <div />;
 }
