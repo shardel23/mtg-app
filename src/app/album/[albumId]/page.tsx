@@ -8,8 +8,8 @@ export default async function AlbumPage({
   params: { albumId: string };
 }) {
   const albumIdInt = parseInt(params.albumId);
-  const { albumName, cards } = await getAlbumCards(albumIdInt);
-  if (albumName === "") {
+  const { album, cards } = await getAlbumCards(albumIdInt);
+  if (album == null) {
     return (
       <>
         <RedirectIfNotLoggedIn />
@@ -20,7 +20,7 @@ export default async function AlbumPage({
   return (
     <>
       <RedirectIfNotLoggedIn />
-      <AlbumView albumId={albumIdInt} albumName={albumName} cards={cards} />
+      <AlbumView album={album} cards={cards} />
     </>
   );
 }

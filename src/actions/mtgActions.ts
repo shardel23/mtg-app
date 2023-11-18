@@ -305,9 +305,7 @@ export async function createAlbumFromCSV(
   return await createAlbum({ setCode }, importedCards);
 }
 
-export async function getAlbumCards(
-  albumId: number,
-): Promise<{ albumName: string; cards: Map<string, CardData[]> }> {
+export async function getAlbumCards(albumId: number) {
   const userId = await getUserIdFromSession();
   if (userId == null) {
     return {
@@ -327,7 +325,11 @@ export async function getAlbumCards(
   const cards = transformCardsFromDB(album.cards);
 
   return {
-    albumName: album.name,
+    album: {
+      id: albumId,
+      name: album.name,
+      setId: album.setId,
+    },
     cards: cardsArrayToMap(cards),
   };
 }

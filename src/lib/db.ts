@@ -17,6 +17,7 @@ export const getCardsFromAlbum = async (
     },
     select: {
       name: true,
+      setId: true,
       cards: {
         select: {
           id: true,
