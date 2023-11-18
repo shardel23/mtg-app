@@ -3,7 +3,7 @@
 import CardGrid from "@/components/cardGrid";
 import DeleteAlbumDialog from "@/components/deleteAlbumDialog";
 import Filters, { Filter } from "@/components/filters";
-import Typeahead from "@/components/typeahead/typeahead";
+import CardSearchTypeahead from "@/components/typeahead/cardSearchTypeahead";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CardData } from "@/types/types";
@@ -59,7 +59,8 @@ function AlbumView({
       <div className="flex justify-between">
         <div className="flex flex-col gap-y-2">
           <div className="flex gap-x-2">
-            {album.setId == null && <Typeahead />}
+            {/* {album.setId == null && <Typeahead />} */}
+            {album.setId == null && <CardSearchTypeahead />}
             <Filters filters={filters} setFilters={setFilters} />
             {filters.size !== 0 && (
               <Button onClick={() => setFilters(new Map())}>
