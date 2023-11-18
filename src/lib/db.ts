@@ -119,11 +119,11 @@ export const searchCardsInCollection = async (
   });
 };
 
-export const getCardsAvailableForTrade = (
+export const getCardsAvailableForTrade = async (
   userId: string,
   collection: string,
 ) => {
-  return prisma.card.findMany({
+  return await prisma.card.findMany({
     where: {
       numCollected: {
         gt: 1,
@@ -169,6 +169,18 @@ export const getCardsAvailableForTrade = (
           },
         },
       },
+    },
+  });
+};
+
+export const createEmptyAlbum = async (
+  collection: { id: number },
+  albumName: string,
+) => {
+  return await prisma.album.create({
+    data: {
+      collectionId: collection.id,
+      name: albumName,
     },
   });
 };
