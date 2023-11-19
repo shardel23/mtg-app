@@ -48,35 +48,21 @@ export const AutoComplete = ({
 
   useEffect(() => {
     if (debouncedInputValue && debouncedInputValue.length > 1) {
-      // fetch(`https://api.example.com/search?q=${inputValue}`)
-      //   .then(response => response.json())
-      //   .then(data => setSuggestions(data.items));
-      setSuggestions([
-        {
-          value:
-            debouncedInputValue +
-            (Math.random() * 10000).toPrecision(4).toString(),
-          label:
-            debouncedInputValue +
-            (Math.random() * 10000).toPrecision(4).toString(),
-        },
-        {
-          value:
-            debouncedInputValue +
-            (Math.random() * 10000).toPrecision(4).toString(),
-          label:
-            debouncedInputValue +
-            (Math.random() * 10000).toPrecision(4).toString(),
-        },
-        {
-          value:
-            debouncedInputValue +
-            (Math.random() * 10000).toPrecision(4).toString(),
-          label:
-            debouncedInputValue +
-            (Math.random() * 10000).toPrecision(4).toString(),
-        },
-      ]);
+      fetch(
+        `https://api.scryfall.com/cards/search?order=name&q=name:${debouncedInputValue}`,
+      )
+        .then((response) => response.json())
+        .then((res) => {
+          if (!res.data) {
+            setSuggestions([]);
+            return;
+          }
+          setSuggestions(
+            res.data
+              .slice(0, 10)
+              .map((card: any) => ({ value: card.id, label: card.name })),
+          );
+        });
       setLoading(false);
     } else {
       setSuggestions([]);
@@ -153,7 +139,7 @@ export const AutoComplete = ({
           onFocus={() => {}}
           placeholder={placeholder}
           disabled={disabled}
-          className="text-base"
+          className="text-base w-72"
         />
       </div>
       <div className="mt-1 relative">

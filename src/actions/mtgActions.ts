@@ -67,6 +67,7 @@ export async function createEmptyAlbum(name: string): Promise<number> {
     return -1;
   }
   const newAlbum = await DB.createEmptyAlbum(collection, name);
+  revalidatePath("/");
   return newAlbum.id;
 }
 
