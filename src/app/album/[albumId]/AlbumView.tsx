@@ -51,16 +51,16 @@ function AlbumView({
         <div className="flex items-center gap-x-4">
           <div className="text-xl"> {album.name} </div>
           <div className="text-sm">
-            {`Collected: ${collectedCardsCount}/${cards.size}`}
+            {album.setId != null &&
+              `Collected: ${collectedCardsCount}/${cards.size}`}
           </div>
+          {album.setId == null && <CardSearchTypeahead />}
         </div>
         <DeleteAlbumDialog albumId={album.id} />
       </div>
       <div className="flex justify-between">
         <div className="flex flex-col gap-y-2">
           <div className="flex gap-x-2">
-            {/* {album.setId == null && <Typeahead />} */}
-            {album.setId == null && <CardSearchTypeahead />}
             <Filters filters={filters} setFilters={setFilters} />
             {filters.size !== 0 && (
               <Button onClick={() => setFilters(new Map())}>
