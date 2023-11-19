@@ -49,7 +49,7 @@ export const AutoComplete = ({
   useEffect(() => {
     if (debouncedInputValue && debouncedInputValue.length > 1) {
       fetch(
-        `https://api.scryfall.com/cards/search?order=name&q=name:${debouncedInputValue}`,
+        `https://api.scryfall.com/cards/search?order=name&q=name:/${debouncedInputValue}/`,
       )
         .then((response) => response.json())
         .then((res) => {
@@ -59,7 +59,7 @@ export const AutoComplete = ({
           }
           setSuggestions(
             res.data
-              .slice(0, 10)
+              .slice(0, 50)
               .map((card: any) => ({ value: card.id, label: card.name })),
           );
         });
