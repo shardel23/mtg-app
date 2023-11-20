@@ -1,9 +1,9 @@
 "use client";
 
+import AddCardDialog from "@/components/addCardDialog";
 import CardGrid from "@/components/cardGrid";
 import DeleteAlbumDialog from "@/components/deleteAlbumDialog";
 import Filters, { Filter } from "@/components/filters";
-import CardSearchTypeahead from "@/components/typeahead/cardSearchTypeahead";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CardData } from "@/types/types";
@@ -54,7 +54,8 @@ function AlbumView({
             {album.setId != null &&
               `Collected: ${collectedCardsCount}/${cards.size}`}
           </div>
-          {album.setId == null && <CardSearchTypeahead />}
+          {/* {album.setId == null && <CardSearchTypeahead />} */}
+          {album.setId == null && <AddCardDialog />}
         </div>
         <DeleteAlbumDialog albumId={album.id} />
       </div>
