@@ -1,5 +1,6 @@
 import { getImageUri } from "@/actions/helpers";
 import * as API from "@/lib/scryfallApi";
+import { Card } from "scryfall-sdk";
 import { prisma } from "./prisma";
 import { endsWithNumber } from "./utils";
 
@@ -189,12 +190,10 @@ export const createEmptyAlbum = async (
   });
 };
 
-export const addCardToAlbum = async (cardId: string, albumId: number) => {
-  let card = await API.getCard(cardId);
-  let set = await API.getSet({ setId: card.set_id });
-
-  console.log(cardId);
-
+export const upsertCardDetails = async (
+  card: Card,
+  setDetails: { setCode: string; setIconSvgUri: string },
+) => {
   await prisma.cardDetails.upsert({
     where: {
       id: card.id,
@@ -211,8 +210,8 @@ export const addCardToAlbum = async (cardId: string, albumId: number) => {
       ),
       setName: card.set_name,
       setId: card.set_id,
-      setCode: set.code,
-      setIconSvgUri: set.icon_svg_uri,
+      setCode: setDetails.setCode,
+      setIconSvgUri: setDetails.setIconSvgUri,
       rarity: card.rarity,
       arena_id: card.arena_id,
       lang: card.lang,
@@ -318,8 +317,15 @@ export const addCardToAlbum = async (cardId: string, albumId: number) => {
       watermark: card.watermark,
     },
   });
+};
 
-  console.log("done with card details");
+export const addCardToAlbum = async (card: Card, albumId: number) => {
+  let set = await API.getSet({ setId: card.set_id });
+
+  await upsertCardDetails(card, {
+    setCode: set.code,
+    setIconSvgUri: set.icon_svg_uri,
+  });
 
   await prisma.card.upsert({
     where: {
@@ -339,6 +345,4 @@ export const addCardToAlbum = async (cardId: string, albumId: number) => {
       },
     },
   });
-
-  console.log("done with card");
 };
