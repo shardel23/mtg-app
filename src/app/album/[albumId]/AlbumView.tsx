@@ -1,5 +1,6 @@
 "use client";
 
+import AddCardDialog from "@/components/addCardDialog";
 import CardGrid from "@/components/cardGrid";
 import DeleteAlbumDialog from "@/components/deleteAlbumDialog";
 import Filters, { Filter } from "@/components/filters";
@@ -10,12 +11,10 @@ import { X } from "lucide-react";
 import { useMemo, useState } from "react";
 
 function AlbumView({
-  albumId,
-  albumName,
+  album,
   cards,
 }: {
-  albumId: number;
-  albumName: string;
+  album: { id: number; name: string; setId: string | null | undefined };
   cards: Map<string, CardData[]>;
 }) {
   const [cardsPerRow, setCardsPerRow] = useState<number>(5);
@@ -50,12 +49,14 @@ function AlbumView({
     <div className="space-y-2 pt-2 md:pt-0">
       <div className="flex justify-between">
         <div className="flex items-center gap-x-4">
-          <div className="text-xl"> {albumName} </div>
+          <div className="text-xl"> {album.name} </div>
           <div className="text-sm">
-            {`Collected: ${collectedCardsCount}/${cards.size}`}
+            {album.setId != null &&
+              `Collected: ${collectedCardsCount}/${cards.size}`}
           </div>
+          {album.setId == null && <AddCardDialog albumId={album.id} />}
         </div>
-        <DeleteAlbumDialog albumId={albumId} />
+        <DeleteAlbumDialog albumId={album.id} />
       </div>
       <div className="flex justify-between">
         <div className="flex flex-col gap-y-2">

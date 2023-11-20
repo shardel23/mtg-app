@@ -52,15 +52,47 @@ export async function getAllAlbums(): Promise<AlbumData[]> {
       setReleaseDate: "desc",
     },
   });
-  return albums
-    .filter((album) => album.setId != null && album.setName != null)
-    .map((album) => ({
-      id: album.id,
-      name: album.name,
-      setId: album.setId as string,
-      setName: album.setName as string,
-      setReleaseDate: album.setReleaseDate as string,
-    }));
+  return albums.map((album) => ({
+    id: album.id,
+    name: album.name,
+    setId: album.setId,
+    setName: album.setName,
+    setReleaseDate: album.setReleaseDate,
+  }));
+}
+
+export async function createEmptyAlbum(name: string): Promise<number> {
+  const { userId, collection } = await getUserAndCollection();
+  if (userId == null || collection == null) {
+    return -1;
+  }
+  const newAlbum = await DB.createEmptyAlbum(collection, name);
+  revalidatePath("/");
+  return newAlbum.id;
+}
+
+export async function addCardToAlbum(cardId: string, albumId: number) {
+  const { userId, collection } = await getUserAndCollection();
+  if (userId == null || collection == null) {
+    return false;
+  }
+
+  const album = await prisma.album.findUnique({
+    where: {
+      id: albumId,
+      collectionId: collection.id,
+    },
+    select: {
+      id: true,
+    },
+  });
+  if (album == null) {
+    return false;
+  }
+
+  await DB.addCardToAlbum(cardId, albumId);
+  revalidatePath(`/album/${albumId}`);
+  return true;
 }
 
 async function createAlbum(
@@ -298,9 +330,7 @@ export async function createAlbumFromCSV(
   return await createAlbum({ setCode }, importedCards);
 }
 
-export async function getAlbumCards(
-  albumId: number,
-): Promise<{ albumName: string; cards: Map<string, CardData[]> }> {
+export async function getAlbumCards(albumId: number) {
   const userId = await getUserIdFromSession();
   if (userId == null) {
     return {
@@ -320,7 +350,11 @@ export async function getAlbumCards(
   const cards = transformCardsFromDB(album.cards);
 
   return {
-    albumName: album.name,
+    album: {
+      id: albumId,
+      name: album.name,
+      setId: album.setId,
+    },
     cards: cardsArrayToMap(cards),
   };
 }
@@ -496,6 +530,9 @@ export async function getCollectionStats(): Promise<AlbumStats[]> {
         },
         userId: userId,
       },
+      setId: {
+        not: null,
+      },
     },
     select: {
       id: true,
@@ -598,4 +635,17 @@ export async function getCollection() {
 export async function getAllCollections(): Promise<CollectionData[]> {
   const collections = await prisma.collection.findMany();
   return collections.map((collection) => ({ name: collection.name }));
+}
+
+async function getUserAndCollection() {
+  const userId = await getUserIdFromSession();
+  const collection = await prisma.collection.findFirst({
+    where: {
+      name: await getCollection(),
+    },
+    select: {
+      id: true,
+    },
+  });
+  return { userId, collection };
 }

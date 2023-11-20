@@ -5,9 +5,9 @@ export type CollectionData = {
 export type AlbumData = {
   id: number;
   name: string;
-  setId: string;
-  setName: string;
-  setReleaseDate: string;
+  setId?: string | null;
+  setName?: string | null;
+  setReleaseDate?: string | null;
 };
 
 export type SetData = { name: string; id: string };
