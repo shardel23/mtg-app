@@ -641,6 +641,7 @@ async function getUserAndCollection() {
   const userId = await getUserIdFromSession();
   const collection = await prisma.collection.findFirst({
     where: {
+      userId: userId,
       name: await getCollection(),
     },
     select: {
