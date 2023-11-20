@@ -13,7 +13,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 
-function AddCardDialog() {
+function AddCardDialog({ albumId }: { albumId: number }) {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   return (
@@ -29,7 +29,7 @@ function AddCardDialog() {
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col h-[90%]">
-          <CardSearchGridView />
+          <CardSearchGridView albumId={albumId} />
         </div>
         <DialogFooter></DialogFooter>
       </DialogContent>

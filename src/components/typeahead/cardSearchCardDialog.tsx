@@ -1,7 +1,9 @@
 "use client";
 
+import { addCardToAlbum } from "@/actions/mtgActions";
+import { Loader2 } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import * as Scry from "scryfall-sdk";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogFooter } from "../ui/dialog";
@@ -19,16 +21,19 @@ function CardSearchCardDialog({
   isOpen,
   setIsOpen,
   card,
+  albumId,
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   card: Scry.Card | null;
+  albumId: number;
 }) {
   const [renderedCard, setRenderedCard] = useState<Scry.Card | null>(card);
   const [cardVersions, setCardVersions] = useState<Scry.Card[]>([]);
   const [selectedVersion, setSelectedVersion] = useState<
     string | null | undefined
   >(card?.id);
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     setRenderedCard(card);
@@ -118,7 +123,21 @@ function CardSearchCardDialog({
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={() => setIsOpen(false)}>Add</Button>
+          <form
+            action={async () => {
+              startTransition(async () => {
+                const res = await addCardToAlbum(renderedCard.id, albumId);
+                if (res) {
+                  setIsOpen(false);
+                }
+              });
+            }}
+          >
+            <Button disabled={isPending}>
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Add
+            </Button>
+          </form>
         </DialogFooter>
       </DialogContent>
     </Dialog>

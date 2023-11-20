@@ -54,8 +54,7 @@ function AlbumView({
             {album.setId != null &&
               `Collected: ${collectedCardsCount}/${cards.size}`}
           </div>
-          {/* {album.setId == null && <CardSearchTypeahead />} */}
-          {album.setId == null && <AddCardDialog />}
+          {album.setId == null && <AddCardDialog albumId={album.id} />}
         </div>
         <DeleteAlbumDialog albumId={album.id} />
       </div>

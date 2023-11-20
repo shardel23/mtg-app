@@ -71,6 +71,30 @@ export async function createEmptyAlbum(name: string): Promise<number> {
   return newAlbum.id;
 }
 
+export async function addCardToAlbum(cardId: string, albumId: number) {
+  const { userId, collection } = await getUserAndCollection();
+  if (userId == null || collection == null) {
+    return false;
+  }
+
+  const album = await prisma.album.findUnique({
+    where: {
+      id: albumId,
+      collectionId: collection.id,
+    },
+    select: {
+      id: true,
+    },
+  });
+  if (album == null) {
+    return false;
+  }
+
+  await DB.addCardToAlbum(cardId, albumId);
+  revalidatePath(`/album/${albumId}`);
+  return true;
+}
+
 async function createAlbum(
   setIdentifier: { setId?: string; setCode?: string },
   collectedCards?: Map<string, number>,
