@@ -17,7 +17,7 @@ function CardSearchGridView() {
   useEffect(() => {
     if (debouncedInputValue && debouncedInputValue.length > 1) {
       fetch(
-        `https://api.scryfall.com/cards/search?order=name&q=name:/${debouncedInputValue}/`,
+        `https://api.scryfall.com/cards/search?order=released&unique=cards&q=name:/${debouncedInputValue}/`,
       )
         .then((response) => response.json())
         .then((res) => {
