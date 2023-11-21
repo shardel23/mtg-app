@@ -9,7 +9,10 @@ export default function Provider({
 }) {
   return (
     <div className="rounded border p-4">
-      <button onClick={() => signIn(provider.id, { callbackUrl: "/" })}>
+      <button
+        data-testid={`login-button-${provider.name.toLowerCase()}`}
+        onClick={() => signIn(provider.id, { callbackUrl: "/" })}
+      >
         Sign in with {provider.name}
       </button>
     </div>

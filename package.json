@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "test": "NODE_ENV=test next dev --port 3001",
     "build": "npx prisma migrate deploy && prisma generate && next build",
     "start": "next start",
     "lint": "next lint && npm run typecheck",

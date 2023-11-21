@@ -16,7 +16,9 @@ async function Header() {
     <div className="fixed top-0 z-10 flex w-full justify-between bg-slate-950 p-3 md:p-8 md:pt-6">
       <div className="flex items-center gap-x-8">
         <div className="flex w-24 text-2xl font-bold md:w-72 md:text-4xl">
-          <Link href={`/`}>MTG Collection</Link>
+          <Link data-testid="app-banner" href={`/`}>
+            MTG Collection
+          </Link>
         </div>
         <div className="hidden md:flex">
           <Auth />
