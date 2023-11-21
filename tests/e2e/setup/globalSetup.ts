@@ -56,7 +56,7 @@ async function globalSetup() {
       path: "/",
       httpOnly: true,
       sameSite: "Lax",
-      expires: 1661406204,
+      expires: 1921515052,
     },
   ]);
   await context.storageState({ path: storagePath });
