@@ -38,6 +38,11 @@ async function globalSetup() {
           scope: "read:org,read:user,repo,user:email",
         },
       },
+      collections: {
+        create: {
+          name: "Default",
+        },
+      },
     },
     update: {},
   });

@@ -19,13 +19,17 @@ function SetSelector({
 }) {
   return (
     <Select onValueChange={(setId) => onSetChange(setId)}>
-      <SelectTrigger id="set">
+      <SelectTrigger data-testid="set-selector" id="set">
         <SelectValue placeholder="Choose a set..." />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup className="h-72 overflow-y-scroll">
           {sets.map((set, idx) => (
-            <SelectItem key={idx} value={set.id}>
+            <SelectItem
+              data-testid={`set-selector-option-${idx}`}
+              key={idx}
+              value={set.id}
+            >
               {set.name}
             </SelectItem>
           ))}

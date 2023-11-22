@@ -49,7 +49,9 @@ function AlbumView({
     <div className="space-y-2 pt-2 md:pt-0">
       <div className="flex justify-between">
         <div className="flex items-center gap-x-4">
-          <div className="text-xl"> {album.name} </div>
+          <div data-testid="album-name-div" className="text-xl">
+            {album.name}
+          </div>
           <div className="text-sm">
             {album.setId != null &&
               `Collected: ${collectedCardsCount}/${cards.size}`}

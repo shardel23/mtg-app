@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit --pretty",
     "docker": "docker compose up -d",
     "purgedb": "npx prisma migrate reset",
-    "e2e": "start-server-and-test test http://localhost:3001 \"playwright test\""
+    "e2e": "start-server-and-test test http://localhost:3001 \"playwright test\"",
+    "e2e:ui": "start-server-and-test test http://localhost:3001 \"playwright test --ui\""
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",

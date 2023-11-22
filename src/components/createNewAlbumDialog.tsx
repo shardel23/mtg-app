@@ -32,7 +32,10 @@ function CreateNewAlbumDialog({ sets }: { sets: Array<SetData> }) {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger>
-        <PlusCircle className="cursor-pointer" />
+        <PlusCircle
+          data-testid="create-album-button"
+          className="cursor-pointer"
+        />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -94,7 +97,11 @@ function CreateNewAlbumDialog({ sets }: { sets: Array<SetData> }) {
               });
             }}
           >
-            <Button type="submit" disabled={selectedSetId === "" || isPending}>
+            <Button
+              data-testid="create-album-from-set-button"
+              type="submit"
+              disabled={selectedSetId === "" || isPending}
+            >
               {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Add Album
             </Button>
