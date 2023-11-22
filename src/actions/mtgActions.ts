@@ -4,7 +4,12 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import * as DB from "@/lib/db";
 import { prisma } from "@/lib/prisma";
 import * as API from "@/lib/scryfallApi";
-import { cardsArrayToMap, isSetExists } from "@/lib/utils";
+import {
+  cardsArrayToMap,
+  hashDecode,
+  hashEncode,
+  isSetExists,
+} from "@/lib/utils";
 import {
   AlbumData,
   AlbumStats,
@@ -53,7 +58,7 @@ export async function getAllAlbums(): Promise<AlbumData[]> {
     },
   });
   return albums.map((album) => ({
-    id: album.id,
+    id: hashEncode(album.id),
     name: album.name,
     setId: album.setId,
     setName: album.setName,
@@ -71,15 +76,17 @@ export async function createEmptyAlbum(name: string): Promise<number> {
   return newAlbum.id;
 }
 
-export async function addCardToAlbum(cardId: string, albumId: number) {
+export async function addCardToAlbum(cardId: string, albumId: string) {
   const { userId, collection } = await getUserAndCollection();
   if (userId == null || collection == null) {
     return false;
   }
 
+  const albumIdDecoded = hashDecode(albumId);
+
   const album = await prisma.album.findUnique({
     where: {
-      id: albumId,
+      id: albumIdDecoded,
       collectionId: collection.id,
     },
     select: {
@@ -92,7 +99,7 @@ export async function addCardToAlbum(cardId: string, albumId: number) {
 
   const card = await API.getCard(cardId);
 
-  await DB.addCardToAlbum(card, albumId);
+  await DB.addCardToAlbum(card, albumIdDecoded);
   revalidatePath(`/album/${albumId}`);
   return true;
 }
@@ -217,7 +224,7 @@ export async function createAlbumFromCSV(
   return await createAlbum({ setCode }, importedCards);
 }
 
-export async function getAlbumCards(albumId: number) {
+export async function getAlbumCards(albumId: string) {
   const userId = await getUserIdFromSession();
   if (userId == null) {
     return {
@@ -226,7 +233,8 @@ export async function getAlbumCards(albumId: number) {
     };
   }
   const collection = await getCollection();
-  const album = await DB.getCardsFromAlbum(userId, collection, albumId);
+  const albumIdDecoded = hashDecode(albumId);
+  const album = await DB.getCardsFromAlbum(userId, collection, albumIdDecoded);
   if (album == null) {
     return {
       albumName: "",
@@ -252,15 +260,38 @@ export async function getCardPrice(cardId: string): Promise<string | null> {
 }
 
 export async function markCardIsCollected(
-  albumId: number,
+  albumId: string,
   cardId: string,
   isCollected: boolean,
 ): Promise<void> {
+  const { userId, collection } = await getUserAndCollection();
+  if (userId == null || collection == null) {
+    log(LogLevel.warn, "User is not logged in");
+    return;
+  }
+
+  const albumIdDecoded = hashDecode(albumId);
+
+  // verify user owns the album
+  const album = await prisma.album.findUnique({
+    where: {
+      id: albumIdDecoded,
+      collectionId: collection.id,
+    },
+    select: {
+      collectionId: true,
+    },
+  });
+  if (album?.collectionId !== collection.id) {
+    log(LogLevel.warn, "User is not the owner of the album");
+    return;
+  }
+
   await prisma.card.update({
     where: {
       id_albumId: {
         id: cardId,
-        albumId: albumId,
+        albumId: albumIdDecoded,
       },
     },
     data: {
@@ -270,15 +301,38 @@ export async function markCardIsCollected(
 }
 
 export async function updateAmountCollected(
-  albumId: number,
+  albumId: string,
   cardId: string,
   amount: number,
 ): Promise<void> {
+  const { userId, collection } = await getUserAndCollection();
+  if (userId == null || collection == null) {
+    log(LogLevel.warn, "User is not logged in");
+    return;
+  }
+
+  const albumIdDecoded = hashDecode(albumId);
+
+  // verify user owns the album
+  const album = await prisma.album.findUnique({
+    where: {
+      id: albumIdDecoded,
+      collectionId: collection.id,
+    },
+    select: {
+      collectionId: true,
+    },
+  });
+  if (album?.collectionId !== collection.id) {
+    log(LogLevel.warn, "User is not the owner of the album");
+    return;
+  }
+
   await prisma.card.update({
     where: {
       id_albumId: {
         id: cardId,
-        albumId: albumId,
+        albumId: albumIdDecoded,
       },
     },
     data: {
@@ -287,16 +341,18 @@ export async function updateAmountCollected(
   });
 }
 
-export async function deleteAlbum(albumId: number): Promise<void> {
+export async function deleteAlbum(albumId: string): Promise<void> {
   const userId = await getUserIdFromSession();
   if (userId == null) {
     log(LogLevel.warn, "User is not logged in");
     return;
   }
 
+  const albumIdDecoded = hashDecode(albumId);
+
   const album = await prisma.album.findUnique({
     where: {
-      id: albumId,
+      id: albumIdDecoded,
       collection: {
         userId: userId,
       },
@@ -325,7 +381,7 @@ export async function deleteAlbum(albumId: number): Promise<void> {
 
   const deleteAlbum = prisma.album.delete({
     where: {
-      id: albumId,
+      id: albumIdDecoded,
       collection: {
         userId: userId,
       },
@@ -338,7 +394,7 @@ export async function deleteAlbum(albumId: number): Promise<void> {
 }
 
 export async function deleteCardFromAlbum(
-  albumId: number,
+  albumId: string,
   cardIds: string[],
 ): Promise<boolean> {
   const userId = await getUserIdFromSession();
@@ -346,9 +402,10 @@ export async function deleteCardFromAlbum(
     log(LogLevel.warn, "User is not logged in");
     return false;
   }
+  const albumIdDecoded = hashDecode(albumId);
   const res = await prisma.album.findUnique({
     where: {
-      id: albumId,
+      id: albumIdDecoded,
     },
     select: {
       collection: {
@@ -364,7 +421,7 @@ export async function deleteCardFromAlbum(
   }
   await prisma.card.deleteMany({
     where: {
-      albumId: albumId,
+      albumId: albumIdDecoded,
       id: {
         in: cardIds,
       },

@@ -1,7 +1,10 @@
 import { getCollection } from "@/actions/mtgActions";
 import { clsx, type ClassValue } from "clsx";
+import Hashids from "hashids";
 import { twMerge } from "tailwind-merge";
 import { prisma } from "./prisma";
+
+const hashids = new Hashids();
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -70,4 +73,12 @@ export async function isSetExists(setId: string): Promise<boolean> {
     },
   });
   return album != null;
+}
+
+export function hashEncode(value: number) {
+  return hashids.encode(value);
+}
+
+export function hashDecode(encoded: string) {
+  return hashids.decode(encoded)[0] as number;
 }

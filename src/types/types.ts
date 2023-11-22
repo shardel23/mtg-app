@@ -3,7 +3,7 @@ export type CollectionData = {
 };
 
 export type AlbumData = {
-  id: number;
+  id: string;
   name: string;
   setId?: string | null;
   setName?: string | null;
@@ -18,7 +18,7 @@ export type CardData = {
   image: string;
   isCollected?: boolean;
   numCollected: number;
-  albumId?: number;
+  albumId?: string;
   collectorNumber: string;
   setCode: string;
   setIconUri?: string;

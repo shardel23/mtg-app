@@ -14,7 +14,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 
-function DeleteAlbumDialog({ albumId }: { albumId: number }) {
+function DeleteAlbumDialog({ albumId }: { albumId: string }) {
   const [isPending, startTransition] = useTransition();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const router = useRouter();

@@ -18,7 +18,7 @@ function DeleteCardDialog({
   cardName,
   cardIds,
 }: {
-  albumId: number;
+  albumId: string;
   cardName: string;
   cardIds: string[];
 }) {

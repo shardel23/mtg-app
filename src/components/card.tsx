@@ -74,7 +74,7 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
                 });
                 startTransition(() => {
                   markCardIsCollected(
-                    card.albumId as number,
+                    card.albumId!,
                     card.id,
                     !isVersionCollected[cardVersionNumberToDisplay],
                   );

@@ -68,6 +68,9 @@ dependencies:
   export-to-csv:
     specifier: ^1.0.0
     version: 1.0.0
+  hashids:
+    specifier: ^2.3.0
+    version: 2.3.0
   ioredis:
     specifier: ^5.3.2
     version: 5.3.2
@@ -2661,6 +2664,10 @@ packages:
   /has@1.0.4:
     resolution: {integrity: sha512-qdSAmqLF6209RFj4VVItywPMbm3vWylknmB3nvNiUIs72xAimcM8nVYxYr7ncvZq5qzk9MKIZR8ijqD/1QuYjQ==}
     engines: {node: '>= 0.4.0'}
+    dev: false
+
+  /hashids@2.3.0:
+    resolution: {integrity: sha512-ljM73TE/avEhNnazxaj0Dw3BbEUuLC5yYCQ9RSkSUcT4ZSU6ZebdKCIBJ+xT/DnSYW36E9k82GH1Q6MydSIosQ==}
     dev: false
 
   /hasown@2.0.0:

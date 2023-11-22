@@ -13,7 +13,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 
-function AddCardDialog({ albumId }: { albumId: number }) {
+function AddCardDialog({ albumId }: { albumId: string }) {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   return (

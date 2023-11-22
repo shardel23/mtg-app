@@ -26,7 +26,7 @@ function CardSearchCardDialog({
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   card: Scry.Card | null;
-  albumId: number;
+  albumId: string;
 }) {
   const [renderedCard, setRenderedCard] = useState<Scry.Card | null>(card);
   const [cardVersions, setCardVersions] = useState<Scry.Card[]>([]);

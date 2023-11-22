@@ -132,7 +132,7 @@ export default function CardDetails({
         <DialogFooter>
           <div className="flex justify-end">
             <DeleteCardDialog
-              albumId={card.albumId as number}
+              albumId={card.albumId as string}
               cardName={card.name}
               cardIds={cardVersions.map((card) => card.id)}
             />

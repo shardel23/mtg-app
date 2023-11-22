@@ -14,7 +14,7 @@ function AlbumView({
   album,
   cards,
 }: {
-  album: { id: number; name: string; setId: string | null | undefined };
+  album: { id: string; name: string; setId: string | null | undefined };
   cards: Map<string, CardData[]>;
 }) {
   const [cardsPerRow, setCardsPerRow] = useState<number>(5);

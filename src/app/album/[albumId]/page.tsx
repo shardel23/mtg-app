@@ -3,12 +3,11 @@ import RedirectIfNotLoggedIn from "@/components/redirect";
 import AlbumView from "./AlbumView";
 
 export default async function AlbumPage({
-  params,
+  params: { albumId },
 }: {
   params: { albumId: string };
 }) {
-  const albumIdInt = parseInt(params.albumId);
-  const { album, cards } = await getAlbumCards(albumIdInt);
+  const { album, cards } = await getAlbumCards(albumId);
   if (album == null) {
     return (
       <>

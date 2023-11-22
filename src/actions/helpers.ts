@@ -1,4 +1,5 @@
 import * as DB from "@/lib/db";
+import { hashEncode } from "@/lib/utils";
 import { CardData, ManaCost } from "@/types/types";
 import { Prisma } from "@prisma/client";
 import { Logger } from "next-axiom";
@@ -25,7 +26,7 @@ export const transformCardsFromDB = (
     isCollected: card.numCollected > 0,
     numCollected: card.numCollected,
     name: card.CardDetails.name,
-    albumId: card.albumId,
+    albumId: hashEncode(card.albumId),
     image:
       card.CardDetails.normalImageURI ??
       card.CardDetails.card_faces[0].normalImageURI ??
