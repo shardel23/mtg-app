@@ -52,7 +52,7 @@ function AlbumView({
           <div data-testid="album-name-div" className="text-xl">
             {album.name}
           </div>
-          <div className="text-sm">
+          <div data-testid="album-collection-status-div" className="text-sm">
             {album.setId != null &&
               `Collected: ${collectedCardsCount}/${cards.size}`}
           </div>

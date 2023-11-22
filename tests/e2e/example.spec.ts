@@ -24,7 +24,11 @@ test("create album", async ({ page }) => {
 
   await page.getByTestId("create-album-from-set-button").click();
 
-  await page.waitForTimeout(3000);
+  await page.waitForTimeout(2000);
 
   await expect(page.getByTestId("album-name-div")).toBeVisible();
+
+  await expect(page.getByTestId("album-collection-status-div")).toHaveText(
+    "Collected: 0/266",
+  );
 });
