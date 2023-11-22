@@ -26,7 +26,7 @@ function SetSelector({
         <SelectGroup className="h-72 overflow-y-scroll">
           {sets.map((set, idx) => (
             <SelectItem
-              data-testid={`set-selector-option-${idx}`}
+              data-testid={`set-selector-option-${set.name.toLowerCase()}`}
               key={idx}
               value={set.id}
             >

@@ -20,7 +20,7 @@ test("create album", async ({ page }) => {
 
   await page.getByTestId("set-selector").click();
 
-  await page.getByTestId("set-selector-option-1").click();
+  await page.getByTestId("set-selector-option-wilds of eldraine").click();
 
   await page.getByTestId("create-album-from-set-button").click();
 
