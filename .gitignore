@@ -7,7 +7,7 @@
 
 # testing
 /coverage
-/tests/e2e/setup/storageState.json
+tests/e2e/setup/storageState.json
 
 # next.js
 /.next/
