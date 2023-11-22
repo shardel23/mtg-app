@@ -32,3 +32,14 @@ test("create album", async ({ page }) => {
     "Collected: 0/266",
   );
 });
+
+test("search card", async ({ page }) => {
+  await page.goto("http://localhost:3001");
+
+  await page.getByTestId("card-search-input").fill("giant killer");
+  await page.keyboard.press("Enter");
+
+  await expect(
+    page.getByTestId("search-page-display-message-div"),
+  ).toBeVisible();
+});
