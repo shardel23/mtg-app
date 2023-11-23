@@ -15,7 +15,7 @@ import { Input } from "./ui/input";
 function CSVUploader({
   onUploadSuccess,
 }: {
-  onUploadSuccess: (albumId: number) => void;
+  onUploadSuccess: (albumId: string) => void;
 }) {
   const [isPending, startTransition] = useTransition();
   const [file, setFile] = useState<File>();
@@ -41,7 +41,7 @@ function CSVUploader({
         });
         startTransition(async () => {
           const albumId = await createAlbumFromCSV(cards);
-          if (albumId !== -1) {
+          if (albumId !== "") {
             onUploadSuccess(albumId);
           }
         });
