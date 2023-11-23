@@ -68,3 +68,5 @@ export type AlbumStats = {
   rare: CollectedMissingStats;
   mythic: CollectedMissingStats;
 };
+
+export type ViewMode = "view" | "edit";

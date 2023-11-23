@@ -1,6 +1,6 @@
 import { isCardMultiFace } from "@/actions/helpers";
 import { updateAmountCollected } from "@/actions/mtgActions";
-import { CardData } from "@/types/types";
+import { CardData, ViewMode } from "@/types/types";
 import Image from "next/image";
 import React, { useState, useTransition } from "react";
 import useFetch from "react-fetch-hook";
@@ -26,6 +26,7 @@ export default function CardDetails({
   setAmountCollected,
   onAmountCollectedChange,
   cardVersionIndex,
+  viewMode,
 }: {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -35,6 +36,7 @@ export default function CardDetails({
   setAmountCollected: React.Dispatch<React.SetStateAction<number>>;
   onAmountCollectedChange: React.Dispatch<React.SetStateAction<boolean[]>>;
   cardVersionIndex: number;
+  viewMode: ViewMode;
 }) {
   const [isPending, startTransition] = useTransition();
   const [cardFaceIndex, setCardFaceIndex] = useState<number>(0);
@@ -43,6 +45,8 @@ export default function CardDetails({
   const { isLoading, data } = useFetch<{ price: string | null }>(
     `/api/card?cardId=${card.id}`,
   );
+
+  const isEditMode = viewMode === "edit";
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -84,6 +88,7 @@ export default function CardDetails({
                 <Button
                   variant={"secondary"}
                   className="w-12"
+                  disabled={!isEditMode || amountCollected === 0}
                   onClick={() => {
                     startTransition(() => {
                       updateAmountCollected(
@@ -107,6 +112,7 @@ export default function CardDetails({
                 <Button
                   variant={"secondary"}
                   className="w-12"
+                  disabled={!isEditMode}
                   onClick={() => {
                     startTransition(() => {
                       updateAmountCollected(
@@ -135,6 +141,7 @@ export default function CardDetails({
               albumId={card.albumId as string}
               cardName={card.name}
               cardIds={cardVersions.map((card) => card.id)}
+              isDisabled={!isEditMode}
             />
           </div>
         </DialogFooter>

@@ -22,6 +22,11 @@ export const getCardsFromAlbum = async (
     select: {
       name: true,
       setId: true,
+      collection: {
+        select: {
+          userId: true,
+        },
+      },
       cards: {
         select: {
           id: true,

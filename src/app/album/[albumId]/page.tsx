@@ -7,7 +7,7 @@ export default async function AlbumPage({
 }: {
   params: { albumId: string };
 }) {
-  const { album, cards } = await getAlbumCards(albumId);
+  const { album, cards, viewMode } = await getAlbumCards(albumId);
   if (album == null) {
     return (
       <>
@@ -19,7 +19,7 @@ export default async function AlbumPage({
   return (
     <>
       <RedirectIfNotLoggedIn />
-      <AlbumView album={album} cards={cards} />
+      <AlbumView album={album} cards={cards} viewMode={viewMode} />
     </>
   );
 }

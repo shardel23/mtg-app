@@ -17,10 +17,12 @@ function DeleteCardDialog({
   albumId,
   cardName,
   cardIds,
+  isDisabled,
 }: {
   albumId: string;
   cardName: string;
   cardIds: string[];
+  isDisabled?: boolean;
 }) {
   const [isPending, startTransition] = useTransition();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
@@ -28,7 +30,7 @@ function DeleteCardDialog({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="destructive" size={"icon"}>
+        <Button variant="destructive" size={"icon"} disabled={isDisabled}>
           <Trash />
         </Button>
       </DialogTrigger>

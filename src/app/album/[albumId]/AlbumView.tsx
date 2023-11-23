@@ -6,19 +6,23 @@ import DeleteAlbumDialog from "@/components/deleteAlbumDialog";
 import Filters, { Filter } from "@/components/filters";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CardData } from "@/types/types";
+import { CardData, ViewMode } from "@/types/types";
 import { X } from "lucide-react";
 import { useMemo, useState } from "react";
 
 function AlbumView({
   album,
   cards,
+  viewMode,
 }: {
   album: { id: string; name: string; setId: string | null | undefined };
   cards: Map<string, CardData[]>;
+  viewMode: ViewMode;
 }) {
   const [cardsPerRow, setCardsPerRow] = useState<number>(5);
   const [filters, setFilters] = useState<Map<string, Filter>>(new Map());
+
+  const isEditMode = viewMode === "edit";
 
   const filteredCards = useMemo(() => {
     if (filters.size === 0) {
@@ -56,9 +60,11 @@ function AlbumView({
             {album.setId != null &&
               `Collected: ${collectedCardsCount}/${cards.size}`}
           </div>
-          {album.setId == null && <AddCardDialog albumId={album.id} />}
+          {album.setId == null && isEditMode && (
+            <AddCardDialog albumId={album.id} />
+          )}
         </div>
-        <DeleteAlbumDialog albumId={album.id} />
+        {isEditMode && <DeleteAlbumDialog albumId={album.id} />}
       </div>
       <div className="flex justify-between">
         <div className="flex flex-col gap-y-2">
@@ -112,7 +118,11 @@ function AlbumView({
           </Button>
         </div>
       </div>
-      <CardGrid cards={filteredCards} cardsPerRow={cardsPerRow} />
+      <CardGrid
+        cards={filteredCards}
+        cardsPerRow={cardsPerRow}
+        viewMode={viewMode}
+      />
     </div>
   );
 }

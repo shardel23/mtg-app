@@ -16,6 +16,7 @@ import {
   CardData,
   CollectionData,
   SetData,
+  ViewMode,
   createAlbumFromCSVInput,
   createAlbumsFromCSVInput,
 } from "@/types/types";
@@ -224,12 +225,20 @@ export async function createAlbumFromCSV(
   return await createAlbum({ setCode }, importedCards);
 }
 
-export async function getAlbumCards(albumId: string) {
+export async function getAlbumCards(albumId: string): Promise<{
+  album?: {
+    id: string;
+    name: string;
+    setId: string | null;
+  };
+  cards: Map<string, CardData[]>;
+  viewMode: ViewMode;
+}> {
   const userId = await getUserIdFromSession();
   if (userId == null) {
     return {
-      albumName: "",
       cards: new Map(),
+      viewMode: "view",
     };
   }
   const collection = await getCollection();
@@ -237,8 +246,8 @@ export async function getAlbumCards(albumId: string) {
   const album = await DB.getCardsFromAlbum(userId, collection, albumIdDecoded);
   if (album == null) {
     return {
-      albumName: "",
       cards: new Map(),
+      viewMode: "view",
     };
   }
 
@@ -251,6 +260,7 @@ export async function getAlbumCards(albumId: string) {
       setId: album.setId,
     },
     cards: cardsArrayToMap(cards),
+    viewMode: userId === album.collection?.userId ? "edit" : "view",
   };
 }
 

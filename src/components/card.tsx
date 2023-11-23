@@ -1,14 +1,20 @@
 "use client";
 
 import { markCardIsCollected } from "@/actions/mtgActions";
-import { CardData } from "@/types/types";
+import { CardData, ViewMode } from "@/types/types";
 import Image from "next/image";
 import { useCallback, useState, useTransition } from "react";
 import CardDetails from "./cardDetails";
 import ArrowRightLeft from "./icons/arrow-right-left";
 import CheckCircle from "./icons/check-circle";
 
-function Card({ cardVersions }: { cardVersions: CardData[] }) {
+function Card({
+  cardVersions,
+  viewMode,
+}: {
+  cardVersions: CardData[];
+  viewMode: ViewMode;
+}) {
   const [isPending, startTransition] = useTransition();
   const [cardVersionNumberToDisplay, setCardVersionNumberToDisplay] = useState(
     () => {
@@ -32,6 +38,7 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
   }, [cardVersions.length]);
 
   const card = cardVersions[cardVersionNumberToDisplay];
+  const isEditMode = viewMode === "edit";
 
   const [numCollected, setNumCollected] = useState<number>(card.numCollected);
 
@@ -55,32 +62,34 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
               blurDataURL="/assets/card-back.jpg"
               onClick={() => setIsCardDialogOpen(true)}
             />
-            <CheckCircle
-              className={
-                "absolute left-1/10 top-1/10 cursor-pointer " +
-                (isVersionCollected[cardVersionNumberToDisplay]
-                  ? "text-green-400 "
-                  : "text-slate-400 ") +
-                (isVersionCollected[cardVersionNumberToDisplay]
-                  ? "md:hover:text-white"
-                  : "md:hover:text-green-500")
-              }
-              onClick={() => {
-                setIsVersionCollected((curr) => {
-                  const newIsVersionCollected = [...curr];
-                  newIsVersionCollected[cardVersionNumberToDisplay] =
-                    !newIsVersionCollected[cardVersionNumberToDisplay];
-                  return newIsVersionCollected;
-                });
-                startTransition(() => {
-                  markCardIsCollected(
-                    card.albumId!,
-                    card.id,
-                    !isVersionCollected[cardVersionNumberToDisplay],
-                  );
-                });
-              }}
-            />
+            {isEditMode && (
+              <CheckCircle
+                className={
+                  "absolute left-1/10 top-1/10 cursor-pointer " +
+                  (isVersionCollected[cardVersionNumberToDisplay]
+                    ? "text-green-400 "
+                    : "text-slate-400 ") +
+                  (isVersionCollected[cardVersionNumberToDisplay]
+                    ? "md:hover:text-white"
+                    : "md:hover:text-green-500")
+                }
+                onClick={() => {
+                  setIsVersionCollected((curr) => {
+                    const newIsVersionCollected = [...curr];
+                    newIsVersionCollected[cardVersionNumberToDisplay] =
+                      !newIsVersionCollected[cardVersionNumberToDisplay];
+                    return newIsVersionCollected;
+                  });
+                  startTransition(() => {
+                    markCardIsCollected(
+                      card.albumId!,
+                      card.id,
+                      !isVersionCollected[cardVersionNumberToDisplay],
+                    );
+                  });
+                }}
+              />
+            )}
             {cardVersions.length > 1 && (
               <ArrowRightLeft
                 className="absolute right-1/10 top-1/10 cursor-pointer text-slate-400 md:hover:text-red-500"
@@ -119,6 +128,7 @@ function Card({ cardVersions }: { cardVersions: CardData[] }) {
           setAmountCollected={setNumCollected}
           onAmountCollectedChange={setIsVersionCollected}
           cardVersionIndex={cardVersionNumberToDisplay}
+          viewMode={viewMode}
         />
       )}
     </div>
