@@ -351,3 +351,83 @@ export const addCardToAlbum = async (card: Card, albumId: number) => {
     },
   });
 };
+
+export const getAlbumsOfUser = async (userId: string, collection: string) => {
+  return await prisma.album.findMany({
+    where: {
+      collection: {
+        name: {
+          equals: collection,
+        },
+        userId: userId,
+      },
+    },
+    orderBy: {
+      setReleaseDate: "desc",
+    },
+  });
+};
+
+export const getAlbumsOfUserWithCollectionStats = async (
+  userId: string,
+  collection: string,
+) => {
+  return await prisma.album.findMany({
+    where: {
+      collection: {
+        name: {
+          equals: collection,
+        },
+        userId: userId,
+      },
+      setId: {
+        not: null,
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+      cards: {
+        select: {
+          numCollected: true,
+          CardDetails: {
+            select: {
+              name: true,
+              rarity: true,
+            },
+          },
+        },
+      },
+    },
+    orderBy: {
+      setReleaseDate: "desc",
+    },
+  });
+};
+
+export const getAlbumOfUser = async (collectionId: number, albumId: number) => {
+  return await prisma.album.findUnique({
+    where: {
+      id: albumId,
+      collectionId: collectionId,
+    },
+    select: {
+      id: true,
+      collectionId: true,
+    },
+  });
+};
+
+export const deleteCardsFromAlbum = async (
+  albumId: number,
+  cardIds: string[],
+) => {
+  await prisma.card.deleteMany({
+    where: {
+      albumId: albumId,
+      id: {
+        in: cardIds,
+      },
+    },
+  });
+};

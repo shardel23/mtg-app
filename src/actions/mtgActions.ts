@@ -14,7 +14,6 @@ import {
   AlbumData,
   AlbumStats,
   CardData,
-  CollectionData,
   SetData,
   ViewMode,
   createAlbumFromCSVInput,
@@ -23,7 +22,6 @@ import {
 import { getServerSession } from "next-auth";
 import { LogLevel } from "next-axiom/dist/logger";
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
 import { log, transformCardsFromDB } from "./helpers";
 
 export async function getUserIdFromSession(): Promise<string | null> {
@@ -41,23 +39,12 @@ export async function getAllSets(): Promise<SetData[]> {
 }
 
 export async function getAllAlbums(): Promise<AlbumData[]> {
-  const userId = await getUserIdFromSession();
-  if (userId == null) {
+  const { userId, collection } = await getUserAndCollection();
+  if (userId == null || collection == null) {
+    log(LogLevel.warn, "User is not logged in");
     return [];
   }
-  const albums = await prisma.album.findMany({
-    where: {
-      collection: {
-        name: {
-          equals: await getCollection(),
-        },
-        userId: userId,
-      },
-    },
-    orderBy: {
-      setReleaseDate: "desc",
-    },
-  });
+  const albums = await DB.getAlbumsOfUser(userId, collection.name);
   return albums.map((album) => ({
     id: hashEncode(album.id),
     name: album.name,
@@ -84,16 +71,7 @@ export async function addCardToAlbum(cardId: string, albumId: string) {
   }
 
   const albumIdDecoded = hashDecode(albumId);
-
-  const album = await prisma.album.findUnique({
-    where: {
-      id: albumIdDecoded,
-      collectionId: collection.id,
-    },
-    select: {
-      id: true,
-    },
-  });
+  const album = await DB.getAlbumOfUser(collection.id, albumIdDecoded);
   if (album == null) {
     return false;
   }
@@ -109,18 +87,16 @@ async function createAlbum(
   setIdentifier: { setId?: string; setCode?: string },
   collectedCards?: Map<string, number>,
 ): Promise<number> {
+  const { userId, collection } = await getUserAndCollection();
+  if (userId == null || collection == null) {
+    log(LogLevel.warn, "User is not logged in");
+    return -1;
+  }
+
   const set = await API.getSet(setIdentifier);
   const isSetInDB = await isSetExists(set.id);
   if (isSetInDB) {
     logWithTimestamp("Set " + set.name + " already exists in DB");
-    return -1;
-  }
-  const collection = await prisma.collection.findFirst({
-    where: {
-      name: await getCollection(),
-    },
-  });
-  if (collection == null) {
     return -1;
   }
 
@@ -234,16 +210,21 @@ export async function getAlbumCards(albumId: string): Promise<{
   cards: Map<string, CardData[]>;
   viewMode: ViewMode;
 }> {
-  const userId = await getUserIdFromSession();
-  if (userId == null) {
+  const { userId, collection } = await getUserAndCollection();
+  if (userId == null || collection == null) {
+    log(LogLevel.warn, "User is not logged in");
     return {
       cards: new Map(),
       viewMode: "view",
     };
   }
-  const collection = await getCollection();
+
   const albumIdDecoded = hashDecode(albumId);
-  const album = await DB.getCardsFromAlbum(userId, collection, albumIdDecoded);
+  const album = await DB.getCardsFromAlbum(
+    userId,
+    collection.name,
+    albumIdDecoded,
+  );
   if (album == null) {
     return {
       cards: new Map(),
@@ -281,17 +262,7 @@ export async function markCardIsCollected(
   }
 
   const albumIdDecoded = hashDecode(albumId);
-
-  // verify user owns the album
-  const album = await prisma.album.findUnique({
-    where: {
-      id: albumIdDecoded,
-      collectionId: collection.id,
-    },
-    select: {
-      collectionId: true,
-    },
-  });
+  const album = await DB.getAlbumOfUser(collection.id, albumIdDecoded);
   if (album?.collectionId !== collection.id) {
     log(LogLevel.warn, "User is not the owner of the album");
     return;
@@ -322,17 +293,7 @@ export async function updateAmountCollected(
   }
 
   const albumIdDecoded = hashDecode(albumId);
-
-  // verify user owns the album
-  const album = await prisma.album.findUnique({
-    where: {
-      id: albumIdDecoded,
-      collectionId: collection.id,
-    },
-    select: {
-      collectionId: true,
-    },
-  });
+  const album = await DB.getAlbumOfUser(collection.id, albumIdDecoded);
   if (album?.collectionId !== collection.id) {
     log(LogLevel.warn, "User is not the owner of the album");
     return;
@@ -412,6 +373,7 @@ export async function deleteCardFromAlbum(
     log(LogLevel.warn, "User is not logged in");
     return false;
   }
+
   const albumIdDecoded = hashDecode(albumId);
   const res = await prisma.album.findUnique({
     where: {
@@ -429,14 +391,8 @@ export async function deleteCardFromAlbum(
     log(LogLevel.warn, "User is not the owner of the album");
     return false;
   }
-  await prisma.card.deleteMany({
-    where: {
-      albumId: albumIdDecoded,
-      id: {
-        in: cardIds,
-      },
-    },
-  });
+
+  await DB.deleteCardsFromAlbum(albumIdDecoded, cardIds);
   revalidatePath(`/album/{albumId}`);
   log(LogLevel.info, "Card deleted from album");
   return true;
@@ -446,68 +402,48 @@ export async function searchCardInCollection(
   cardName: string,
 ): Promise<Map<string, CardData[]>> {
   if (cardName.length < 2) {
+    log(LogLevel.warn, "Card name searched is too short");
     return new Map();
   }
-  const userId = await getUserIdFromSession();
-  if (userId == null) {
-    return new Map();
-  }
-  const collection = await getCollection();
-  const cards = await DB.searchCardsInCollection(userId, collection, cardName);
 
+  const { userId, collection } = await getUserAndCollection();
+  if (userId == null || collection == null) {
+    log(LogLevel.warn, "User is not logged in");
+    return new Map();
+  }
+
+  const cards = await DB.searchCardsInCollection(
+    userId,
+    collection.name,
+    cardName,
+  );
   return cardsArrayToMap(transformCardsFromDB(cards));
 }
 
 export async function getCardsAvailableForTrade(): Promise<
   Map<string, CardData[]>
 > {
-  const userId = await getUserIdFromSession();
-  if (userId == null) {
+  const { userId, collection } = await getUserAndCollection();
+  if (userId == null || collection == null) {
+    log(LogLevel.warn, "User is not logged in");
     return new Map();
   }
-  const collection = await getCollection();
-  const cards = await DB.getCardsAvailableForTrade(userId, collection);
 
+  const cards = await DB.getCardsAvailableForTrade(userId, collection.name);
   return cardsArrayToMap(transformCardsFromDB(cards));
 }
 
 export async function getCollectionStats(): Promise<AlbumStats[]> {
-  const userId = await getUserIdFromSession();
-  if (userId == null) {
+  const { userId, collection } = await getUserAndCollection();
+  if (userId == null || collection == null) {
+    log(LogLevel.warn, "User is not logged in");
     return [];
   }
-  const albums = await prisma.album.findMany({
-    where: {
-      collection: {
-        name: {
-          equals: await getCollection(),
-        },
-        userId: userId,
-      },
-      setId: {
-        not: null,
-      },
-    },
-    select: {
-      id: true,
-      name: true,
-      cards: {
-        select: {
-          numCollected: true,
-          CardDetails: {
-            select: {
-              name: true,
-              rarity: true,
-            },
-          },
-        },
-      },
-    },
-    orderBy: {
-      setReleaseDate: "desc",
-    },
-  });
 
+  const albums = await DB.getAlbumsOfUserWithCollectionStats(
+    userId,
+    collection.name,
+  );
   const stats = albums.map((album) => {
     const cardsMap = cardsArrayToMap(
       album.cards.map((c) => ({
@@ -578,17 +514,7 @@ export async function getCollectionStats(): Promise<AlbumStats[]> {
 }
 
 export async function getCollection() {
-  const cookieStore = cookies();
-  const collectionCookie = cookieStore.get("collection");
-  if (collectionCookie != null) {
-    return collectionCookie.value;
-  }
   return "Default";
-}
-
-export async function getAllCollections(): Promise<CollectionData[]> {
-  const collections = await prisma.collection.findMany();
-  return collections.map((collection) => ({ name: collection.name }));
 }
 
 async function getUserAndCollection() {
@@ -600,6 +526,7 @@ async function getUserAndCollection() {
     },
     select: {
       id: true,
+      name: true,
     },
   });
   return { userId, collection };
