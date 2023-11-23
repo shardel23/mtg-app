@@ -180,6 +180,16 @@ export const getCardsAvailableForTrade = async (
         },
       },
     },
+    orderBy: [
+      { CardDetails: { colors: "desc" } },
+      { CardDetails: { cmc: "asc" } },
+      { CardDetails: { set_name: "asc" } },
+      {
+        CardDetails: {
+          collectorNumber: "asc",
+        },
+      },
+    ],
   });
 };
 
