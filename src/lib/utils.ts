@@ -82,3 +82,9 @@ export function hashEncode(value: number) {
 export function hashDecode(encoded: string) {
   return hashids.decode(encoded)[0] as number;
 }
+
+export function logWithTimestamp(message: string) {
+  if (process.env.NODE_ENV === "development") {
+    console.log(new Date().toLocaleString(), message);
+  }
+}

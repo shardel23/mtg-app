@@ -9,6 +9,7 @@ import {
   hashDecode,
   hashEncode,
   isSetExists,
+  logWithTimestamp,
 } from "@/lib/utils";
 import {
   AlbumData,
@@ -185,12 +186,6 @@ export async function createAlbumsFromCSV(
 
   revalidatePath("/");
   return true;
-}
-
-function logWithTimestamp(message: string) {
-  if (process.env.NODE_ENV === "development") {
-    console.log(new Date().toLocaleString(), message);
-  }
 }
 
 export async function createAlbumFromCSV(
