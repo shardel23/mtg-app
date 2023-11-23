@@ -87,18 +87,18 @@ export async function addCardToAlbum(cardId: string, albumId: string) {
 async function createAlbum(
   setIdentifier: { setId?: string; setCode?: string },
   collectedCards?: Map<string, number>,
-): Promise<number> {
+) {
   const { userId, collection } = await getUserAndCollection();
   if (userId == null || collection == null) {
     log(LogLevel.warn, "User is not logged in");
-    return -1;
+    return "";
   }
 
   const set = await API.getSet(setIdentifier);
   const isSetInDB = await isSetExists(set.id);
   if (isSetInDB) {
     logWithTimestamp("Set " + set.name + " already exists in DB");
-    return -1;
+    return "";
   }
 
   const cards = await API.getCardsOfSet(setIdentifier);
@@ -155,10 +155,10 @@ async function createAlbum(
   logWithTimestamp("Created cards for album " + album.name);
 
   revalidatePath("/");
-  return album.id;
+  return hashEncode(album.id);
 }
 
-export async function createAlbumFromSetId(setId: string): Promise<number> {
+export async function createAlbumFromSetId(setId: string) {
   return await createAlbum({ setId });
 }
 
@@ -188,9 +188,7 @@ export async function createAlbumsFromCSV(
   return true;
 }
 
-export async function createAlbumFromCSV(
-  input: createAlbumFromCSVInput,
-): Promise<number> {
+export async function createAlbumFromCSV(input: createAlbumFromCSVInput) {
   const importedCards = new Map(input.map((row) => [row.cardId, 1]));
   const setCode = input[0].setCode;
   return await createAlbum({ setCode }, importedCards);
@@ -215,6 +213,14 @@ export async function getAlbumCards(albumId: string): Promise<{
   }
 
   const albumIdDecoded = hashDecode(albumId);
+  if (albumIdDecoded == null) {
+    log(LogLevel.warn, "Album id is not valid");
+    return {
+      cards: new Map(),
+      viewMode: "view",
+    };
+  }
+
   const album = await DB.getCardsFromAlbum(
     userId,
     collection.name,

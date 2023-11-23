@@ -91,7 +91,7 @@ function CreateNewAlbumDialog({ sets }: { sets: Array<SetData> }) {
               startTransition(async () => {
                 const albumId = await createAlbumFromSetId(selectedSetId);
                 setIsDialogOpen(false);
-                if (albumId !== -1) {
+                if (albumId !== "") {
                   router.push(`/album/${albumId}`);
                 }
               });
