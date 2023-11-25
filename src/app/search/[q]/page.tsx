@@ -17,7 +17,7 @@ export default async function SearchResultsPage({
       </>
     );
   }
-  const searchQuery = params.q.replaceAll("%20", " ");
+  const searchQuery = params.q.replaceAll("%20", " ").replaceAll("%2C", ",");
   const cards = await searchCardInCollection(searchQuery);
   return (
     <>
