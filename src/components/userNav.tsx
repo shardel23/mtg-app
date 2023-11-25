@@ -38,7 +38,12 @@ export function UserNav({ user }: { user: User }) {
           <DropdownMenuItem>Profile</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator /> */}
-        <DropdownMenuItem onClick={() => signOut()}>Log out</DropdownMenuItem>
+        <DropdownMenuItem
+          className="hover:cursor-pointer"
+          onClick={() => signOut()}
+        >
+          Log out
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
