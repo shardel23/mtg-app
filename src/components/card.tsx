@@ -11,9 +11,11 @@ import CheckCircle from "./icons/check-circle";
 function Card({
   cardVersions,
   viewMode,
+  isCardDeleteable,
 }: {
   cardVersions: CardData[];
   viewMode: ViewMode;
+  isCardDeleteable?: boolean;
 }) {
   const [isPending, startTransition] = useTransition();
   const [cardVersionNumberToDisplay, setCardVersionNumberToDisplay] = useState(
@@ -129,6 +131,7 @@ function Card({
           onAmountCollectedChange={setIsVersionCollected}
           cardVersionIndex={cardVersionNumberToDisplay}
           viewMode={viewMode}
+          isCardDeleteable={isCardDeleteable}
         />
       )}
     </div>

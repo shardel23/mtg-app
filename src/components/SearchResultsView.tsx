@@ -21,7 +21,12 @@ function SearchResultsView({
       >
         {displayMessage}
       </div>
-      <CardGrid cards={results} cardsPerRow={5} viewMode="edit" />
+      <CardGrid
+        cards={results}
+        cardsPerRow={5}
+        viewMode="edit"
+        isCardDeleteable={false}
+      />
     </div>
   );
 }

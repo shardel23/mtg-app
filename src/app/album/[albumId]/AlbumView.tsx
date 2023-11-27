@@ -128,6 +128,7 @@ function AlbumView({
         cards={filteredCards}
         cardsPerRow={cardsPerRow}
         viewMode={viewMode}
+        isCardDeleteable={true}
       />
     </div>
   );

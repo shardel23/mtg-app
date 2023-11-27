@@ -27,6 +27,7 @@ export default function CardDetails({
   onAmountCollectedChange,
   cardVersionIndex,
   viewMode,
+  isCardDeleteable,
 }: {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -37,6 +38,7 @@ export default function CardDetails({
   onAmountCollectedChange: React.Dispatch<React.SetStateAction<boolean[]>>;
   cardVersionIndex: number;
   viewMode: ViewMode;
+  isCardDeleteable?: boolean;
 }) {
   const [isPending, startTransition] = useTransition();
   const [cardFaceIndex, setCardFaceIndex] = useState<number>(0);
@@ -136,14 +138,16 @@ export default function CardDetails({
           </div>
         </div>
         <DialogFooter>
-          <div className="flex justify-end">
-            <DeleteCardDialog
-              albumId={card.albumId as string}
-              cardName={card.name}
-              cardIds={cardVersions.map((card) => card.id)}
-              isDisabled={!isEditMode}
-            />
-          </div>
+          {isCardDeleteable && (
+            <div className="flex justify-end">
+              <DeleteCardDialog
+                albumId={card.albumId as string}
+                cardName={card.name}
+                cardIds={cardVersions.map((card) => card.id)}
+                isDisabled={!isEditMode}
+              />
+            </div>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>

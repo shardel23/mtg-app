@@ -5,10 +5,12 @@ function CardGrid({
   cards,
   cardsPerRow,
   viewMode,
+  isCardDeleteable,
 }: {
   cards: Map<string, CardData[]>;
   cardsPerRow: number;
   viewMode: ViewMode;
+  isCardDeleteable?: boolean;
 }) {
   return (
     <div className={`grid grid-cols-3 md:grid-cols-${cardsPerRow} gap-1`}>
@@ -19,6 +21,7 @@ function CardGrid({
             key={cardName}
             cardVersions={cardVersions}
             viewMode={viewMode}
+            isCardDeleteable={isCardDeleteable}
           />
         );
       })}
