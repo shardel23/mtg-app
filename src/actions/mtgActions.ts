@@ -55,14 +55,14 @@ export async function getAllAlbums(): Promise<AlbumData[]> {
   }));
 }
 
-export async function createEmptyAlbum(name: string): Promise<number> {
+export async function createEmptyAlbum(name: string): Promise<string> {
   const { userId, collection } = await getUserAndCollection();
   if (userId == null || collection == null) {
-    return -1;
+    return "";
   }
   const newAlbum = await DB.createEmptyAlbum(collection, name);
   revalidatePath("/");
-  return newAlbum.id;
+  return hashEncode(newAlbum.id);
 }
 
 export async function addCardToAlbum(cardId: string, albumId: string) {
