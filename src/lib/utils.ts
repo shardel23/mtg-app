@@ -1,4 +1,3 @@
-import { getCollection } from "@/actions/mtgActions";
 import { clsx, type ClassValue } from "clsx";
 import Hashids from "hashids";
 import { twMerge } from "tailwind-merge";
@@ -61,14 +60,15 @@ export function endsWithNumber(text: string) {
   return /\d$/.test(text);
 }
 
-export async function isSetExists(setId: string): Promise<boolean> {
+export async function isSetExists(
+  setId: string,
+  collectionId: number,
+): Promise<boolean> {
   const album = await prisma.album.findFirst({
     where: {
       setId: setId,
       collection: {
-        name: {
-          equals: await getCollection(),
-        },
+        id: collectionId,
       },
     },
   });

@@ -95,7 +95,7 @@ async function createAlbum(
   }
 
   const set = await API.getSet(setIdentifier);
-  const isSetInDB = await isSetExists(set.id);
+  const isSetInDB = await isSetExists(set.id, collection.id);
   if (isSetInDB) {
     logWithTimestamp("Set " + set.name + " already exists in DB");
     return "";
