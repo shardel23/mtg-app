@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { getServerSession } from "next-auth/next";
 import { AxiomWebVitals } from "next-axiom";
 import { Inter } from "next/font/google";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { authOptions } from "./api/auth/[...nextauth]/authOptions";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });

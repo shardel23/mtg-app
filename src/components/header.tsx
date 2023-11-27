@@ -1,5 +1,5 @@
 import { getAllAlbums, getAllSets } from "@/actions/mtgActions";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import { getServerSession } from "next-auth/next";
 import Link from "next/link";
 import Auth from "./auth";
