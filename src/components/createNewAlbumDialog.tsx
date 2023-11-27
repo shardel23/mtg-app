@@ -56,7 +56,7 @@ function CreateNewAlbumDialog({ sets }: { sets: Array<SetData> }) {
               startTransitionNewEmptyAlbum(async () => {
                 const albumId = await createEmptyAlbum(emptyAlbumName);
                 setIsDialogOpen(false);
-                if (albumId !== -1) {
+                if (albumId !== "") {
                   router.push(`/album/${albumId}`);
                 }
               });
