@@ -113,7 +113,11 @@ function CardSearchCardDialog({
                   <SelectGroup className="max-h-48">
                     {cardVersions.map((option, idx) => (
                       <SelectItem key={idx} value={option.id}>
-                        {option.set_name}
+                        {`${option.set_name} `}
+                        <span className="text-xxxs text-gray-400 md:text-xxs">
+                          {" "}
+                          {`#${option.collector_number}`}
+                        </span>
                       </SelectItem>
                     ))}
                   </SelectGroup>
