@@ -60,7 +60,7 @@ export type CollectedMissingStats = {
 };
 
 export type AlbumStats = {
-  id: number;
+  id: string;
   name: string;
   total: CollectedMissingStats;
   common: CollectedMissingStats;

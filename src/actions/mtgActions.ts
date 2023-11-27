@@ -454,7 +454,7 @@ export async function getCollectionStats(): Promise<AlbumStats[]> {
       })),
     );
     const stats = {
-      id: album.id,
+      id: hashEncode(album.id),
       name: album.name,
       total: {
         collected: 0,
