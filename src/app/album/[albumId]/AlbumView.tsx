@@ -105,14 +105,20 @@ function AlbumView({
           <div>Cards per row:</div>
           <Button
             variant="ghost"
-            onClick={() => setCardsPerRow((curr) => curr - 1)}
+            disabled={cardsPerRow === 1}
+            onClick={() =>
+              setCardsPerRow((curr) => (curr === 1 ? curr : curr - 1))
+            }
           >
             -
           </Button>
           <div>{cardsPerRow}</div>
           <Button
             variant="ghost"
-            onClick={() => setCardsPerRow((curr) => curr + 1)}
+            disabled={cardsPerRow === 12}
+            onClick={() =>
+              setCardsPerRow((curr) => (curr === 12 ? curr : curr + 1))
+            }
           >
             +
           </Button>
