@@ -115,7 +115,6 @@ function CardSearchCardDialog({
                       <SelectItem key={idx} value={option.id}>
                         {`${option.set_name} `}
                         <span className="text-xxxs text-gray-400 md:text-xxs">
-                          {" "}
                           {`#${option.collector_number}`}
                         </span>
                       </SelectItem>
