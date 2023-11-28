@@ -32,7 +32,10 @@ export default async function RootLayout({
             <Header />
             <div className="flex w-full flex-col p-3 pt-20 md:flex-row md:p-8 md:pl-80 md:pt-20">
               <Sidebar />
-              <div className="w-full">{children}</div>
+              <div className="w-full">
+                {children}
+                <Analytics />
+              </div>
             </div>
           </div>
         )}
