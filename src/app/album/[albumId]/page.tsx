@@ -1,4 +1,4 @@
-import { getAlbumCards } from "@/actions/mtgActions";
+import { getAlbum } from "@/actions/mtgActions";
 import RedirectIfNotLoggedIn from "@/components/redirect";
 import AlbumView from "./AlbumView";
 
@@ -7,7 +7,7 @@ export default async function AlbumPage({
 }: {
   params: { albumId: string };
 }) {
-  const { album, cards, viewMode } = await getAlbumCards(albumId);
+  const { album, cards, viewMode } = await getAlbum("", albumId);
   if (album == null) {
     return (
       <>

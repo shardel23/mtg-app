@@ -7,7 +7,7 @@ import { LogLevel } from "next-axiom/dist/logger";
 import * as Scry from "scryfall-sdk";
 
 type CardWithCardDetails = NonNullable<
-  Prisma.PromiseReturnType<typeof DB.getCardsFromAlbum>
+  Prisma.PromiseReturnType<typeof DB.getAlbumOfUserWithCards>
 >["cards"][number];
 
 export const getImageUri = (card: Scry.Card): string => {

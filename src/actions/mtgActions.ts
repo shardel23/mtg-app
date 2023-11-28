@@ -194,7 +194,10 @@ export async function createAlbumFromCSV(input: createAlbumFromCSVInput) {
   return await createAlbum({ setCode }, importedCards);
 }
 
-export async function getAlbumCards(albumId: string): Promise<{
+export async function getAlbum(
+  username: string,
+  albumId: string,
+): Promise<{
   album?: {
     id: string;
     name: string;
@@ -221,28 +224,49 @@ export async function getAlbumCards(albumId: string): Promise<{
     };
   }
 
-  const album = await DB.getCardsFromAlbum(
-    userId,
-    collection.name,
-    albumIdDecoded,
-  );
-  if (album == null) {
+  const ownerId =
+    username !== ""
+      ? (
+          await prisma.user.findUnique({
+            where: {
+              username: username,
+            },
+            select: {
+              id: true,
+            },
+          })
+        )?.id
+      : userId;
+  if (ownerId == null) {
+    log(LogLevel.warn, "User does not exist");
     return {
       cards: new Map(),
       viewMode: "view",
     };
   }
 
-  const cards = transformCardsFromDB(album.cards);
+  const albumWithCards = await DB.getAlbumOfUserWithCards(
+    ownerId,
+    albumIdDecoded,
+  );
+
+  if (albumWithCards == null) {
+    return {
+      cards: new Map(),
+      viewMode: "view",
+    };
+  }
+
+  const cards = transformCardsFromDB(albumWithCards.cards);
 
   return {
     album: {
       id: albumId,
-      name: album.name,
-      setId: album.setId,
+      name: albumWithCards.name,
+      setId: albumWithCards.setId,
     },
     cards: cardsArrayToMap(cards),
-    viewMode: userId === album.collection?.userId ? "edit" : "view",
+    viewMode: userId === ownerId ? "edit" : "view",
   };
 }
 

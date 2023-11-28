@@ -4,9 +4,8 @@ import { Card } from "scryfall-sdk";
 import { prisma } from "./prisma";
 import { endsWithNumber } from "./utils";
 
-export const getCardsFromAlbum = async (
+export const getAlbumOfUserWithCards = async (
   userId: string,
-  collection: string,
   albumId: number,
 ) => {
   return await prisma.album.findUnique({
@@ -14,7 +13,7 @@ export const getCardsFromAlbum = async (
       id: albumId,
       collection: {
         name: {
-          equals: collection,
+          equals: "Default",
         },
         userId: userId,
       },
@@ -374,6 +373,62 @@ export const getAlbumsOfUser = async (userId: string, collection: string) => {
     },
     orderBy: {
       setReleaseDate: "desc",
+    },
+  });
+};
+
+export const getAlbumOfUsername = async (username: string, albumId: number) => {
+  return await prisma.album.findUnique({
+    where: {
+      id: albumId,
+      collection: {
+        User: {
+          username: username,
+        },
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+      cards: {
+        select: {
+          id: true,
+          numCollected: true,
+          CardDetails: {
+            select: {
+              name: true,
+              collectorNumber: true,
+              normalImageURI: true,
+              set: true,
+              setIconSvgUri: true,
+              rarity: true,
+              colors: true,
+              mana_cost: true,
+              cmc: true,
+              layout: true,
+              type_line: true,
+              card_faces: {
+                select: {
+                  name: true,
+                  faceNumber: true,
+                  normalImageURI: true,
+                  colors: true,
+                  mana_cost: true,
+                  type_line: true,
+                },
+                orderBy: {
+                  faceNumber: "asc",
+                },
+              },
+            },
+          },
+        },
+        orderBy: {
+          CardDetails: {
+            collectorNumber: "asc",
+          },
+        },
+      },
     },
   });
 };
