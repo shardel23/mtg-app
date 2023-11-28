@@ -31,12 +31,14 @@ async function getAllMtgSets() {
 function download(url: string, setCode: string) {
   const dirPath = `./public/assets/${setCode}`;
   if (fs.existsSync(dirPath)) {
+    console.log(`${setCode} already exists`);
     return;
   }
   fs.mkdirSync(dirPath);
   const filename = `${setCode}.svg`;
   const file = fs.createWriteStream(`${dirPath}/${filename}`);
   https.get(url, function (response) {
+    console.log(`Downloading ${setCode}...`);
     response.pipe(file);
     file.on("finish", () => {
       file.close();
@@ -94,6 +96,4 @@ async function runScript() {
   console.log("Done");
 }
 
-runScript().then(() => {
-  process.exit(0);
-});
+runScript().then(() => {});
