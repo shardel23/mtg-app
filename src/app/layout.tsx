@@ -1,5 +1,6 @@
 import Header from "@/components/header";
 import { Sidebar } from "@/components/sidebar";
+import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth/next";
 import { AxiomWebVitals } from "next-axiom";
@@ -38,6 +39,7 @@ export default async function RootLayout({
         {!isLogged && (
           <div className="flex h-screen items-center justify-center">
             {children}
+            <Analytics />
           </div>
         )}
       </body>
