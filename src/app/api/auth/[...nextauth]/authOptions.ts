@@ -11,6 +11,7 @@ prismaAdapter.createUser = async (userData) => {
   const user = await prisma.user.create({
     data: {
       ...userData,
+      username: userData.email.split("@")[0],
     },
   });
   await prisma.collection.create({
@@ -47,6 +48,7 @@ export const authOptions: NextAuthOptions = {
           user: {
             ...session.user,
             id: user.id,
+            username: user.username,
           },
         };
       }
