@@ -24,7 +24,7 @@ const CollectionStats: React.FC<CollectionStatsProps> = ({
 }) => {
   const [chosenAlbum, setChosenAlbum] = useState<AlbumStats>(collectionData[0]);
   return (
-    <div className="flex gap-x-12">
+    <div className="flex justify-between w-full gap-x-12 p-8">
       <CollectionGrid
         collectionData={collectionData}
         chosenAlbum={chosenAlbum}
@@ -84,7 +84,7 @@ const CollectionGrid: React.FC<CollectionGridProps> = ({
   const router = useRouter();
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 w-10/12">
       {collectionData.map((album) => {
         const percentage = (album.total.collected / album.total.total) * 100;
         const isChosenAlbum = album.name === chosenAlbum?.name;
