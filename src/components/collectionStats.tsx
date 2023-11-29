@@ -24,7 +24,7 @@ const CollectionStats: React.FC<CollectionStatsProps> = ({
 }) => {
   const [chosenAlbum, setChosenAlbum] = useState<AlbumStats>(collectionData[0]);
   return (
-    <div className="flex justify-between w-full gap-x-12 p-8">
+    <div className="flex justify-center w-full gap-x-12 p-8">
       <CollectionGrid
         collectionData={collectionData}
         chosenAlbum={chosenAlbum}
