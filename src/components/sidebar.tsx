@@ -32,7 +32,7 @@ export async function Sidebar() {
               </Button>
             ))}
           </div>
-          <div className="flex w-full items-center justify-start pt-4">
+          <div className="flex w-full items-center justify-start mt-8">
             <h2 className="text-sm font-semibold tracking-tight md:px-4 md:text-lg">
               Views
             </h2>
@@ -41,7 +41,7 @@ export async function Sidebar() {
           <Button asChild variant="ghost" className="w-full justify-start">
             <Link href={`/trades`}>Tradeable Cards</Link>
           </Button>
-          <div className="flex w-full items-center justify-start pt-4">
+          <div className="flex w-full items-center justify-start mt-8">
             <h2 className="text-sm font-semibold tracking-tight md:px-4 md:text-lg">
               Options
             </h2>
