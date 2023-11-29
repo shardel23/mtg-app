@@ -47,38 +47,33 @@ export default function ImportCollectionButton() {
     }
   };
 
-  return (
-    <div className="flex items-center justify-between text-center">
-      {!file && (
-        <div>
-          <Input
-            className="hidden"
-            type={"file"}
-            id={"csvFileInput"}
-            accept={".csv"}
-            onChange={handleOnChange}
-          />
-          <label
-            htmlFor={"csvFileInput"}
-            className="h-10 w-full cursor-pointer justify-start px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
-          >
-            Import Collection
-          </label>
-        </div>
-      )}
-      {file && (
-        <Button
-          variant="ghost"
-          className="w-full justify-start hover:cursor-pointer"
-          onClick={(e) => {
-            handleOnSubmit(e);
-          }}
-          disabled={isPending}
-        >
-          {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Import {file.name}
-        </Button>
-      )}
+  return !file ? (
+    <div className="flex justify-center rounded-md h-10 hover:cursor-pointer hover:bg-accent hover:text-accent-foreground">
+      <Input
+        className="hidden"
+        type={"file"}
+        id={"csvFileInput"}
+        accept={".csv"}
+        onChange={handleOnChange}
+      />
+      <label
+        htmlFor={"csvFileInput"}
+        className="h-10 w-full hover:cursor-pointer justify-start px-4 py-2 text-sm font-medium"
+      >
+        Import Collection
+      </label>
     </div>
+  ) : (
+    <Button
+      variant="ghost"
+      className="w-full justify-start hover:cursor-pointer"
+      onClick={(e) => {
+        handleOnSubmit(e);
+      }}
+      disabled={isPending}
+    >
+      {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+      Import {file.name}
+    </Button>
   );
 }
