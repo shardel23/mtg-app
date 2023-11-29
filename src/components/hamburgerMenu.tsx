@@ -36,7 +36,7 @@ function HamburgerMenu({
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <div className="flex items-center justify-between">
-          {user && <DropdownMenuLabel>{user.name}</DropdownMenuLabel>}
+          {user && <DropdownMenuLabel>{user.username}</DropdownMenuLabel>}
           <SignOut />
         </div>
         <DropdownMenuSeparator />
