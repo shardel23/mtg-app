@@ -538,6 +538,35 @@ export async function getCollectionStats(): Promise<AlbumStats[]> {
   return stats;
 }
 
+export async function changeUsername(username: string): Promise<boolean> {
+  const userId = await getUserIdFromSession();
+  if (userId == null) {
+    log(LogLevel.warn, "User is not logged in");
+    return false;
+  }
+
+  const isUsernameTaken = await prisma.user.findUnique({
+    where: {
+      username: username,
+    },
+  });
+  if (isUsernameTaken != null) {
+    log(LogLevel.info, "Username is already taken");
+    return false;
+  }
+
+  await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      username: username,
+    },
+  });
+
+  return true;
+}
+
 export async function getCollection() {
   return "Default";
 }
