@@ -30,9 +30,9 @@ export default async function RootLayout({
         {isLogged && (
           <div className="w-full flex-1 space-y-4">
             <Header />
-            <div className="flex w-full flex-col p-3 pt-20 md:flex-row md:p-8 md:pl-80 md:pt-20">
+            <div className="flex w-full flex-col pt-16 md:pl-72 md:pt-20">
               <Sidebar />
-              <div className="w-full">
+              <div className="w-full px-4 py-8 md:px-8 ">
                 {children}
                 <Analytics />
               </div>

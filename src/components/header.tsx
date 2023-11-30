@@ -13,7 +13,7 @@ async function Header() {
   const user = session?.user;
 
   return (
-    <div className="fixed top-0 z-10 flex w-full justify-between bg-slate-950 p-3 md:p-8 md:pt-6">
+    <div className="fixed top-0 z-10 flex h-24 w-full justify-between border-b-2 bg-slate-950 p-3 md:p-8 md:pt-6">
       <div className="flex items-center gap-x-8">
         <div className="flex w-24 text-2xl font-bold md:w-72 md:text-4xl">
           <Link data-testid="app-banner" href={`/`}>

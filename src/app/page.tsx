@@ -7,8 +7,8 @@ export default async function Home() {
   return (
     <div>
       <RedirectIfNotLoggedIn />
-      <div className="flex w-full flex-col items-center">
-        <div className="text-2xl">Your collection status</div>
+      <div className="flex w-full flex-col items-center gap-y-6 md:gap-y-8">
+        <div className="text-2xl font-bold underline">Collection Overview</div>
         <CollectionStats collectionData={collectionData} />
       </div>
     </div>

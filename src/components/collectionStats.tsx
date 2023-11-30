@@ -24,7 +24,7 @@ const CollectionStats: React.FC<CollectionStatsProps> = ({
 }) => {
   const [chosenAlbum, setChosenAlbum] = useState<AlbumStats>(collectionData[0]);
   return (
-    <div className="flex justify-center w-full gap-x-12 p-8">
+    <div className="flex w-full justify-center gap-x-8">
       <CollectionGrid
         collectionData={collectionData}
         chosenAlbum={chosenAlbum}
@@ -37,8 +37,8 @@ const CollectionStats: React.FC<CollectionStatsProps> = ({
 
 const CollectionDetails: React.FC<CollectionDetailsProps> = ({ stats }) => {
   return (
-    <div className="hidden md:flex flex-col gap-8 w-96">
-      <div className="text-2xl text-center">{stats.name}</div>
+    <div className="hidden w-96 flex-col gap-8 md:flex">
+      <div className="text-center text-2xl">{stats.name}</div>
       <div className="flex flex-col">
         {Object.entries(stats).map(([key, value]) => {
           if (["common", "uncommon", "rare", "mythic"].indexOf(key) === -1) {
@@ -48,22 +48,22 @@ const CollectionDetails: React.FC<CollectionDetailsProps> = ({ stats }) => {
           return (
             <div
               key={stats.name + "-" + key}
-              className="flex justify-center items-center gap-x-4"
+              className="flex items-center justify-center gap-x-4"
             >
               <div className="text-sm">{key.charAt(0).toUpperCase()}</div>
-              <div className="flex flex-col w-full justify-between">
+              <div className="flex w-full flex-col justify-between">
                 <div className="text-sm">
                   {rarityStats.collected}/{rarityStats.total}
                 </div>
                 <div className="relative pt-1">
-                  <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
+                  <div className="mb-4 flex h-2 overflow-hidden rounded bg-gray-200 text-xs">
                     <div
                       style={{
                         width: `${
                           (rarityStats.collected / rarityStats.total) * 100
                         }%`,
                       }}
-                      className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"
+                      className="flex flex-col justify-center whitespace-nowrap bg-green-500 text-center text-white shadow-none"
                     ></div>
                   </div>
                 </div>
@@ -84,7 +84,7 @@ const CollectionGrid: React.FC<CollectionGridProps> = ({
   const router = useRouter();
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 w-10/12">
+    <div className="grid w-10/12 grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
       {collectionData.map((album) => {
         const percentage = (album.total.collected / album.total.total) * 100;
         const isChosenAlbum = album.name === chosenAlbum?.name;
@@ -92,7 +92,7 @@ const CollectionGrid: React.FC<CollectionGridProps> = ({
           <div
             key={album.name}
             className={
-              "bg-slate-500 rounded-lg shadow-md p-4 flex flex-col gap-y-2 hover:bg-slate-600 hover:cursor-pointer border-2 " +
+              "flex flex-col gap-y-2 rounded-lg border-2 bg-slate-500 p-4 shadow-md hover:cursor-pointer hover:bg-slate-600 " +
               (isChosenAlbum ? "border-slate-200" : "")
             }
             onClick={() => {
@@ -103,17 +103,17 @@ const CollectionGrid: React.FC<CollectionGridProps> = ({
               }
             }}
           >
-            <h2 className="text-lg font-medium mb-2 truncate">{album.name}</h2>
+            <h2 className="mb-2 truncate text-lg font-medium">{album.name}</h2>
             <p className="mb-2">
               Collected: {album.total.collected} / {album.total.total}
             </p>
             <div className="relative pt-1">
-              <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
+              <div className="mb-4 flex h-2 overflow-hidden rounded bg-gray-200 text-xs">
                 <div
                   style={{
                     width: `${percentage}%`,
                   }}
-                  className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"
+                  className="flex flex-col justify-center whitespace-nowrap bg-green-500 text-center text-white shadow-none"
                 ></div>
               </div>
             </div>
