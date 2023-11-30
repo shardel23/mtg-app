@@ -564,6 +564,7 @@ export async function changeUsername(username: string): Promise<boolean> {
     },
   });
 
+  revalidatePath("/");
   return true;
 }
 

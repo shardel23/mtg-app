@@ -17,13 +17,14 @@ import CreateNewAlbumDialog from "./createNewAlbumDialog";
 import Hamburger from "./icons/hamburger";
 import SignOut from "./signOut";
 import { ScrollArea } from "./ui/scroll-area";
+import Username from "./username";
 
 function HamburgerMenu({
   user,
   sets,
   albums,
 }: {
-  user: User | undefined;
+  user: User;
   sets: SetData[];
   albums: AlbumData[];
 }) {
@@ -35,10 +36,7 @@ function HamburgerMenu({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <div className="flex items-center justify-between">
-          {user && <DropdownMenuLabel>{user.username}</DropdownMenuLabel>}
-          <SignOut />
-        </div>
+        <Username user={user} />
         <DropdownMenuSeparator />
         <div className="flex items-center justify-between">
           <DropdownMenuLabel>My Albums</DropdownMenuLabel>
@@ -59,6 +57,9 @@ function HamburgerMenu({
           </ScrollArea>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
+        <div className="flex justify-end">
+          <SignOut />
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   );

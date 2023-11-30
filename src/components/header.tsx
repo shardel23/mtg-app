@@ -28,7 +28,7 @@ async function Header() {
         <div className="flex items-center justify-end md:gap-x-8">
           <CardSearch />
           <div className="flex md:hidden">
-            <HamburgerMenu user={user} sets={sets} albums={albums} />
+            {user && <HamburgerMenu user={user} sets={sets} albums={albums} />}
           </div>
         </div>
       </div>
