@@ -20,11 +20,13 @@ import {
 function CardSearchCardDialog({
   isOpen,
   setIsOpen,
+  onCardAdd,
   card,
   albumId,
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  onCardAdd: () => void;
   card: Scry.Card | null;
   albumId: string;
 }) {
@@ -131,6 +133,7 @@ function CardSearchCardDialog({
               startTransition(async () => {
                 const res = await addCardToAlbum(renderedCard.id, albumId);
                 if (res) {
+                  onCardAdd();
                   setIsOpen(false);
                 }
               });

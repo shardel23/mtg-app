@@ -9,7 +9,13 @@ import { useDebounce } from "./useDebounce";
 
 type Option = Record<"value" | "label", Scry.Card> & Record<string, string>;
 
-function CardSearchGridView({ albumId }: { albumId: string }) {
+function CardSearchGridView({
+  albumId,
+  onCardAdd,
+}: {
+  albumId: string;
+  onCardAdd: () => void;
+}) {
   const [inputValue, setInputValue] = useState<string>("");
   const [suggestions, setSuggestions] = useState<Option[]>([]);
   const [isLoading, setLoading] = useState(false);
@@ -93,6 +99,7 @@ function CardSearchGridView({ albumId }: { albumId: string }) {
             setSelected(null);
           }
         }}
+        onCardAdd={onCardAdd}
         card={selected}
         albumId={albumId}
       />

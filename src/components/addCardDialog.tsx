@@ -29,7 +29,12 @@ function AddCardDialog({ albumId }: { albumId: string }) {
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col h-[90%]">
-          <CardSearchGridView albumId={albumId} />
+          <CardSearchGridView
+            albumId={albumId}
+            onCardAdd={() => {
+              setIsDialogOpen(false);
+            }}
+          />
         </div>
         <DialogFooter></DialogFooter>
       </DialogContent>
