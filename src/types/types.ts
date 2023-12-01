@@ -69,4 +69,9 @@ export type AlbumStats = {
   mythic: CollectedMissingStats;
 };
 
+export type CollectionStats = {
+  setAlbumsStats: AlbumStats[];
+  nonSetAlbumsStats: AlbumStats[];
+};
+
 export type ViewMode = "view" | "edit";

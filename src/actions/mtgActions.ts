@@ -13,13 +13,14 @@ import {
 } from "@/lib/utils";
 import {
   AlbumData,
-  AlbumStats,
   CardData,
+  CollectionStats,
   SetData,
   ViewMode,
   createAlbumFromCSVInput,
   createAlbumsFromCSVInput,
 } from "@/types/types";
+import { partition } from "lodash";
 import { getServerSession } from "next-auth";
 import { LogLevel } from "next-axiom/dist/logger";
 import { revalidatePath } from "next/cache";
@@ -458,84 +459,108 @@ export async function getCardsAvailableForTrade(): Promise<
   return cardsArrayToMap(transformCardsFromDB(cards));
 }
 
-export async function getCollectionStats(): Promise<AlbumStats[]> {
+const albumToStats = (album: {
+  id: number;
+  name: string;
+  setId: string | null;
+  cards: {
+    numCollected: number;
+    CardDetails: {
+      name: string;
+      rarity: string;
+    };
+  }[];
+}) => {
+  const cardsMap = cardsArrayToMap(
+    album.cards.map((c) => ({
+      name: c.CardDetails.name,
+      isCollected: c.numCollected > 0,
+      rarity: c.CardDetails.rarity,
+    })),
+  );
+  const stats = {
+    id: hashEncode(album.id),
+    name: album.name,
+    total: {
+      collected: 0,
+      missing: 0,
+      total: cardsMap.size,
+    },
+    common: {
+      collected: 0,
+      missing: 0,
+      total: 0,
+    },
+    uncommon: {
+      collected: 0,
+      missing: 0,
+      total: 0,
+    },
+    rare: {
+      collected: 0,
+      missing: 0,
+      total: 0,
+    },
+    mythic: {
+      collected: 0,
+      missing: 0,
+      total: 0,
+    },
+  };
+  cardsMap.forEach((card) => {
+    const isCollected = card.some((ver) => ver.isCollected);
+    stats.total.collected += isCollected ? 1 : 0;
+    stats.total.missing += isCollected ? 0 : 1;
+    switch (card[0].rarity) {
+      case "common":
+        stats.common.total += 1;
+        stats.common.collected += isCollected ? 1 : 0;
+        stats.common.missing += isCollected ? 0 : 1;
+        break;
+      case "uncommon":
+        stats.uncommon.total += 1;
+        stats.uncommon.collected += isCollected ? 1 : 0;
+        stats.uncommon.missing += isCollected ? 0 : 1;
+        break;
+      case "rare":
+        stats.rare.total += 1;
+        stats.rare.collected += isCollected ? 1 : 0;
+        stats.rare.missing += isCollected ? 0 : 1;
+        break;
+      case "mythic":
+        stats.mythic.total += 1;
+        stats.mythic.collected += isCollected ? 1 : 0;
+        stats.mythic.missing += isCollected ? 0 : 1;
+        break;
+    }
+  });
+  return stats;
+};
+
+export async function getCollectionStats(): Promise<CollectionStats> {
   const { userId, collection } = await getUserAndCollection();
   if (userId == null || collection == null) {
     log(LogLevel.warn, "User is not logged in");
-    return [];
+    return {
+      setAlbumsStats: [],
+      nonSetAlbumsStats: [],
+    };
   }
 
   const albums = await DB.getAlbumsOfUserWithCollectionStats(
     userId,
     collection.name,
   );
-  const stats = albums.map((album) => {
-    const cardsMap = cardsArrayToMap(
-      album.cards.map((c) => ({
-        name: c.CardDetails.name,
-        isCollected: c.numCollected > 0,
-        rarity: c.CardDetails.rarity,
-      })),
-    );
-    const stats = {
-      id: hashEncode(album.id),
-      name: album.name,
-      total: {
-        collected: 0,
-        missing: 0,
-        total: cardsMap.size,
-      },
-      common: {
-        collected: 0,
-        missing: 0,
-        total: 0,
-      },
-      uncommon: {
-        collected: 0,
-        missing: 0,
-        total: 0,
-      },
-      rare: {
-        collected: 0,
-        missing: 0,
-        total: 0,
-      },
-      mythic: {
-        collected: 0,
-        missing: 0,
-        total: 0,
-      },
-    };
-    cardsMap.forEach((card) => {
-      const isCollected = card.some((ver) => ver.isCollected);
-      stats.total.collected += isCollected ? 1 : 0;
-      stats.total.missing += isCollected ? 0 : 1;
-      switch (card[0].rarity) {
-        case "common":
-          stats.common.total += 1;
-          stats.common.collected += isCollected ? 1 : 0;
-          stats.common.missing += isCollected ? 0 : 1;
-          break;
-        case "uncommon":
-          stats.uncommon.total += 1;
-          stats.uncommon.collected += isCollected ? 1 : 0;
-          stats.uncommon.missing += isCollected ? 0 : 1;
-          break;
-        case "rare":
-          stats.rare.total += 1;
-          stats.rare.collected += isCollected ? 1 : 0;
-          stats.rare.missing += isCollected ? 0 : 1;
-          break;
-        case "mythic":
-          stats.mythic.total += 1;
-          stats.mythic.collected += isCollected ? 1 : 0;
-          stats.mythic.missing += isCollected ? 0 : 1;
-          break;
-      }
-    });
-    return stats;
-  });
-  return stats;
+  const [setAlbums, nonSetAlbums] = partition(
+    albums,
+    (album) => album.setId != null,
+  );
+  const setAlbumsStats = setAlbums.map(albumToStats);
+  const nonSetAlbumsStats = nonSetAlbums.map(albumToStats);
+  return {
+    setAlbumsStats,
+    nonSetAlbumsStats,
+  };
 }
 
 export async function changeUsername(username: string) {

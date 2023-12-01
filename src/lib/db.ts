@@ -445,13 +445,11 @@ export const getAlbumsOfUserWithCollectionStats = async (
         },
         userId: userId,
       },
-      setId: {
-        not: null,
-      },
     },
     select: {
       id: true,
       name: true,
+      setId: true,
       cards: {
         select: {
           numCollected: true,
