@@ -538,11 +538,14 @@ export async function getCollectionStats(): Promise<AlbumStats[]> {
   return stats;
 }
 
-export async function changeUsername(username: string): Promise<boolean> {
+export async function changeUsername(username: string) {
   const userId = await getUserIdFromSession();
   if (userId == null) {
     log(LogLevel.warn, "User is not logged in");
-    return false;
+    return {
+      result: false,
+      error: "User is not logged in",
+    };
   }
 
   const isUsernameTaken = await prisma.user.findUnique({
@@ -552,7 +555,10 @@ export async function changeUsername(username: string): Promise<boolean> {
   });
   if (isUsernameTaken != null) {
     log(LogLevel.info, "Username is already taken");
-    return false;
+    return {
+      result: false,
+      error: "Username is already taken",
+    };
   }
 
   await prisma.user.update({
@@ -565,7 +571,9 @@ export async function changeUsername(username: string): Promise<boolean> {
   });
 
   revalidatePath("/");
-  return true;
+  return {
+    result: true,
+  };
 }
 
 export async function getCollection() {

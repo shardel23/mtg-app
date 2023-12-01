@@ -18,6 +18,7 @@ function Username({ user }: Props) {
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [editedUsername, setEditedUsername] = useState(user.username);
   const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
 
   return (
     <DropdownMenuLabel className="font-normal">
@@ -29,15 +30,19 @@ function Username({ user }: Props) {
               value={editedUsername}
               onChange={(e) => {
                 setEditedUsername(e.target.value);
+                setError(null);
               }}
             />
             <form
               action={() => {
                 startTransition(async () => {
-                  const isSuccess = await changeUsername(editedUsername);
-                  if (isSuccess) {
+                  const { result, error } =
+                    await changeUsername(editedUsername);
+                  if (result) {
                     setDisplayedUsername(editedUsername);
                     setIsEditingUsername(false);
+                  } else {
+                    setError(error!);
                   }
                 });
               }}
@@ -71,6 +76,7 @@ function Username({ user }: Props) {
             />
           </div>
         )}
+        {error && <p className="text-xs leading-none text-red-500">{error}</p>}
         <p className="text-xs leading-none text-muted-foreground">
           {user.email}
         </p>
