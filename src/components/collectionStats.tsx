@@ -23,6 +23,14 @@ interface CollectionDetailsProps {
   stats: AlbumStats;
 }
 
+interface CollectionStatsSectionProps {
+  title: string;
+  isSetAlbum: boolean;
+  stats: AlbumStats[];
+  chosenAlbum?: AlbumStats;
+  setChosenAlbum?: React.Dispatch<React.SetStateAction<AlbumStats>>;
+}
+
 const CollectionStats: React.FC<CollectionStatsProps> = ({
   collectionData,
 }) => {
@@ -92,34 +100,62 @@ const CollectionGrid: React.FC<CollectionGridProps> = ({
   return (
     <div className="flex flex-col gap-y-8 w-full justify-center items-center">
       {collectionData.setAlbumsStats.length > 0 && (
-        <div className="flex flex-col w-full items-center gap-y-4">
-          <div className="text-xl font-bold underline">Set Albums</div>
-          <div className="grid px-2 grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 w-full">
-            {collectionData.setAlbumsStats.map((album) => {
-              const percentage =
-                (album.total.collected / album.total.total) * 100;
-              const isChosenAlbum = album.name === chosenAlbum?.name;
-              return (
-                <div
-                  key={album.name}
-                  className={
-                    "flex flex-col gap-y-2 rounded-lg border-2 bg-slate-500 p-4 shadow-md hover:cursor-pointer hover:bg-slate-600 " +
-                    (isChosenAlbum ? "border-slate-200" : "")
-                  }
-                  onClick={() => {
-                    if (isMobile) {
-                      router.push(`/album/${album.id}`);
-                    } else {
-                      setChosenAlbum(album);
-                    }
-                  }}
-                >
-                  <h2 className="mb-2 truncate text-lg font-bold">
-                    {album.name}
-                  </h2>
-                  <p className="mb-2">
-                    Collected: {album.total.collected} / {album.total.total}
-                  </p>
+        <CollectionStatsSection
+          title="Set Albums"
+          isSetAlbum={true}
+          stats={collectionData.setAlbumsStats}
+          chosenAlbum={chosenAlbum}
+          setChosenAlbum={setChosenAlbum}
+        />
+      )}
+      {collectionData.nonSetAlbumsStats.length > 0 && (
+        <CollectionStatsSection
+          title="Custom Albums"
+          isSetAlbum={false}
+          stats={collectionData.nonSetAlbumsStats}
+        />
+      )}
+    </div>
+  );
+};
+
+const CollectionStatsSection: React.FC<CollectionStatsSectionProps> = ({
+  title,
+  isSetAlbum,
+  stats,
+  chosenAlbum,
+  setChosenAlbum,
+}) => {
+  const router = useRouter();
+
+  return (
+    <div className="flex flex-col w-full items-center gap-y-4">
+      <div className="text-xl font-bold underline">{title}</div>
+      <div className="grid px-2 grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 w-full">
+        {stats.map((album) => {
+          const percentage = (album.total.collected / album.total.total) * 100;
+          const isChosenAlbum = isSetAlbum && album.name === chosenAlbum?.name;
+          return (
+            <div
+              key={album.name}
+              className={
+                "flex flex-col gap-y-2 rounded-lg border-2 bg-slate-500 p-4 shadow-md hover:cursor-pointer hover:bg-slate-600 " +
+                (isChosenAlbum ? "border-slate-200" : "")
+              }
+              onClick={() => {
+                if (isMobile) {
+                  router.push(`/album/${album.id}`);
+                } else if (isSetAlbum && setChosenAlbum) {
+                  setChosenAlbum(album);
+                }
+              }}
+            >
+              <h2 className="mb-2 truncate text-lg font-bold">{album.name}</h2>
+              <p className="mb-2">
+                Collected: {album.total.collected} / {album.total.total}
+              </p>
+              {isSetAlbum && (
+                <>
                   <div className="relative pt-1">
                     <div className="mb-4 flex h-2 overflow-hidden rounded bg-gray-200 text-xs">
                       <div
@@ -131,43 +167,14 @@ const CollectionGrid: React.FC<CollectionGridProps> = ({
                     </div>
                   </div>
                   <p className="text-sm">
-                    {percentage.toPrecision(3)}% Complete
+                    {percentage.toPrecision(2)}% Complete
                   </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-      {collectionData.nonSetAlbumsStats.length > 0 && (
-        <div className="flex flex-col w-full items-center gap-y-4">
-          <div className="text-center text-xl font-bold underline">
-            Custom Albums
-          </div>
-          <div className="grid w-full px-2 grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-            {collectionData.nonSetAlbumsStats.map((album) => {
-              return (
-                <div
-                  key={album.name}
-                  className={
-                    "flex flex-col gap-y-2 rounded-lg border-2 bg-slate-500 p-4 shadow-md hover:cursor-pointer hover:bg-slate-600"
-                  }
-                  onClick={() => {
-                    if (isMobile) {
-                      router.push(`/album/${album.id}`);
-                    }
-                  }}
-                >
-                  <h2 className="mb-2 truncate text-lg font-bold">
-                    {album.name}
-                  </h2>
-                  <p className="mb-2">Card Count: {album.total.collected}</p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
+                </>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
