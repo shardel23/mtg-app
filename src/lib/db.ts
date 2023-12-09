@@ -8,6 +8,43 @@ export const getAlbumOfUserWithCards = async (
   userId: string,
   albumId: number,
 ) => {
+  const album = await prisma.album.findUnique({
+    where: {
+      id: albumId,
+      collection: {
+        name: {
+          equals: "Default",
+        },
+        userId: userId,
+      },
+    },
+    select: {
+      setId: true,
+    },
+  });
+
+  if (album == null) {
+    return null;
+  }
+
+  const orderBy =
+    album.setId != null
+      ? ({
+          CardDetails: {
+            collectorNumber: "asc",
+          },
+        } as const)
+      : [
+          { CardDetails: { colors: "desc" } } as const,
+          { CardDetails: { cmc: "asc" } } as const,
+          { CardDetails: { set_name: "asc" } } as const,
+          {
+            CardDetails: {
+              collectorNumber: "asc",
+            },
+          } as const,
+        ];
+
   return await prisma.album.findUnique({
     where: {
       id: albumId,
@@ -21,11 +58,6 @@ export const getAlbumOfUserWithCards = async (
     select: {
       name: true,
       setId: true,
-      collection: {
-        select: {
-          userId: true,
-        },
-      },
       cards: {
         select: {
           id: true,
@@ -60,11 +92,7 @@ export const getAlbumOfUserWithCards = async (
             },
           },
         },
-        orderBy: {
-          CardDetails: {
-            collectorNumber: "asc",
-          },
-        },
+        orderBy,
       },
     },
   });
