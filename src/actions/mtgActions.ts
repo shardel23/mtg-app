@@ -468,14 +468,21 @@ const albumToStats = (album: {
     CardDetails: {
       name: string;
       rarity: string;
+      colors: string[];
     };
   }[];
 }) => {
+  const emptyStats = {
+    collected: 0,
+    missing: 0,
+    total: 0,
+  };
   const cardsMap = cardsArrayToMap(
     album.cards.map((c) => ({
       name: c.CardDetails.name,
       isCollected: c.numCollected > 0,
       rarity: c.CardDetails.rarity,
+      colors: c.CardDetails.colors,
     })),
   );
   const stats = {
@@ -486,25 +493,40 @@ const albumToStats = (album: {
       missing: 0,
       total: cardsMap.size,
     },
-    common: {
-      collected: 0,
-      missing: 0,
-      total: 0,
+    rarity: {
+      common: { ...emptyStats },
+      uncommon: {
+        ...emptyStats,
+      },
+      rare: {
+        ...emptyStats,
+      },
+      mythic: {
+        ...emptyStats,
+      },
     },
-    uncommon: {
-      collected: 0,
-      missing: 0,
-      total: 0,
-    },
-    rare: {
-      collected: 0,
-      missing: 0,
-      total: 0,
-    },
-    mythic: {
-      collected: 0,
-      missing: 0,
-      total: 0,
+    colors: {
+      white: {
+        ...emptyStats,
+      },
+      blue: {
+        ...emptyStats,
+      },
+      black: {
+        ...emptyStats,
+      },
+      red: {
+        ...emptyStats,
+      },
+      green: {
+        ...emptyStats,
+      },
+      multicolor: {
+        ...emptyStats,
+      },
+      colorless: {
+        ...emptyStats,
+      },
     },
   };
   cardsMap.forEach((card) => {
@@ -513,24 +535,61 @@ const albumToStats = (album: {
     stats.total.missing += isCollected ? 0 : 1;
     switch (card[0].rarity) {
       case "common":
-        stats.common.total += 1;
-        stats.common.collected += isCollected ? 1 : 0;
-        stats.common.missing += isCollected ? 0 : 1;
+        stats.rarity.common.total += 1;
+        stats.rarity.common.collected += isCollected ? 1 : 0;
+        stats.rarity.common.missing += isCollected ? 0 : 1;
         break;
       case "uncommon":
-        stats.uncommon.total += 1;
-        stats.uncommon.collected += isCollected ? 1 : 0;
-        stats.uncommon.missing += isCollected ? 0 : 1;
+        stats.rarity.uncommon.total += 1;
+        stats.rarity.uncommon.collected += isCollected ? 1 : 0;
+        stats.rarity.uncommon.missing += isCollected ? 0 : 1;
         break;
       case "rare":
-        stats.rare.total += 1;
-        stats.rare.collected += isCollected ? 1 : 0;
-        stats.rare.missing += isCollected ? 0 : 1;
+        stats.rarity.rare.total += 1;
+        stats.rarity.rare.collected += isCollected ? 1 : 0;
+        stats.rarity.rare.missing += isCollected ? 0 : 1;
         break;
       case "mythic":
-        stats.mythic.total += 1;
-        stats.mythic.collected += isCollected ? 1 : 0;
-        stats.mythic.missing += isCollected ? 0 : 1;
+        stats.rarity.mythic.total += 1;
+        stats.rarity.mythic.collected += isCollected ? 1 : 0;
+        stats.rarity.mythic.missing += isCollected ? 0 : 1;
+        break;
+    }
+    const colors = card[0].colors;
+    if (colors.length > 1) {
+      stats.colors.multicolor.total += 1;
+      stats.colors.multicolor.collected += isCollected ? 1 : 0;
+      stats.colors.multicolor.missing += isCollected ? 0 : 1;
+    } else if (colors.length === 0) {
+      stats.colors.colorless.total += 1;
+      stats.colors.colorless.collected += isCollected ? 1 : 0;
+      stats.colors.colorless.missing += isCollected ? 0 : 1;
+    }
+    switch (colors[0]) {
+      case "W":
+        stats.colors.white.total += 1;
+        stats.colors.white.collected += isCollected ? 1 : 0;
+        stats.colors.white.missing += isCollected ? 0 : 1;
+        break;
+      case "U":
+        stats.colors.blue.total += 1;
+        stats.colors.blue.collected += isCollected ? 1 : 0;
+        stats.colors.blue.missing += isCollected ? 0 : 1;
+        break;
+      case "B":
+        stats.colors.black.total += 1;
+        stats.colors.black.collected += isCollected ? 1 : 0;
+        stats.colors.black.missing += isCollected ? 0 : 1;
+        break;
+      case "R":
+        stats.colors.red.total += 1;
+        stats.colors.red.collected += isCollected ? 1 : 0;
+        stats.colors.red.missing += isCollected ? 0 : 1;
+        break;
+      case "G":
+        stats.colors.green.total += 1;
+        stats.colors.green.collected += isCollected ? 1 : 0;
+        stats.colors.green.missing += isCollected ? 0 : 1;
         break;
     }
   });
