@@ -180,7 +180,10 @@ const CollectionStatsSection: React.FC<CollectionStatsSectionProps> = ({
                     </div>
                   </div>
                   <p className="text-sm">
-                    {percentage.toPrecision(2)}% Complete
+                    {percentage === 100
+                      ? percentage
+                      : percentage.toPrecision(2)}
+                    % Complete
                   </p>
                 </>
               )}
