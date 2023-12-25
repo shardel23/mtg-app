@@ -63,10 +63,21 @@ export type AlbumStats = {
   id: string;
   name: string;
   total: CollectedMissingStats;
-  common: CollectedMissingStats;
-  uncommon: CollectedMissingStats;
-  rare: CollectedMissingStats;
-  mythic: CollectedMissingStats;
+  rarity: {
+    common: CollectedMissingStats;
+    uncommon: CollectedMissingStats;
+    rare: CollectedMissingStats;
+    mythic: CollectedMissingStats;
+  };
+  colors: {
+    white: CollectedMissingStats;
+    blue: CollectedMissingStats;
+    black: CollectedMissingStats;
+    red: CollectedMissingStats;
+    green: CollectedMissingStats;
+    multicolor: CollectedMissingStats;
+    colorless: CollectedMissingStats;
+  };
 };
 
 export type CollectionStats = {

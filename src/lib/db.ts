@@ -485,6 +485,7 @@ export const getAlbumsOfUserWithCollectionStats = async (
             select: {
               name: true,
               rarity: true,
+              colors: true,
             },
           },
         },

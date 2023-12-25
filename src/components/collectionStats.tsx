@@ -53,39 +53,52 @@ const CollectionDetails: React.FC<CollectionDetailsProps> = ({ stats }) => {
   return (
     <div className="hidden w-96 flex-col gap-8 md:flex">
       <div className="text-center text-2xl">{stats.name}</div>
-      <div className="flex flex-col">
-        {Object.entries(stats).map(([key, value]) => {
-          if (["common", "uncommon", "rare", "mythic"].indexOf(key) === -1) {
-            return;
-          }
-          const rarityStats = value as CollectedMissingStats;
-          return (
-            <div
-              key={stats.name + "-" + key}
-              className="flex items-center justify-center gap-x-4"
-            >
-              <div className="text-sm">{key.charAt(0).toUpperCase()}</div>
-              <div className="flex w-full flex-col justify-between">
-                <div className="text-sm">
-                  {rarityStats.collected}/{rarityStats.total}
-                </div>
-                <div className="relative pt-1">
-                  <div className="mb-4 flex h-2 overflow-hidden rounded bg-gray-200 text-xs">
-                    <div
-                      style={{
-                        width: `${
-                          (rarityStats.collected / rarityStats.total) * 100
-                        }%`,
-                      }}
-                      className="flex flex-col justify-center whitespace-nowrap bg-green-500 text-center text-white shadow-none"
-                    ></div>
-                  </div>
+      <DetailedStatsSection title="Rarities" stats={stats.rarity} />
+      <DetailedStatsSection title="Colors" stats={stats.colors} />
+    </div>
+  );
+};
+
+const DetailedStatsSection = ({
+  title,
+  stats,
+}: {
+  title: string;
+  stats: any;
+}) => {
+  return (
+    <div className="flex flex-col">
+      <div className="text-center text-xl">{title}</div>
+      {Object.entries(stats).map(([key, value]) => {
+        const rarityStats = value as CollectedMissingStats;
+        return (
+          <div
+            key={stats.name + "-" + key}
+            className="flex items-center justify-center gap-x-4"
+          >
+            <div className="text-sm">
+              {key === "blue" ? "U" : key.charAt(0).toUpperCase()}
+            </div>
+            <div className="flex w-full flex-col justify-between">
+              <div className="text-sm">
+                {rarityStats.collected}/{rarityStats.total}
+              </div>
+              <div className="relative pt-1">
+                <div className="mb-4 flex h-2 overflow-hidden rounded bg-gray-200 text-xs">
+                  <div
+                    style={{
+                      width: `${
+                        (rarityStats.collected / rarityStats.total) * 100
+                      }%`,
+                    }}
+                    className="flex flex-col justify-center whitespace-nowrap bg-green-500 text-center text-white shadow-none"
+                  ></div>
                 </div>
               </div>
             </div>
-          );
-        })}
-      </div>
+          </div>
+        );
+      })}
     </div>
   );
 };
@@ -98,7 +111,7 @@ const CollectionGrid: React.FC<CollectionGridProps> = ({
   const router = useRouter();
 
   return (
-    <div className="flex flex-col gap-y-8 w-full justify-center items-center">
+    <div className="flex flex-col gap-y-8 w-full items-center">
       {collectionData.setAlbumsStats.length > 0 && (
         <CollectionStatsSection
           title="Set Albums"
