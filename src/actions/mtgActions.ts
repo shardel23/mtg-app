@@ -2,6 +2,7 @@
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import * as DB from "@/lib/db";
+import { getAlbumsOfUserWithCollectionStats } from "@/lib/db";
 import { prisma } from "@/lib/prisma";
 import * as API from "@/lib/scryfallApi";
 import {
@@ -459,19 +460,9 @@ export async function getCardsAvailableForTrade(): Promise<
   return cardsArrayToMap(transformCardsFromDB(cards));
 }
 
-const albumToStats = (album: {
-  id: number;
-  name: string;
-  setId: string | null;
-  cards: {
-    numCollected: number;
-    CardDetails: {
-      name: string;
-      rarity: string;
-      colors: string[];
-    };
-  }[];
-}) => {
+const albumToStats = (
+  album: Awaited<ReturnType<typeof getAlbumsOfUserWithCollectionStats>>[0],
+) => {
   const emptyStats = {
     collected: 0,
     missing: 0,
@@ -482,7 +473,12 @@ const albumToStats = (album: {
       name: c.CardDetails.name,
       isCollected: c.numCollected > 0,
       rarity: c.CardDetails.rarity,
-      colors: c.CardDetails.colors,
+      colors:
+        c.CardDetails.card_faces.length > 0
+          ? c.CardDetails.card_faces[0].colors
+              .concat(c.CardDetails.card_faces[1].colors)
+              .filter((color, index, array) => array.indexOf(color) === index)
+          : c.CardDetails.colors,
     })),
   );
   const stats = {
@@ -564,33 +560,34 @@ const albumToStats = (album: {
       stats.colors.colorless.total += 1;
       stats.colors.colorless.collected += isCollected ? 1 : 0;
       stats.colors.colorless.missing += isCollected ? 0 : 1;
-    }
-    switch (colors[0]) {
-      case "W":
-        stats.colors.white.total += 1;
-        stats.colors.white.collected += isCollected ? 1 : 0;
-        stats.colors.white.missing += isCollected ? 0 : 1;
-        break;
-      case "U":
-        stats.colors.blue.total += 1;
-        stats.colors.blue.collected += isCollected ? 1 : 0;
-        stats.colors.blue.missing += isCollected ? 0 : 1;
-        break;
-      case "B":
-        stats.colors.black.total += 1;
-        stats.colors.black.collected += isCollected ? 1 : 0;
-        stats.colors.black.missing += isCollected ? 0 : 1;
-        break;
-      case "R":
-        stats.colors.red.total += 1;
-        stats.colors.red.collected += isCollected ? 1 : 0;
-        stats.colors.red.missing += isCollected ? 0 : 1;
-        break;
-      case "G":
-        stats.colors.green.total += 1;
-        stats.colors.green.collected += isCollected ? 1 : 0;
-        stats.colors.green.missing += isCollected ? 0 : 1;
-        break;
+    } else {
+      switch (colors[0]) {
+        case "W":
+          stats.colors.white.total += 1;
+          stats.colors.white.collected += isCollected ? 1 : 0;
+          stats.colors.white.missing += isCollected ? 0 : 1;
+          break;
+        case "U":
+          stats.colors.blue.total += 1;
+          stats.colors.blue.collected += isCollected ? 1 : 0;
+          stats.colors.blue.missing += isCollected ? 0 : 1;
+          break;
+        case "B":
+          stats.colors.black.total += 1;
+          stats.colors.black.collected += isCollected ? 1 : 0;
+          stats.colors.black.missing += isCollected ? 0 : 1;
+          break;
+        case "R":
+          stats.colors.red.total += 1;
+          stats.colors.red.collected += isCollected ? 1 : 0;
+          stats.colors.red.missing += isCollected ? 0 : 1;
+          break;
+        case "G":
+          stats.colors.green.total += 1;
+          stats.colors.green.collected += isCollected ? 1 : 0;
+          stats.colors.green.missing += isCollected ? 0 : 1;
+          break;
+      }
     }
   });
   return stats;
