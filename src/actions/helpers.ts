@@ -68,13 +68,18 @@ export function isCardMultiFace(card: CardData): boolean {
   );
 }
 
-function getDBCardColors(card: CardWithCardDetails): string[] {
+export function getDBCardColors(card: CardWithCardDetails): string[] {
   return (
     (card.CardDetails.card_faces.length > 0
-      ? card.CardDetails.card_faces.reduce(
-          (colors, face) => [...colors, ...(face.colors ?? [])],
-          [] as string[],
-        )
+      ? card.CardDetails.card_faces
+          .reduce(
+            (colors, face) => [
+              ...colors,
+              ...(face.mana_cost?.match(/[A-Z]+/g) ?? []),
+            ],
+            [] as string[],
+          )
+          .filter((color, index, self) => self.indexOf(color) === index)
       : card.CardDetails.colors) ?? []
   );
 }
@@ -98,4 +103,63 @@ export async function log(logLevel: LogLevel, message: string) {
   const log = new Logger();
   log._log(logLevel, message);
   await log.flush();
+}
+
+export function compareCards(
+  a: CardWithCardDetails,
+  b: CardWithCardDetails,
+): number {
+  const colorsA = getDBCardColors(a);
+  const colorsB = getDBCardColors(b);
+  const isAMonoColor = colorsA.length === 1;
+  const isBMonoColor = colorsB.length === 1;
+  const isAMultiColor = colorsA.length > 1;
+  const isBMultiColor = colorsB.length > 1;
+  if (isAMonoColor) {
+    if (isBMonoColor) {
+      const colorOrders = ["W", "U", "B", "R", "G"];
+      const colorA = colorsA[0];
+      const colorB = colorsB[0];
+      const colorAIndex = colorOrders.indexOf(colorA);
+      const colorBIndex = colorOrders.indexOf(colorB);
+      if (colorAIndex < colorBIndex) {
+        return -1;
+      }
+      if (colorAIndex > colorBIndex) {
+        return 1;
+      }
+      return 0;
+    }
+    return -1;
+  }
+  if (isAMultiColor) {
+    if (isBMonoColor) {
+      return 1;
+    }
+    if (isBMultiColor) {
+      return 0;
+    }
+    return -1;
+  }
+  if (isBMultiColor || isBMonoColor) {
+    return 1;
+  }
+  if (!isAMonoColor && !isAMultiColor && !isBMonoColor && !isBMultiColor) {
+    const typeA =
+      a.CardDetails.type_line ?? a.CardDetails.card_faces[0].type_line;
+    const typeB =
+      b.CardDetails.type_line ?? b.CardDetails.card_faces[0].type_line;
+    const isALand = typeA.includes("Land");
+    const isBLand = typeB.includes("Land");
+    if (isALand && isBLand) {
+      return 0;
+    }
+    if (isALand) {
+      return 1;
+    }
+    if (isBLand) {
+      return -1;
+    }
+  }
+  return 0;
 }
