@@ -260,7 +260,7 @@ export async function getAlbum(
   }
 
   const albumCards = [...albumWithCards.cards];
-  if (!albumWithCards.setId == null) {
+  if (albumWithCards.setId == null) {
     albumCards.sort(compareCards);
   }
   const cards = transformCardsFromDB(albumCards);
