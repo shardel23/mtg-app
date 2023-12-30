@@ -25,7 +25,7 @@ import { partition } from "lodash";
 import { getServerSession } from "next-auth";
 import { LogLevel } from "next-axiom/dist/logger";
 import { revalidatePath } from "next/cache";
-import { log, transformCardsFromDB } from "./helpers";
+import { compareCards, log, transformCardsFromDB } from "./helpers";
 
 export async function getUserIdFromSession(): Promise<string | null> {
   const session = await getServerSession(authOptions);
@@ -259,7 +259,11 @@ export async function getAlbum(
     };
   }
 
-  const cards = transformCardsFromDB(albumWithCards.cards);
+  const albumCards = [...albumWithCards.cards];
+  if (!albumWithCards.setId == null) {
+    albumCards.sort(compareCards);
+  }
+  const cards = transformCardsFromDB(albumCards);
 
   return {
     album: {
@@ -457,6 +461,7 @@ export async function getCardsAvailableForTrade(): Promise<
   }
 
   const cards = await DB.getCardsAvailableForTrade(userId, collection.name);
+  cards.sort(compareCards);
   return cardsArrayToMap(transformCardsFromDB(cards));
 }
 
