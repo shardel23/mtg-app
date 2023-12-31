@@ -25,7 +25,12 @@ import { partition } from "lodash";
 import { getServerSession } from "next-auth";
 import { LogLevel } from "next-axiom/dist/logger";
 import { revalidatePath } from "next/cache";
-import { compareCards, log, transformCardsFromDB } from "./helpers";
+import {
+  compareCards,
+  log,
+  transformCardsFromAPI,
+  transformCardsFromDB,
+} from "./helpers";
 
 export async function getUserIdFromSession(): Promise<string | null> {
   const session = await getServerSession(authOptions);
@@ -449,6 +454,18 @@ export async function searchCardInCollection(
     cardName,
   );
   return cardsArrayToMap(transformCardsFromDB(cards));
+}
+
+export async function searchCardFromAPI(
+  cardName: string,
+): Promise<Map<string, CardData[]>> {
+  if (cardName.length < 2) {
+    log(LogLevel.warn, "Card name searched is too short");
+    return new Map();
+  }
+
+  const cards = await API.searchCards(cardName);
+  return cardsArrayToMap(transformCardsFromAPI(cards));
 }
 
 export async function getCardsAvailableForTrade(): Promise<
