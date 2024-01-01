@@ -459,7 +459,7 @@ export async function searchCardInCollection(
 export async function searchCardFromAPI(
   cardName: string,
 ): Promise<Map<string, CardData[]>> {
-  if (cardName.length < 2) {
+  if (cardName.length < 3) {
     log(LogLevel.warn, "Card name searched is too short");
     return new Map();
   }
