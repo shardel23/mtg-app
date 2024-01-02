@@ -528,3 +528,24 @@ export const deleteCardsFromAlbum = async (
     },
   });
 };
+
+export async function getOwnedCards(userId: string, collection: string) {
+  return await prisma.card.findMany({
+    where: {
+      numCollected: {
+        gt: 0,
+      },
+      Album: {
+        collection: {
+          name: {
+            equals: collection,
+          },
+          userId: userId,
+        },
+      },
+    },
+    select: {
+      id: true,
+    },
+  });
+}
