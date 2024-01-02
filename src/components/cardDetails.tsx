@@ -40,7 +40,6 @@ export default function CardDetails({
   viewMode: ViewMode;
   isCardDeleteable?: boolean;
 }) {
-  const [isPending, startTransition] = useTransition();
   const [cardFaceIndex, setCardFaceIndex] = useState<number>(0);
   const cardFaces = card.cardFaces || [];
   const isMultiFaced = isCardMultiFace(card);
@@ -86,54 +85,15 @@ export default function CardDetails({
                   <ArrowUTurnRight />
                 </Button>
               )}
-              <div className="flex items-center gap-x-2">
-                <Button
-                  variant={"secondary"}
-                  className="w-12"
-                  disabled={!isEditMode || amountCollected === 0}
-                  onClick={() => {
-                    startTransition(() => {
-                      updateAmountCollected(
-                        card.albumId!,
-                        card.id,
-                        Math.max(0, amountCollected - 1),
-                      );
-                    });
-                    onAmountCollectedChange((curr) => {
-                      const newIsVersionCollected = [...curr];
-                      newIsVersionCollected[cardVersionIndex] =
-                        amountCollected > 1;
-                      return newIsVersionCollected;
-                    });
-                    setAmountCollected((curr) => Math.max(0, curr - 1));
-                  }}
-                >
-                  <Minus />
-                </Button>
-                <span className="px-2">{amountCollected}</span>
-                <Button
-                  variant={"secondary"}
-                  className="w-12"
-                  disabled={!isEditMode}
-                  onClick={() => {
-                    startTransition(() => {
-                      updateAmountCollected(
-                        card.albumId!,
-                        card.id,
-                        amountCollected + 1,
-                      );
-                    });
-                    onAmountCollectedChange((curr) => {
-                      const newIsVersionCollected = [...curr];
-                      newIsVersionCollected[cardVersionIndex] = true;
-                      return newIsVersionCollected;
-                    });
-                    setAmountCollected((curr) => curr + 1);
-                  }}
-                >
-                  <Plus />
-                </Button>
-              </div>
+              <CardAmountCollectedSection
+                isEditMode={isEditMode}
+                card={card}
+                cardVersions={cardVersions}
+                amountCollected={amountCollected}
+                setAmountCollected={setAmountCollected}
+                onAmountCollectedChange={onAmountCollectedChange}
+                cardVersionIndex={cardVersionIndex}
+              />
             </div>
           </div>
         </div>
@@ -174,6 +134,72 @@ const CardPriceLoading = () => {
         />
       </svg>
       <span className="sr-only">Loading...</span>
+    </div>
+  );
+};
+
+const CardAmountCollectedSection = (props: {
+  isEditMode: boolean;
+  card: CardData;
+  cardVersions: CardData[];
+  amountCollected: number;
+  setAmountCollected: React.Dispatch<React.SetStateAction<number>>;
+  onAmountCollectedChange: React.Dispatch<React.SetStateAction<boolean[]>>;
+  cardVersionIndex: number;
+}) => {
+  const [_, startTransition] = useTransition();
+
+  if (!props.isEditMode) {
+    return null;
+  }
+
+  return (
+    <div className="flex items-center gap-x-2">
+      <Button
+        variant={"secondary"}
+        className="w-12"
+        disabled={props.amountCollected === 0}
+        onClick={() => {
+          startTransition(() => {
+            updateAmountCollected(
+              props.card.albumId!,
+              props.card.id,
+              Math.max(0, props.amountCollected - 1),
+            );
+          });
+          props.onAmountCollectedChange((curr) => {
+            const newIsVersionCollected = [...curr];
+            newIsVersionCollected[props.cardVersionIndex] =
+              props.amountCollected > 1;
+            return newIsVersionCollected;
+          });
+          props.setAmountCollected((curr) => Math.max(0, curr - 1));
+        }}
+      >
+        <Minus />
+      </Button>
+      <span className="px-2">{props.amountCollected}</span>
+      <Button
+        variant={"secondary"}
+        className="w-12"
+        onClick={() => {
+          startTransition(() => {
+            updateAmountCollected(
+              props.card.albumId!,
+              props.card.id,
+              props.amountCollected + 1,
+            );
+          });
+          props.onAmountCollectedChange((curr) => {
+            const newIsVersionCollected = [...curr];
+            newIsVersionCollected[props.cardVersionIndex] = true;
+            return newIsVersionCollected;
+          });
+          props.setAmountCollected((curr) => curr + 1);
+        }}
+      >
+        <Plus />
+      </Button>
     </div>
   );
 };

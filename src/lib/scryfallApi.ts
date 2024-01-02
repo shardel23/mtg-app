@@ -22,9 +22,16 @@ export async function getSet(setIdentifier: {
 }
 
 export async function searchCards(searchString: string): Promise<Scry.Card[]> {
-  return await Scry.Cards.search(`name:/${searchString}/`, {
+  const cards = await Scry.Cards.search(`name:/${searchString}/`, {
+    order: "name",
     unique: "prints",
   }).waitForAll();
+  return cards.filter(
+    (card) =>
+      !["token", "double_faced_token", "emblem", "art_series"].includes(
+        card.layout,
+      ),
+  );
 }
 
 export async function getCardsOfSet(setIdentifier: {

@@ -54,6 +54,33 @@ export const transformCardsFromDB = (
   }));
 };
 
+export const transformCardsFromAPI = (cards: Scry.Card[]): CardData[] => {
+  return cards.map((card) => ({
+    id: card.id,
+    numCollected: 1,
+    isCollected: true,
+    name: card.name,
+    image:
+      card.image_uris?.normal ?? card.card_faces[0].image_uris?.normal ?? "",
+    collectorNumber: card.collector_number,
+    setCode: card.set,
+    rarity: card.rarity,
+    colors: getAPICardColors(card),
+    manaCost: card.mana_cost,
+    cmc: card.cmc ?? 0,
+    layout: card.layout ?? "",
+    types: card.type_line?.split(" ").map((type) => type.toLowerCase()) ?? [],
+    cardFaces: card.card_faces.map((face) => ({
+      name: face.name,
+      image: face.image_uris?.normal ?? "",
+      manaCost: face.mana_cost,
+      cmc: getCardCMC(face.mana_cost),
+      types: face.type_line.split(" ").map((type) => type.toLowerCase()),
+    })),
+    price: null,
+  }));
+};
+
 export function isCardMultiFace(card: CardData): boolean {
   return (
     (card.cardFaces ?? []).length > 1 &&
@@ -81,6 +108,22 @@ export function getDBCardColors(card: CardWithCardDetails): string[] {
           )
           .filter((color, index, self) => self.indexOf(color) === index)
       : card.CardDetails.colors) ?? []
+  );
+}
+
+export function getAPICardColors(card: Scry.Card): string[] {
+  return (
+    (card.card_faces.length > 0
+      ? card.card_faces
+          .reduce(
+            (colors, face) => [
+              ...colors,
+              ...(face.mana_cost?.match(/[A-Z]+/g) ?? []),
+            ],
+            [] as string[],
+          )
+          .filter((color, index, self) => self.indexOf(color) === index)
+      : card.colors) ?? []
   );
 }
 
