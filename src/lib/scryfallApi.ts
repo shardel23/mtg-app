@@ -26,12 +26,14 @@ export async function searchCards(searchString: string): Promise<Scry.Card[]> {
     order: "name",
     unique: "prints",
   }).waitForAll();
-  return cards.filter(
-    (card) =>
-      !["token", "double_faced_token", "emblem", "art_series"].includes(
-        card.layout,
-      ),
-  );
+  return cards
+    .filter(
+      (card) =>
+        !["token", "double_faced_token", "emblem", "art_series"].includes(
+          card.layout,
+        ),
+    )
+    .filter((card) => !card.digital);
 }
 
 export async function getCardsOfSet(setIdentifier: {
