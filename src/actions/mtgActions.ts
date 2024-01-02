@@ -463,9 +463,19 @@ export async function searchCardFromAPI(
     log(LogLevel.warn, "Card name searched is too short");
     return new Map();
   }
-
-  const cards = await API.searchCards(cardName);
-  return cardsArrayToMap(transformCardsFromAPI(cards));
+  const { userId, collection } = await getUserAndCollection();
+  let apiCards = await API.searchCards(cardName);
+  let transformedCards = transformCardsFromAPI(apiCards);
+  if (userId != null && collection != null) {
+    const ownedCards = new Set(
+      (await DB.getOwnedCards(userId, collection.name)).map((card) => card.id),
+    );
+    transformedCards = transformedCards.map((card) => ({
+      ...card,
+      isCollected: ownedCards.has(card.id),
+    }));
+  }
+  return cardsArrayToMap(transformedCards);
 }
 
 export async function getCardsAvailableForTrade(): Promise<
