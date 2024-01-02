@@ -12,20 +12,18 @@ const iconTypes = [
 
 async function getAllMtgSets() {
   const sets = await Scry.Sets.all();
-  return (
-    sets
-      .filter((set) =>
-        ["core", "expansion", "masters", "draft_innovation"].includes(
-          set.set_type,
-        ),
-      )
-      .filter((set) => set.digital === false)
-      // filter all sets released after 2015 based on release date
-      .filter((set) => {
-        const releaseDate = new Date(set.released_at!);
-        return releaseDate.getFullYear() >= 2018;
-      })
-  );
+  return sets;
+  // .filter((set) =>
+  //   ["core", "expansion", "masters", "draft_innovation"].includes(
+  //     set.set_type,
+  //   ),
+  // )
+  // .filter((set) => set.digital === false);
+  // filter all sets released after 2015 based on release date
+  // .filter((set) => {
+  //   const releaseDate = new Date(set.released_at!);
+  //   return releaseDate.getFullYear() >= 2018;
+  // })
 }
 
 function download(url: string, setCode: string) {
