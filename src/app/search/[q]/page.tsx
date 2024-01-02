@@ -7,12 +7,12 @@ export default async function SearchResultsPage({
 }: {
   params: { q: string };
 }) {
-  if (params.q.length < 2) {
+  if (params.q.length < 3) {
     return (
       <>
         <RedirectIfNotLoggedIn />
         <div className="text-center">
-          Search query must be at least 2 characters long
+          Search query must be at least 3 characters long
         </div>
       </>
     );

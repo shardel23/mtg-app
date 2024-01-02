@@ -23,6 +23,7 @@ export async function getSet(setIdentifier: {
 
 export async function searchCards(searchString: string): Promise<Scry.Card[]> {
   const cards = await Scry.Cards.search(`name:/${searchString}/`, {
+    order: "name",
     unique: "prints",
   }).waitForAll();
   return cards.filter(

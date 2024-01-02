@@ -86,54 +86,56 @@ export default function CardDetails({
                   <ArrowUTurnRight />
                 </Button>
               )}
-              <div className="flex items-center gap-x-2">
-                <Button
-                  variant={"secondary"}
-                  className="w-12"
-                  disabled={!isEditMode || amountCollected === 0}
-                  onClick={() => {
-                    startTransition(() => {
-                      updateAmountCollected(
-                        card.albumId!,
-                        card.id,
-                        Math.max(0, amountCollected - 1),
-                      );
-                    });
-                    onAmountCollectedChange((curr) => {
-                      const newIsVersionCollected = [...curr];
-                      newIsVersionCollected[cardVersionIndex] =
-                        amountCollected > 1;
-                      return newIsVersionCollected;
-                    });
-                    setAmountCollected((curr) => Math.max(0, curr - 1));
-                  }}
-                >
-                  <Minus />
-                </Button>
-                <span className="px-2">{amountCollected}</span>
-                <Button
-                  variant={"secondary"}
-                  className="w-12"
-                  disabled={!isEditMode}
-                  onClick={() => {
-                    startTransition(() => {
-                      updateAmountCollected(
-                        card.albumId!,
-                        card.id,
-                        amountCollected + 1,
-                      );
-                    });
-                    onAmountCollectedChange((curr) => {
-                      const newIsVersionCollected = [...curr];
-                      newIsVersionCollected[cardVersionIndex] = true;
-                      return newIsVersionCollected;
-                    });
-                    setAmountCollected((curr) => curr + 1);
-                  }}
-                >
-                  <Plus />
-                </Button>
-              </div>
+              {isEditMode && (
+                <div className="flex items-center gap-x-2">
+                  <Button
+                    variant={"secondary"}
+                    className="w-12"
+                    disabled={!isEditMode || amountCollected === 0}
+                    onClick={() => {
+                      startTransition(() => {
+                        updateAmountCollected(
+                          card.albumId!,
+                          card.id,
+                          Math.max(0, amountCollected - 1),
+                        );
+                      });
+                      onAmountCollectedChange((curr) => {
+                        const newIsVersionCollected = [...curr];
+                        newIsVersionCollected[cardVersionIndex] =
+                          amountCollected > 1;
+                        return newIsVersionCollected;
+                      });
+                      setAmountCollected((curr) => Math.max(0, curr - 1));
+                    }}
+                  >
+                    <Minus />
+                  </Button>
+                  <span className="px-2">{amountCollected}</span>
+                  <Button
+                    variant={"secondary"}
+                    className="w-12"
+                    disabled={!isEditMode}
+                    onClick={() => {
+                      startTransition(() => {
+                        updateAmountCollected(
+                          card.albumId!,
+                          card.id,
+                          amountCollected + 1,
+                        );
+                      });
+                      onAmountCollectedChange((curr) => {
+                        const newIsVersionCollected = [...curr];
+                        newIsVersionCollected[cardVersionIndex] = true;
+                        return newIsVersionCollected;
+                      });
+                      setAmountCollected((curr) => curr + 1);
+                    }}
+                  >
+                    <Plus />
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>

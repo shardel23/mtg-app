@@ -34,7 +34,7 @@ function SearchResultsView({
         <CardGrid
           cards={results}
           cardsPerRow={5}
-          viewMode="edit"
+          viewMode={isSearch ? "view" : "edit"}
           isCardDeleteable={false}
         />
       </div>

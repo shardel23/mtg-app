@@ -57,12 +57,13 @@ export const transformCardsFromDB = (
 export const transformCardsFromAPI = (cards: Scry.Card[]): CardData[] => {
   return cards.map((card) => ({
     id: card.id,
-    numCollected: 0,
+    numCollected: 1,
+    isCollected: true,
     name: card.name,
     image:
       card.image_uris?.normal ?? card.card_faces[0].image_uris?.normal ?? "",
     collectorNumber: card.collector_number,
-    setCode: "",
+    setCode: card.set,
     rarity: card.rarity,
     colors: getAPICardColors(card),
     manaCost: card.mana_cost,
