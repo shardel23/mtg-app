@@ -1,5 +1,4 @@
 import { searchCardFromAPI } from "@/actions/mtgActions";
-import RedirectIfNotLoggedIn from "@/components/redirect";
 import SearchResultsView from "../../../components/SearchResultsView";
 
 export default async function SearchResultsPage({
@@ -10,7 +9,6 @@ export default async function SearchResultsPage({
   if (params.q.length < 3) {
     return (
       <>
-        <RedirectIfNotLoggedIn />
         <div className="text-center">
           Search query must be at least 3 characters long
         </div>
@@ -21,7 +19,6 @@ export default async function SearchResultsPage({
   const cards = await searchCardFromAPI(searchQuery);
   return (
     <>
-      <RedirectIfNotLoggedIn />
       <SearchResultsView results={cards} query={searchQuery} />
     </>
   );
