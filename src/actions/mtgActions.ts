@@ -128,24 +128,29 @@ async function createAlbum(
   });
   logWithTimestamp("Album " + album.name + " created");
 
-  const isCardDetailsInDB = await prisma.cardDetails.findFirst({
+  const cardDeatilsAlreadyInDB = await prisma.cardDetails.findMany({
     where: {
-      id: cardsToAdd[0].id,
+      set_id: set.id,
     },
     select: {
       id: true,
     },
   });
+  const cardDetailsIdsAlreadyInDBSet = new Set(
+    cardDeatilsAlreadyInDB.map((c) => c.id),
+  );
 
-  if (!isCardDetailsInDB) {
-    for (let i = 0; i < cardsToAdd.length; i++) {
-      let card = cardsToAdd[i];
-      await DB.upsertCardDetails(card, {
-        setCode: set.code,
-        setIconSvgUri: set.icon_svg_uri,
-      });
-      logWithTimestamp("Card " + card.name + " created");
+  for (let i = 0; i < cardsToAdd.length; i++) {
+    let card = cardsToAdd[i];
+    if (cardDetailsIdsAlreadyInDBSet.has(card.id)) {
+      logWithTimestamp("CardDetails of " + card.name + " already exists in DB");
+      continue;
     }
+    await DB.upsertCardDetails(card, {
+      setCode: set.code,
+      setIconSvgUri: set.icon_svg_uri,
+    });
+    logWithTimestamp("CardDetails of " + card.name + " created");
   }
 
   await prisma.card.createMany({
