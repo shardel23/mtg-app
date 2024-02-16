@@ -498,6 +498,7 @@ const albumToStats = (
               .concat(c.CardDetails.card_faces[1].colors)
               .filter((color, index, array) => array.indexOf(color) === index)
           : c.CardDetails.colors,
+      price: c.CardDetails.price_usd ?? 0,
     })),
   );
   const stats = {
@@ -543,11 +544,15 @@ const albumToStats = (
         ...emptyStats,
       },
     },
+    value: 0,
   };
   cardsMap.forEach((card) => {
     const isCollected = card.some((ver) => ver.isCollected);
     stats.total.collected += isCollected ? 1 : 0;
     stats.total.missing += isCollected ? 0 : 1;
+    card.forEach((ver) => {
+      stats.value += ver.isCollected ? ver.price : 0;
+    });
     switch (card[0].rarity) {
       case "common":
         stats.rarity.common.total += 1;
@@ -609,6 +614,7 @@ const albumToStats = (
       }
     }
   });
+  stats.value = Math.round(stats.value * 100) / 100;
   return stats;
 };
 

@@ -629,6 +629,7 @@ export const getAlbumsOfUserWithCollectionStats = async (
                   colors: true,
                 },
               },
+              price_usd: true,
             },
           },
         },
