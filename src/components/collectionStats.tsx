@@ -186,9 +186,14 @@ const CollectionStatsSection: React.FC<CollectionStatsSectionProps> = ({
                         : percentage.toPrecision(2)}
                       % Complete
                     </p>
-                    <p>${album.value}</p>
+                    <p className="text-sm">${album.value}</p>
                   </div>
                 </>
+              )}
+              {!isSetAlbum && (
+                <div className="flex justify-end items-center">
+                  <p className="text-sm">${album.value}</p>
+                </div>
               )}
             </div>
           );
