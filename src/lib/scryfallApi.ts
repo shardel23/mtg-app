@@ -55,3 +55,14 @@ export async function getCardsOfSet(setIdentifier: {
 export async function getCard(cardId: string): Promise<Scry.Card> {
   return await Scry.Cards.byId(cardId);
 }
+
+export async function getCardsPrices(cardIds: string[]) {
+  if (cardIds.length === 0) return [];
+  const collection = cardIds.map((cardId) => Scry.CardIdentifier.byId(cardId));
+  const apiResponse = await Scry.Cards.collection(...collection).waitForAll();
+  return apiResponse.map((card) => ({
+    cardId: card.id,
+    priceUsd: Number(card.prices.usd),
+    priceUsdFoil: Number(card.prices.usd_foil),
+  }));
+}
