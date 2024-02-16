@@ -687,3 +687,26 @@ export async function getOwnedCards(userId: string, collection: string) {
     },
   });
 }
+
+export async function getAllCardDetails() {
+  return await prisma.cardDetails.findMany();
+}
+
+export async function setCardPrices(
+  prices: { cardId: string; priceUsd: number; priceUsdFoil: number }[],
+) {
+  const currentTime = new Date();
+  const dbActions = prices.map((price) =>
+    prisma.cardDetails.update({
+      where: {
+        id: price.cardId,
+      },
+      data: {
+        price_usd: price.priceUsd,
+        price_usd_foil: price.priceUsdFoil,
+        price_date: currentTime,
+      },
+    }),
+  );
+  await prisma.$transaction(dbActions);
+}
