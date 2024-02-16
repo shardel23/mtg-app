@@ -179,12 +179,15 @@ const CollectionStatsSection: React.FC<CollectionStatsSectionProps> = ({
                       ></div>
                     </div>
                   </div>
-                  <p className="text-sm">
-                    {percentage === 100
-                      ? percentage
-                      : percentage.toPrecision(2)}
-                    % Complete
-                  </p>
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm">
+                      {percentage === 100
+                        ? percentage
+                        : percentage.toPrecision(2)}
+                      % Complete
+                    </p>
+                    <p>${album.value}</p>
+                  </div>
                 </>
               )}
             </div>

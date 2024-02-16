@@ -78,6 +78,7 @@ export type AlbumStats = {
     multicolor: CollectedMissingStats;
     colorless: CollectedMissingStats;
   };
+  value: number;
 };
 
 export type CollectionStats = {
