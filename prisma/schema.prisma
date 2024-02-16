@@ -103,6 +103,9 @@ model CardDetails {
   variation_of        String?
   security_stamp      String?
   watermark           String?
+  price_usd           Float?
+  price_usd_foil      Float?
+  price_date          DateTime?
   Card                Card[]
 }
 
