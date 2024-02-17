@@ -1,9 +1,14 @@
 import { withAuth } from "next-auth/middleware";
 import { NextRequest } from "next/server";
 
+const whitelist = ["/api/cron"];
+
 const authMiddleware = withAuth((req: NextRequest) => {}, {
   callbacks: {
-    authorized: ({ req: { cookies } }) => {
+    authorized: ({ req: { cookies, nextUrl } }) => {
+      if (whitelist.includes(nextUrl.pathname)) {
+        return true;
+      }
       const sessionToken = cookies.get(
         process.env.NODE_ENV === "production"
           ? "__Secure-next-auth.session-token"
