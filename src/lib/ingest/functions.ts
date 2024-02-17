@@ -19,12 +19,24 @@ export const fetchPrices = inngest.createFunction(
       const cardDetails = await DB.getAllCardDetails();
       return cardDetails.map((card) => card.id);
     });
-    const prices = await step.run("Get Cards Prices", async () => {
-      return await API.getCardsPrices(cardIds);
-    });
-    await step.run("Set Card Prices", async () => {
-      return await DB.setCardPrices(prices);
-    });
-    return { event, body: prices };
+    const chunkSize = 75;
+    const chunks: string[][] = [];
+    for (let i = 0; i < cardIds.length; i += chunkSize) {
+      chunks.push(cardIds.slice(i, i + chunkSize));
+    }
+    const numOfChunks = chunks.length;
+    for (let i = 1; i <= numOfChunks; i++) {
+      const prices = await step.run(
+        `Get Cards Prices ${i}/${numOfChunks}`,
+        async () => {
+          const pricesResponse = await API.getCardsPrices(chunks[i - 1]);
+          return pricesResponse;
+        },
+      );
+      await step.run(`Set Card Prices ${i}/${numOfChunks}`, async () => {
+        return await DB.setCardPrices(prices);
+      });
+    }
+    return { event, body: { status: "success" } };
   },
 );
