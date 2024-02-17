@@ -1,7 +1,12 @@
 import { withAuth } from "next-auth/middleware";
 import { NextRequest } from "next/server";
 
-const whitelist = ["/api/cron"];
+const whitelist = [
+  "/api/cron",
+  "/api/inngest",
+  "/.netlify/functions/inngest",
+  "/.redwood/functions/inngest",
+];
 
 const authMiddleware = withAuth((req: NextRequest) => {}, {
   callbacks: {
