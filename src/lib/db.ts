@@ -362,7 +362,7 @@ export const createCardsDetails = async (cardsToAdd: Card[], set: Set) => {
           printed_text: face.printed_text,
           printed_type_line: face.printed_type_line,
           toughness: face.toughness,
-          type_line: face.type_line,
+          type_line: face.type_line ?? "",
         });
       });
     }
@@ -434,7 +434,7 @@ export const upsertCardDetails = async (
                 printed_text: face.printed_text,
                 printed_type_line: face.printed_type_line,
                 toughness: face.toughness,
-                type_line: face.type_line,
+                type_line: face.type_line ?? "",
               }))
             : undefined,
       },

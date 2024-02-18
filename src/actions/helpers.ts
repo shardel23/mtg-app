@@ -75,7 +75,7 @@ export const transformCardsFromAPI = (cards: Scry.Card[]): CardData[] => {
       image: face.image_uris?.normal ?? "",
       manaCost: face.mana_cost,
       cmc: getCardCMC(face.mana_cost),
-      types: face.type_line.split(" ").map((type) => type.toLowerCase()),
+      types: face.type_line?.split(" ").map((type) => type.toLowerCase()) ?? [],
     })),
     priceUsd: Number(card.prices?.usd),
   }));
