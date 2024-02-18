@@ -1,6 +1,7 @@
 import Header from "@/components/header";
 import { Sidebar } from "@/components/sidebar";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth/next";
 import { AxiomWebVitals } from "next-axiom";
@@ -35,6 +36,7 @@ export default async function RootLayout({
               <div className="w-full px-4 py-8 md:px-8 ">
                 {children}
                 <Analytics />
+                <SpeedInsights />
               </div>
             </div>
           </div>
@@ -43,6 +45,7 @@ export default async function RootLayout({
           <div className="flex h-screen items-center justify-center">
             {children}
             <Analytics />
+            <SpeedInsights />
           </div>
         )}
       </body>
