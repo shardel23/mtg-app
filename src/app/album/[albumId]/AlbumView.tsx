@@ -44,8 +44,12 @@ function AlbumView({
     return filteredCards;
   }, [cards, filters]);
 
-  const [cardsToDisplay, setSortingMethod, setSortingDirection] =
-    useCardSorting(filteredCards);
+  const [
+    cardsToDisplay,
+    setSortingMethod,
+    setSortingDirection,
+    sortingDirection,
+  ] = useCardSorting(filteredCards);
 
   const collectedCardsCount = useMemo(() => {
     return Array.from(cards.keys()).filter((cardName) => {
@@ -85,6 +89,7 @@ function AlbumView({
             <Sorting
               setSortingMethod={setSortingMethod}
               setSortingDirection={setSortingDirection}
+              sortingDirection={sortingDirection}
             />
           </div>
           {Array.from(filters.keys()).length !== 0 && (

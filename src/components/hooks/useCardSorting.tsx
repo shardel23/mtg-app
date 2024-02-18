@@ -42,5 +42,10 @@ export const useCardSorting = (cards: Map<string, CardData[]>) => {
     return sortedCards;
   }, [cards, sortingMethod, sortingDirection]);
 
-  return [sortedCards, setSortingMethod, setSortingDirection] as const;
+  return [
+    sortedCards,
+    setSortingMethod,
+    setSortingDirection,
+    sortingDirection,
+  ] as const;
 };
