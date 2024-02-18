@@ -4,11 +4,13 @@ import AddCardDialog from "@/components/addCardDialog";
 import CardGrid from "@/components/cardGrid";
 import DeleteAlbumDialog from "@/components/deleteAlbumDialog";
 import Filters, { Filter } from "@/components/filters";
+import { useCardSorting } from "@/components/hooks/useCardSorting";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CardData, ViewMode } from "@/types/types";
 import { X } from "lucide-react";
 import { useMemo, useState } from "react";
+import Sorting from "./Sorting";
 
 function AlbumView({
   album,
@@ -42,6 +44,8 @@ function AlbumView({
     return filteredCards;
   }, [cards, filters]);
 
+  const [cardsToDisplay, _, setSortingMethod] = useCardSorting(filteredCards);
+
   const collectedCardsCount = useMemo(() => {
     return Array.from(cards.keys()).filter((cardName) => {
       const cardVersions = cards.get(cardName)!;
@@ -67,14 +71,17 @@ function AlbumView({
         {isEditMode && <DeleteAlbumDialog albumId={album.id} />}
       </div>
       <div className="flex justify-between">
-        <div className="flex flex-col gap-y-2">
-          <div className="flex gap-x-2">
-            <Filters filters={filters} setFilters={setFilters} />
-            {filters.size !== 0 && (
-              <Button onClick={() => setFilters(new Map())}>
-                Clear filters
-              </Button>
-            )}
+        <div className="flex flex-col gap-y-4">
+          <div className="flex gap-x-8 items-center">
+            <div className="flex gap-x-2 items-center">
+              <Filters filters={filters} setFilters={setFilters} />
+              {filters.size !== 0 && (
+                <Button onClick={() => setFilters(new Map())}>
+                  Clear filters
+                </Button>
+              )}
+            </div>
+            <Sorting setSortingMethod={setSortingMethod} />
           </div>
           {Array.from(filters.keys()).length !== 0 && (
             <div className="flex items-center gap-x-2">
@@ -125,7 +132,7 @@ function AlbumView({
         </div>
       </div>
       <CardGrid
-        cards={filteredCards}
+        cards={cardsToDisplay}
         cardsPerRow={cardsPerRow}
         viewMode={viewMode}
         isCardDeleteable={true}
