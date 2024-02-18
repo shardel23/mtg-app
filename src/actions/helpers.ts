@@ -50,7 +50,7 @@ export const transformCardsFromDB = (
       cmc: getCardCMC(face.mana_cost),
       types: face.type_line.split(" ").map((type) => type.toLowerCase()),
     })),
-    price: null,
+    priceUsd: card.CardDetails.price_usd ?? 0,
   }));
 };
 
@@ -77,7 +77,7 @@ export const transformCardsFromAPI = (cards: Scry.Card[]): CardData[] => {
       cmc: getCardCMC(face.mana_cost),
       types: face.type_line.split(" ").map((type) => type.toLowerCase()),
     })),
-    price: null,
+    priceUsd: Number(card.prices?.usd),
   }));
 };
 
