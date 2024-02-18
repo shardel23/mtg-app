@@ -142,6 +142,9 @@ devDependencies:
   dotenv:
     specifier: ^16.4.4
     version: 16.4.4
+  prettier:
+    specifier: ^3.2.5
+    version: 3.2.5
   prettier-plugin-organize-imports:
     specifier: ^3.2.4
     version: 3.2.4(prettier@3.2.5)(typescript@5.1.6)
