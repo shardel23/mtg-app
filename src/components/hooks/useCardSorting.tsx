@@ -11,7 +11,7 @@ const rarityPriority = {
 export const SORTINGS = {
   "Collector Number": (a: CardData, b: CardData) =>
     Number(a.collectorNumber) - Number(b.collectorNumber),
-  Price: (a: CardData, b: CardData) => b.priceUsd - a.priceUsd,
+  Price: (a: CardData, b: CardData) => a.priceUsd - b.priceUsd,
   Name: (a: CardData, b: CardData) => a.name.localeCompare(b.name),
   Rarity: (a: CardData, b: CardData) =>
     rarityPriority[a.rarity as keyof typeof rarityPriority] -
@@ -21,6 +21,9 @@ export const SORTINGS = {
 export const useCardSorting = (cards: Map<string, CardData[]>) => {
   const [sortingMethod, setSortingMethod] =
     useState<keyof typeof SORTINGS>("Collector Number");
+  const [sortingDirection, setSortingDirection] = useState<"asc" | "desc">(
+    "asc",
+  );
 
   const sortedCards = useMemo(() => {
     const sortedCards = new Map<string, CardData[]>();
@@ -30,11 +33,14 @@ export const useCardSorting = (cards: Map<string, CardData[]>) => {
       const cardB = cards.get(b)![0];
       return SORTINGS[sortingMethod](cardA, cardB);
     });
+    if (sortingDirection === "desc") {
+      cardNames.reverse();
+    }
     cardNames.forEach((cardName) => {
       sortedCards.set(cardName, cards.get(cardName)!);
     });
     return sortedCards;
-  }, [cards, sortingMethod]);
+  }, [cards, sortingMethod, sortingDirection]);
 
-  return [sortedCards, sortingMethod, setSortingMethod] as const;
+  return [sortedCards, setSortingMethod, setSortingDirection] as const;
 };
