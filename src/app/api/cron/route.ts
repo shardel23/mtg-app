@@ -1,9 +1,16 @@
 import { inngest } from "@/lib/ingest/client";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authHeader = request.headers.get("authorization");
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new NextResponse("Unauthorized", {
+      status: 401,
+    });
+  }
+
   try {
     await inngest.send({
       name: "fetch.prices",
