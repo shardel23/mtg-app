@@ -6,6 +6,41 @@ import { Card, Set } from "scryfall-sdk";
 import { prisma } from "./prisma";
 import { endsWithNumber } from "./utils";
 
+const cardsSelectFields = {
+  id: true,
+  numCollected: true,
+  albumId: true,
+  CardDetails: {
+    select: {
+      name: true,
+      collectorNumber: true,
+      normalImageURI: true,
+      set: true,
+      setIconSvgUri: true,
+      rarity: true,
+      colors: true,
+      mana_cost: true,
+      cmc: true,
+      layout: true,
+      type_line: true,
+      card_faces: {
+        select: {
+          name: true,
+          faceNumber: true,
+          normalImageURI: true,
+          colors: true,
+          mana_cost: true,
+          type_line: true,
+        },
+        orderBy: {
+          faceNumber: "asc",
+        },
+      },
+      price_usd: true,
+    },
+  },
+} as const;
+
 export const getAlbumOfUserWithCards = async (
   userId: string,
   albumId: number,
@@ -61,40 +96,7 @@ export const getAlbumOfUserWithCards = async (
       name: true,
       setId: true,
       cards: {
-        select: {
-          id: true,
-          numCollected: true,
-          albumId: true,
-          CardDetails: {
-            select: {
-              name: true,
-              collectorNumber: true,
-              normalImageURI: true,
-              set: true,
-              setIconSvgUri: true,
-              rarity: true,
-              colors: true,
-              mana_cost: true,
-              cmc: true,
-              layout: true,
-              type_line: true,
-              card_faces: {
-                select: {
-                  name: true,
-                  faceNumber: true,
-                  normalImageURI: true,
-                  colors: true,
-                  mana_cost: true,
-                  type_line: true,
-                },
-                orderBy: {
-                  faceNumber: "asc",
-                },
-              },
-              price_usd: true,
-            },
-          },
-        },
+        select: cardsSelectFields,
         orderBy,
       },
     },
@@ -123,40 +125,7 @@ export const searchCardsInCollection = async (
         },
       },
     },
-    select: {
-      id: true,
-      numCollected: true,
-      albumId: true,
-      CardDetails: {
-        select: {
-          name: true,
-          collectorNumber: true,
-          normalImageURI: true,
-          set: true,
-          setIconSvgUri: true,
-          rarity: true,
-          colors: true,
-          mana_cost: true,
-          cmc: true,
-          layout: true,
-          type_line: true,
-          card_faces: {
-            select: {
-              name: true,
-              faceNumber: true,
-              normalImageURI: true,
-              colors: true,
-              mana_cost: true,
-              type_line: true,
-            },
-            orderBy: {
-              faceNumber: "asc",
-            },
-          },
-          price_usd: true,
-        },
-      },
-    },
+    select: cardsSelectFields,
   });
 };
 
@@ -178,40 +147,7 @@ export const getCardsAvailableForTrade = async (
         },
       },
     },
-    select: {
-      id: true,
-      numCollected: true,
-      albumId: true,
-      CardDetails: {
-        select: {
-          name: true,
-          collectorNumber: true,
-          normalImageURI: true,
-          set: true,
-          setIconSvgUri: true,
-          rarity: true,
-          colors: true,
-          mana_cost: true,
-          cmc: true,
-          layout: true,
-          type_line: true,
-          card_faces: {
-            select: {
-              name: true,
-              faceNumber: true,
-              normalImageURI: true,
-              colors: true,
-              mana_cost: true,
-              type_line: true,
-            },
-            orderBy: {
-              faceNumber: "asc",
-            },
-          },
-          price_usd: true,
-        },
-      },
-    },
+    select: cardsSelectFields,
     orderBy: [
       { CardDetails: { colors: "desc" } },
       { CardDetails: { cmc: "asc" } },
@@ -560,38 +496,7 @@ export const getAlbumOfUsername = async (username: string, albumId: number) => {
       id: true,
       name: true,
       cards: {
-        select: {
-          id: true,
-          numCollected: true,
-          CardDetails: {
-            select: {
-              name: true,
-              collectorNumber: true,
-              normalImageURI: true,
-              set: true,
-              setIconSvgUri: true,
-              rarity: true,
-              colors: true,
-              mana_cost: true,
-              cmc: true,
-              layout: true,
-              type_line: true,
-              card_faces: {
-                select: {
-                  name: true,
-                  faceNumber: true,
-                  normalImageURI: true,
-                  colors: true,
-                  mana_cost: true,
-                  type_line: true,
-                },
-                orderBy: {
-                  faceNumber: "asc",
-                },
-              },
-            },
-          },
-        },
+        select: cardsSelectFields,
         orderBy: {
           CardDetails: {
             collectorNumber: "asc",
@@ -693,7 +598,11 @@ export async function getOwnedCards(userId: string, collection: string) {
 }
 
 export async function getAllCardDetails() {
-  return await prisma.cardDetails.findMany();
+  return await prisma.cardDetails.findMany({
+    select: {
+      id: true,
+    },
+  });
 }
 
 export async function setCardPrices(
