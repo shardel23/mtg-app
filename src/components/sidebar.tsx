@@ -1,5 +1,5 @@
 import { getAllAlbums, getAllSets } from "@/actions/mtgActions";
-import Link from "next/link";
+import MyLink from "./MyLink";
 import CreateNewAlbumDialog from "./createNewAlbumDialog";
 import ExportCollectionButton from "./exportCollectionButton";
 import ImportCollectionButton from "./importCollectionButton";
@@ -19,19 +19,18 @@ export async function Sidebar() {
           <div className="flex flex-row md:flex-col md:space-y-1">
             {albums.map((album) => (
               <Button
-                asChild
                 key={album.id}
                 variant="ghost"
                 className="w-full justify-start"
               >
-                <Link href={`/album/${album.id}`}>{album.name}</Link>
+                <MyLink displayText={album.name} href={`/album/${album.id}`} />
               </Button>
             ))}
           </div>
         </SidebarSection>
         <SidebarSection title="Views">
-          <Button asChild variant="ghost" className="w-full justify-start">
-            <Link href={`/trades`}>Tradeable Cards</Link>
+          <Button variant="ghost" className="w-full justify-start">
+            <MyLink displayText="Tradeable Cards" href={`/trades`} />
           </Button>
         </SidebarSection>
         <SidebarSection title="Options">
