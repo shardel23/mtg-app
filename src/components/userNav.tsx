@@ -19,7 +19,11 @@ export function UserNav({ user }: { user: User }) {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-10 w-10">
-            <AvatarImage src={user.image!} alt={user.name!} />
+            <AvatarImage
+              src={user.image!}
+              alt={user.name!}
+              referrerPolicy="no-referrer"
+            />
             <AvatarFallback>MTG</AvatarFallback>
           </Avatar>
         </Button>
