@@ -22,7 +22,7 @@ function CardSearch() {
     <Input
       data-testid="card-search-input"
       value={searchString}
-      className="w-1/2 md:w-72"
+      className="md:w-72"
       placeholder="Search..."
       autoFocus
       onChange={handleChange}
