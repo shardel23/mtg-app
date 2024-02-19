@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AlbumData, SetData } from "@/types/types";
 import { User } from "next-auth";
-import MyLink from "./MyLink";
+import Link from "next/link";
 import CreateNewAlbumDialog from "./createNewAlbumDialog";
 import Hamburger from "./icons/hamburger";
 import SignOut from "./signOut";
@@ -46,8 +46,14 @@ function HamburgerMenu({
         <DropdownMenuGroup>
           <ScrollArea viewportClassName="max-h-48">
             {albums.map((album) => (
-              <DropdownMenuItem key={album.id} className="w-full justify-start">
-                <MyLink displayText={album.name} href={`/album/${album.id}`} />
+              <DropdownMenuItem
+                asChild
+                key={album.id}
+                className="w-full justify-start"
+              >
+                <Link href={`/album/${album.id}`} prefetch={false}>
+                  {album.name}
+                </Link>
               </DropdownMenuItem>
             ))}
           </ScrollArea>
