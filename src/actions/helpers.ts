@@ -1,7 +1,10 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import * as DB from "@/lib/db";
+import { prisma } from "@/lib/prisma";
 import { hashEncode } from "@/lib/utils";
 import { CardData, ManaCost } from "@/types/types";
 import { Prisma } from "@prisma/client";
+import { getServerSession } from "next-auth";
 import { Logger } from "next-axiom";
 import { LogLevel } from "next-axiom/dist/logger";
 import * as Scry from "scryfall-sdk";
@@ -205,4 +208,32 @@ export function compareCards(
     }
   }
   return 0;
+}
+
+export async function getUserIdFromSession(): Promise<string | null> {
+  const session = await getServerSession(authOptions);
+  const user = session?.user;
+  if (user == null) {
+    return null;
+  }
+  return user.id;
+}
+
+export async function getUserAndCollection() {
+  const userId = await getUserIdFromSession();
+  const collection = await prisma.collection.findFirst({
+    where: {
+      userId: userId,
+      name: await getCollection(),
+    },
+    select: {
+      id: true,
+      name: true,
+    },
+  });
+  return { userId, collection };
+}
+
+export async function getCollection() {
+  return "Default";
 }

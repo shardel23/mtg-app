@@ -1,6 +1,6 @@
 "use client";
 
-import { createAlbumsFromCSV } from "@/actions/mtgActions";
+import { createAlbumsFromCSV } from "@/actions/create/createAlbumsFromCsvAction";
 import { csvFileToArray } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import {

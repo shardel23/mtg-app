@@ -1,6 +1,6 @@
 "use client";
 
-import { changeUsername } from "@/actions/mtgActions";
+import { changeUsername } from "@/actions/update/changeUsernameAction";
 import { Loader2 } from "lucide-react";
 import { User } from "next-auth";
 import { useState, useTransition } from "react";

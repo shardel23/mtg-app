@@ -1,4 +1,4 @@
-import { searchCardFromAPI } from "@/actions/mtgActions";
+import { searchCardFromAPI } from "@/actions/get/searchCardFromAPIAction";
 import SearchResultsView from "../../../components/SearchResultsView";
 
 export default async function SearchResultsPage({

@@ -1,6 +1,6 @@
 "use client";
 
-import { addCardToAlbum } from "@/actions/mtgActions";
+import { addCardToAlbum } from "@/actions/update/addCardToAlbumAction";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState, useTransition } from "react";

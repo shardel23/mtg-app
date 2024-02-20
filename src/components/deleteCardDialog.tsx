@@ -1,4 +1,4 @@
-import { deleteCardFromAlbum } from "@/actions/mtgActions";
+import { deleteCardFromAlbum } from "@/actions/delete/deleteCardFromAlbumAction";
 import { Loader2 } from "lucide-react";
 import { useState, useTransition } from "react";
 import Trash from "./icons/TrashIcon";

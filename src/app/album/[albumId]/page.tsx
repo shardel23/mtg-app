@@ -1,4 +1,4 @@
-import { getAlbum } from "@/actions/mtgActions";
+import { getAlbum } from "@/actions/get/getAlbumAction";
 import AlbumView from "./AlbumView";
 
 export default async function AlbumPage({

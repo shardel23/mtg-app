@@ -1,6 +1,6 @@
 "use client";
 
-import { exportCollectionToCSV } from "@/actions/csvActions";
+import { exportCollectionToCSV } from "@/actions/others/exportCollectionToCsvAction";
 import { csvConfig } from "@/lib/csv";
 import { download } from "export-to-csv";
 import { useTransition } from "react";
