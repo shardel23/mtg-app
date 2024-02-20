@@ -2,8 +2,8 @@
 
 import { Dispatch, SetStateAction } from "react";
 import { Color } from "scryfall-sdk";
-import { Filter } from "../filters";
-import { MultiSelect } from "./multiSelect";
+import { Filter } from "../Filters";
+import { MultiSelect } from "./MultiSelect";
 
 const options = [
   {

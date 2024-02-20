@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import CardSearchGridView from "./typeahead/cardSearchGridView";
+import CardSearchGridView from "./typeahead/CardSearchGridView";
 import { Button } from "./ui/button";
 import {
   Dialog,

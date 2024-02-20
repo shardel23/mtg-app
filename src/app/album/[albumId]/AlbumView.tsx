@@ -1,9 +1,9 @@
 "use client";
 
-import AddCardDialog from "@/components/addCardDialog";
-import CardGrid from "@/components/cardGrid";
-import DeleteAlbumDialog from "@/components/deleteAlbumDialog";
-import Filters, { Filter } from "@/components/filters";
+import AddCardDialog from "@/components/AddCardDialog";
+import CardGrid from "@/components/CardGrid";
+import DeleteAlbumDialog from "@/components/DeleteAlbumDialog";
+import Filters, { Filter } from "@/components/Filters";
 import { useCardSorting } from "@/components/hooks/useCardSorting";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

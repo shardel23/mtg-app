@@ -1,6 +1,6 @@
 import { SORTINGS } from "@/components/hooks/useCardSorting";
-import ArrowDown from "@/components/icons/arrow-down";
-import ArrowUp from "@/components/icons/arrow-up";
+import ArrowDown from "@/components/icons/ArrowDownIcon";
+import ArrowUp from "@/components/icons/ArrowUpIcon";
 import {
   Select,
   SelectContent,

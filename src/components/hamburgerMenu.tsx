@@ -13,11 +13,11 @@ import {
 import { AlbumData, SetData } from "@/types/types";
 import { User } from "next-auth";
 import Link from "next/link";
-import CreateNewAlbumDialog from "./createNewAlbumDialog";
-import Hamburger from "./icons/hamburger";
-import SignOut from "./signOut";
+import CreateNewAlbumDialog from "./CreateNewAlbumDialog";
+import SignOut from "./SignOut";
+import Username from "./Username";
+import Hamburger from "./icons/HamburgerIcon";
 import { ScrollArea } from "./ui/scroll-area";
-import Username from "./username";
 
 function HamburgerMenu({
   user,

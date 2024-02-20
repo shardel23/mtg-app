@@ -1,4 +1,4 @@
-import LoadingBlock from "./loadingBlock";
+import LoadingBlock from "./LoadingBlock";
 
 export default function LoadingGrid() {
   return (

@@ -1,8 +1,8 @@
 "use client";
 
 import { Dispatch, SetStateAction } from "react";
-import { Filter } from "../filters";
-import { MultiSelect } from "./multiSelect";
+import { Filter } from "../Filters";
+import { MultiSelect } from "./MultiSelect";
 
 const options = [
   {

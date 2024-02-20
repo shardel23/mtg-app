@@ -7,7 +7,7 @@ import {
   getProviders,
 } from "next-auth/react";
 import { useEffect, useState } from "react";
-import Provider from "./provider";
+import Provider from "./Provider";
 
 export default function SignIn() {
   const [providers, setProviders] = useState<Record<

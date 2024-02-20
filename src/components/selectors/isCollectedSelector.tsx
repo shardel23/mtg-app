@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { Filter } from "../filters";
+import { Filter } from "../Filters";
 import { Label } from "../ui/label";
 import {
   Select,

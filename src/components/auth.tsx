@@ -1,7 +1,7 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
-import { UserNav } from "./userNav";
+import { UserNav } from "./UserNav";
 
 export default async function Auth() {
   const session = await getServerSession(authOptions);

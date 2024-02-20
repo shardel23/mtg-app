@@ -2,9 +2,9 @@ import { getAllAlbums, getAllSets } from "@/actions/mtgActions";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import { getServerSession } from "next-auth/next";
 import Link from "next/link";
-import Auth from "./auth";
-import CardSearch from "./cardSearch";
-import HamburgerMenu from "./hamburgerMenu";
+import Auth from "./Auth";
+import CardSearch from "./CardSearch";
+import HamburgerMenu from "./HamburgerMenu";
 
 async function Header() {
   const sets = await getAllSets();

@@ -1,4 +1,4 @@
-import MidpageSpinner from "@/components/midpageSpinner";
+import MidpageSpinner from "@/components/MidpageSpinner";
 
 export default function HomePageLoading() {
   return <MidpageSpinner />;
