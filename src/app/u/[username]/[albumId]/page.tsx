@@ -1,4 +1,4 @@
-import { getAlbum } from "@/actions/mtgActions";
+import { getAlbum } from "@/actions/get/getAlbumAction";
 import AlbumView from "@/app/album/[albumId]/AlbumView";
 
 type PageParams = { username: string; albumId: string };

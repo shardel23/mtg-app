@@ -1,11 +1,11 @@
-import { getCardsAvailableForTrade } from "@/actions/mtgActions";
+import { getCardsAvailableForTrade } from "@/actions/get/getCardsAvailableForTradeAction";
 import SearchResultsView from "../../components/SearchResultsView";
 
 export default async function TradesPage() {
-  const cards = await getCardsAvailableForTrade();
+  const cardsForTrade = await getCardsAvailableForTrade();
   return (
     <>
-      <SearchResultsView results={cards} />
+      <SearchResultsView results={cardsForTrade} />
     </>
   );
 }

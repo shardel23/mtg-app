@@ -1,4 +1,4 @@
-import { deleteAlbum } from "@/actions/mtgActions";
+import { deleteAlbum } from "@/actions/delete/deleteAlbumAction";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";

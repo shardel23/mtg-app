@@ -1,6 +1,6 @@
 "use client";
 
-import { markCardIsCollected } from "@/actions/mtgActions";
+import { markCardAsCollected } from "@/actions/update/markCardAsCollectedAction";
 import { CardData, ViewMode } from "@/types/types";
 import Image from "next/image";
 import { useCallback, useState, useTransition } from "react";
@@ -83,7 +83,7 @@ function Card({
                     return newIsVersionCollected;
                   });
                   startTransition(() => {
-                    markCardIsCollected(
+                    markCardAsCollected(
                       card.albumId!,
                       card.id,
                       !isVersionCollected[cardVersionNumberToDisplay],

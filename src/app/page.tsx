@@ -1,4 +1,4 @@
-import { getCollectionStats } from "@/actions/mtgActions";
+import { getCollectionStats } from "@/actions/get/getCollectionStatsAction";
 import CollectionStats from "@/components/CollectionStats";
 
 export default async function Home() {

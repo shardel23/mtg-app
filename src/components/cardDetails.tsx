@@ -1,5 +1,5 @@
 import { isCardMultiFace } from "@/actions/helpers";
-import { updateAmountCollected } from "@/actions/mtgActions";
+import { updateAmountCollected } from "@/actions/update/updateAmountCollectedAction";
 import { CardData, ViewMode } from "@/types/types";
 import Image from "next/image";
 import React, { useState, useTransition } from "react";

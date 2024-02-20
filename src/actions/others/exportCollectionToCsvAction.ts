@@ -4,8 +4,7 @@ import { exportDataToCSV } from "@/lib/csv";
 import { prisma } from "@/lib/prisma";
 import { CsvOutput } from "export-to-csv";
 import { LogLevel } from "next-axiom/dist/logger";
-import { log } from "./helpers";
-import { getCollection, getUserIdFromSession } from "./mtgActions";
+import { getCollection, getUserIdFromSession, log } from "../helpers";
 
 export async function exportCollectionToCSV(): Promise<CsvOutput> {
   const userId = await getUserIdFromSession();

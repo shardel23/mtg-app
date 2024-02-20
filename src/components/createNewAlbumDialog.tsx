@@ -1,6 +1,7 @@
 "use client";
 
-import { createAlbumFromSetId, createEmptyAlbum } from "@/actions/mtgActions";
+import { createAlbumFromSetId } from "@/actions/create/createAlbumFromSetIdAction";
+import { createEmptyAlbum } from "@/actions/create/createEmptyAlbumAction";
 import { SetData } from "@/types/types";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -107,15 +108,6 @@ function CreateNewAlbumDialog({ sets }: { sets: Array<SetData> }) {
             </Button>
           </form>
         </div>
-        {/* <div>Or</div>
-        <CSVUploader
-          onUploadSuccess={(albumId: number) => {
-            setIsDialogOpen(false);
-            if (albumId !== -1) {
-              router.push(`/album/${albumId}`);
-            }
-          }}
-        /> */}
         <DialogFooter></DialogFooter>
       </DialogContent>
     </Dialog>

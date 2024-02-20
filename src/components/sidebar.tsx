@@ -1,4 +1,5 @@
-import { getAllAlbums, getAllSets } from "@/actions/mtgActions";
+import { getAllAlbums } from "@/actions/get/getAllAlbumsAction";
+import { getAllSets } from "@/actions/get/getAllSetsAction";
 import CreateNewAlbumDialog from "./CreateNewAlbumDialog";
 import ExportCollectionButton from "./ExportCollectionButton";
 import ImportCollectionButton from "./ImportCollectionButton";
