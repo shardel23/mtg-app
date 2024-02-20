@@ -2,6 +2,7 @@
 
 import { User } from "next-auth";
 import { signOut } from "next-auth/react";
+import Username from "./Username";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import {
@@ -11,7 +12,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import Username from "./username";
 
 export function UserNav({ user }: { user: User }) {
   return (

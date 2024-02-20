@@ -3,9 +3,9 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import * as Scry from "scryfall-sdk";
+import { useDebounce } from "../hooks/useDebounce";
 import { Command, CommandInput } from "../ui/command";
-import CardSearchCardDialog from "./cardSearchCardDialog";
-import { useDebounce } from "./useDebounce";
+import CardSearchCardDialog from "./CardSearchCardDialog";
 
 type Option = Record<"value" | "label", Scry.Card> & Record<string, string>;
 

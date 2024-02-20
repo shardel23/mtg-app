@@ -1,7 +1,7 @@
 import { deleteCardFromAlbum } from "@/actions/mtgActions";
 import { Loader2 } from "lucide-react";
 import { useState, useTransition } from "react";
-import Trash from "./icons/trash";
+import Trash from "./icons/TrashIcon";
 import { Button } from "./ui/button";
 import {
   Dialog,

@@ -4,9 +4,9 @@ import { markCardIsCollected } from "@/actions/mtgActions";
 import { CardData, ViewMode } from "@/types/types";
 import Image from "next/image";
 import { useCallback, useState, useTransition } from "react";
-import CardDetails from "./cardDetails";
-import ArrowRightLeft from "./icons/arrow-right-left";
-import CheckCircle from "./icons/check-circle";
+import CardDetails from "./CardDetails";
+import ArrowRightLeft from "./icons/ArrowRightLeftIcon";
+import CheckCircle from "./icons/CheckCircleIcon";
 
 function Card({
   cardVersions,

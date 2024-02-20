@@ -1,6 +1,6 @@
 "use client";
 
-import CardGrid from "@/components/cardGrid";
+import CardGrid from "@/components/CardGrid";
 import { CardData } from "@/types/types";
 
 function SearchResultsView({

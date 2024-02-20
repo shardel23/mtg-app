@@ -5,8 +5,8 @@ import { SetData } from "@/types/types";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import PlusCircle from "./icons/plus-circle";
-import SetSelector from "./selectors/setSelector";
+import PlusCircle from "./icons/PlusCircleIcon";
+import SetSelector from "./selectors/SetSelector";
 import { Button } from "./ui/button";
 import {
   Dialog,

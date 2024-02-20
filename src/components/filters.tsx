@@ -2,7 +2,7 @@
 
 import { CardData } from "@/types/types";
 import { Dispatch, SetStateAction } from "react";
-import FilterDialog from "./selectors/filterDialog";
+import FilterDialog from "./selectors/FilterDialog";
 
 export type Filter = {
   inputValues: string[];

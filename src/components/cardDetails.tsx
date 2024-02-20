@@ -3,10 +3,10 @@ import { updateAmountCollected } from "@/actions/mtgActions";
 import { CardData, ViewMode } from "@/types/types";
 import Image from "next/image";
 import React, { useState, useTransition } from "react";
-import DeleteCardDialog from "./deleteCardDialog";
-import ArrowUTurnRight from "./icons/arrow-uturn-right";
-import Minus from "./icons/minus";
-import Plus from "./icons/plus";
+import DeleteCardDialog from "./DeleteCardDialog";
+import ArrowUTurnRight from "./icons/ArrowUTurnRightIcon";
+import Minus from "./icons/MinusIcon";
+import Plus from "./icons/PlusIcon";
 import { Button } from "./ui/button";
 import {
   Dialog,

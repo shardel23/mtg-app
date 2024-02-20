@@ -1,5 +1,5 @@
-import LoadingBlock from "@/components/loadingBlock";
-import LoadingGrid from "@/components/loadingGrid";
+import LoadingBlock from "@/components/LoadingBlock";
+import LoadingGrid from "@/components/LoadingGrid";
 
 export default function SearchPageLoading() {
   return (

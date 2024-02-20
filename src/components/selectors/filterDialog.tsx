@@ -1,7 +1,7 @@
 "use client";
 
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Filter } from "../filters";
+import { Filter } from "../Filters";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -12,11 +12,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import ColorSelector from "./colorSelector";
-import IsCollectedSelector from "./isCollectedSelector";
-import ManaValueSelector from "./manaValueSelector";
-import RaritySelector from "./raritySelector";
-import TypeSelector from "./typeSelector";
+import ColorSelector from "./ColorSelector";
+import IsCollectedSelector from "./IsCollectedSelector";
+import ManaValueSelector from "./ManaValueSelector";
+import RaritySelector from "./RaritySelector";
+import TypeSelector from "./TypeSelector";
 
 const filterSelectors = [
   {

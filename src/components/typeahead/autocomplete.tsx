@@ -17,8 +17,8 @@ import {
 
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
+import { useDebounce } from "../hooks/useDebounce";
 import { Skeleton } from "../ui/skeleton";
-import { useDebounce } from "./useDebounce";
 
 export type Option = Record<"value" | "label", string> & Record<string, string>;
 

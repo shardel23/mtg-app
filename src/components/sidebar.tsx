@@ -1,8 +1,8 @@
 import { getAllAlbums, getAllSets } from "@/actions/mtgActions";
+import CreateNewAlbumDialog from "./CreateNewAlbumDialog";
+import ExportCollectionButton from "./ExportCollectionButton";
+import ImportCollectionButton from "./ImportCollectionButton";
 import MyLink from "./MyLink";
-import CreateNewAlbumDialog from "./createNewAlbumDialog";
-import ExportCollectionButton from "./exportCollectionButton";
-import ImportCollectionButton from "./importCollectionButton";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 

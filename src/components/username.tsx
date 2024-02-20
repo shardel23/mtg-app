@@ -4,7 +4,7 @@ import { changeUsername } from "@/actions/mtgActions";
 import { Loader2 } from "lucide-react";
 import { User } from "next-auth";
 import { useState, useTransition } from "react";
-import Pencil from "./icons/pencil";
+import Pencil from "./icons/PencilIcon";
 import { Button } from "./ui/button";
 import { DropdownMenuLabel } from "./ui/dropdown-menu";
 import { Input } from "./ui/input";
