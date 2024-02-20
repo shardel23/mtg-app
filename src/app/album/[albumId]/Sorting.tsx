@@ -1,6 +1,6 @@
-import { SORTINGS } from "@/components/hooks/useCardSorting";
-import ArrowDown from "@/components/icons/ArrowDownIcon";
-import ArrowUp from "@/components/icons/ArrowUpIcon";
+import { SORTINGS } from "@/temp/components/hooks/useCardSorting";
+import ArrowDown from "@/temp/components/icons/ArrowDownIcon";
+import ArrowUp from "@/temp/components/icons/ArrowUpIcon";
 import {
   Select,
   SelectContent,
@@ -8,7 +8,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/temp/components/ui/select";
 import { Dispatch, SetStateAction } from "react";
 
 type SortingDirection = "asc" | "desc";
