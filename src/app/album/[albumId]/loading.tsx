@@ -1,5 +1,5 @@
-import LoadingBlock from "@/components/LoadingBlock";
-import LoadingGrid from "@/components/LoadingGrid";
+import LoadingBlock from "@/temp/components/LoadingBlock";
+import LoadingGrid from "@/temp/components/LoadingGrid";
 
 export default function AlbumPageLoading() {
   return (

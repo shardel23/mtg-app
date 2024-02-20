@@ -1,5 +1,5 @@
-import Header from "@/components/Header";
-import { Sidebar } from "@/components/Sidebar";
+import Header from "@/temp/components/Header";
+import { Sidebar } from "@/temp/components/Sidebar";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";

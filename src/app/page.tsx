@@ -1,5 +1,5 @@
 import { getCollectionStats } from "@/actions/get/getCollectionStatsAction";
-import CollectionStats from "@/components/CollectionStats";
+import CollectionStats from "@/temp/components/CollectionStats";
 
 export default async function Home() {
   const collectionData = await getCollectionStats();

@@ -1,12 +1,12 @@
 "use client";
 
-import AddCardDialog from "@/components/AddCardDialog";
-import CardGrid from "@/components/CardGrid";
-import DeleteAlbumDialog from "@/components/DeleteAlbumDialog";
-import Filters, { Filter } from "@/components/Filters";
-import { useCardSorting } from "@/components/hooks/useCardSorting";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import AddCardDialog from "@/temp/components/AddCardDialog";
+import CardGrid from "@/temp/components/CardGrid";
+import DeleteAlbumDialog from "@/temp/components/DeleteAlbumDialog";
+import Filters, { Filter } from "@/temp/components/Filters";
+import { useCardSorting } from "@/temp/components/hooks/useCardSorting";
+import { Badge } from "@/temp/components/ui/badge";
+import { Button } from "@/temp/components/ui/button";
 import { CardData, ViewMode } from "@/types/types";
 import { X } from "lucide-react";
 import { useMemo, useState } from "react";
