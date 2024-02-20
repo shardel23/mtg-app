@@ -1,19 +1,19 @@
 import { cn } from "@/lib/utils";
 import * as React from "react";
 
-import { Badge } from "@/temp/components/ui/badge";
-import { Button } from "@/temp/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandItem,
-} from "@/temp/components/ui/command";
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/temp/components/ui/popover";
+} from "@/components/ui/popover";
 import { Check, ChevronsUpDown, X } from "lucide-react";
 import { Label } from "../ui/label";
 

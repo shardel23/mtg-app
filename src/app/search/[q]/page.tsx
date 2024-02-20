@@ -1,5 +1,5 @@
 import { searchCardFromAPI } from "@/actions/get/searchCardFromAPIAction";
-import SearchResultsView from "../../../temp/components/SearchResultsView";
+import SearchResultsView from "../../../components/SearchResultsView";
 
 export default async function SearchResultsPage({
   params,

@@ -5,7 +5,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/temp/components/ui/command";
+} from "@/components/ui/command";
 import { Command as CommandPrimitive } from "cmdk";
 import {
   useCallback,
