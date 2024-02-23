@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "test": "NODE_ENV=test next dev --port 3001",
     "build": "npx prisma migrate deploy && prisma generate && next build",
     "start": "next start",
