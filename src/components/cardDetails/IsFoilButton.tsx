@@ -27,8 +27,8 @@ export default function IsFoilButton({
       onClick={() => {
         startTransition(() => {
           setCardFoil(cardId, albumId, !isFoil);
-          setIsFoil((prev) => !prev);
         });
+        setIsFoil((prev) => !prev);
       }}
       disabled={!isCollected}
     >
