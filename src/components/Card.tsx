@@ -45,6 +45,7 @@ function Card({
 
   const [numCollected, setNumCollected] = useState<number>(card.numCollected);
   const [isFoil, setIsFoil] = useState<boolean>(card.isFoil);
+  const price = isFoil ? card.priceUsdFoil : card.priceUsd;
 
   return (
     <div className="rounded p-1 shadow-md">
@@ -108,6 +109,9 @@ function Card({
                 }}
               />
             )}
+            <div className="absolute bottom-0 left-0 rounded-full bg-black bg-opacity-50 px-1 py-0.5 text-xxs md:px-2 md:py-1 md:text-xs">
+              {`$${price !== 0 ? price : "--"}`}
+            </div>
           </div>
           <div className="flex items-center justify-center gap-x-1 pt-1 md:pt-2">
             <Image

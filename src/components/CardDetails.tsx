@@ -48,6 +48,7 @@ export default function CardDetails({
   const cardFaces = card.cardFaces || [];
   const isMultiFaced = isCardMultiFace(card);
   const isEditMode = viewMode === "edit";
+  const cardPrice = isFoil ? card.priceUsdFoil : card.priceUsd;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -82,7 +83,7 @@ export default function CardDetails({
                 <div className="absolute rounded-xl inset-0 bg-gradient-to-br from-red-500 via-yellow-500 to-green-500 opacity-40 mix-blend-screen"></div>
               )}
               <div className="absolute bottom-0 right-0 rounded-full bg-black bg-opacity-50 px-1 py-0.5 text-xxs md:px-2 md:py-1 md:text-xs">
-                {`$${card.priceUsd !== 0 ? card.priceUsd : "--"}`}
+                {`$${cardPrice !== 0 ? cardPrice : "--"}`}
               </div>
             </div>
             <div className="flex justify-center gap-x-4">
