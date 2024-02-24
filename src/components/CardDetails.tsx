@@ -61,6 +61,7 @@ export default function CardDetails({
                 albumId={card.albumId}
                 isFoil={isFoil}
                 setIsFoil={setIsFoil}
+                isCollected={amountCollected > 0}
               />
             )}
           </DialogTitle>
@@ -104,6 +105,7 @@ export default function CardDetails({
                 setAmountCollected={setAmountCollected}
                 onAmountCollectedChange={onAmountCollectedChange}
                 cardVersionIndex={cardVersionIndex}
+                setIsFoil={setIsFoil}
               />
             </div>
           </div>
@@ -133,6 +135,7 @@ const CardAmountCollectedSection = (props: {
   setAmountCollected: React.Dispatch<React.SetStateAction<number>>;
   onAmountCollectedChange: React.Dispatch<React.SetStateAction<boolean[]>>;
   cardVersionIndex: number;
+  setIsFoil: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [_, startTransition] = useTransition();
 
@@ -161,6 +164,9 @@ const CardAmountCollectedSection = (props: {
             return newIsVersionCollected;
           });
           props.setAmountCollected((curr) => Math.max(0, curr - 1));
+          if (props.amountCollected - 1 === 0) {
+            props.setIsFoil(false);
+          }
         }}
       >
         <Minus />

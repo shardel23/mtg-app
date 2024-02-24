@@ -33,6 +33,7 @@ export async function updateAmountCollected(
     },
     data: {
       numCollected: amount,
+      isFoil: amount === 0 ? false : undefined,
     },
   });
 }

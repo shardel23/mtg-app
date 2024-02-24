@@ -8,6 +8,7 @@ type IsFoilButtonProps = {
   albumId: string;
   isFoil: boolean;
   setIsFoil: React.Dispatch<React.SetStateAction<boolean>>;
+  isCollected: boolean;
 };
 
 export default function IsFoilButton({
@@ -15,6 +16,7 @@ export default function IsFoilButton({
   albumId,
   isFoil,
   setIsFoil,
+  isCollected,
 }: IsFoilButtonProps) {
   const [_, startTransition] = useTransition();
 
@@ -28,6 +30,7 @@ export default function IsFoilButton({
           setIsFoil((prev) => !prev);
         });
       }}
+      disabled={!isCollected}
     >
       <SparklesIcon
         className={isFoil ? "text-yellow-500 fill-yellow-500" : ""}
