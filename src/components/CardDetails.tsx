@@ -4,6 +4,7 @@ import { CardData, ViewMode } from "@/types/types";
 import Image from "next/image";
 import React, { useState, useTransition } from "react";
 import DeleteCardDialog from "./DeleteCardDialog";
+import IsFoilButton from "./cardDetails/IsFoilButton";
 import ArrowUTurnRight from "./icons/ArrowUTurnRightIcon";
 import Minus from "./icons/MinusIcon";
 import Plus from "./icons/PlusIcon";
@@ -27,6 +28,7 @@ export default function CardDetails({
   cardVersionIndex,
   viewMode,
   isCardDeleteable,
+  setIsFoil,
 }: {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -38,6 +40,7 @@ export default function CardDetails({
   cardVersionIndex: number;
   viewMode: ViewMode;
   isCardDeleteable?: boolean;
+  setIsFoil: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [cardFaceIndex, setCardFaceIndex] = useState<number>(0);
   const cardFaces = card.cardFaces || [];
@@ -50,6 +53,14 @@ export default function CardDetails({
         <DialogHeader>
           <DialogTitle className="flex justify-center">
             {isMultiFaced ? cardFaces[cardFaceIndex].name : card.name}
+            {card.albumId && (
+              <IsFoilButton
+                cardId={card.id}
+                albumId={card.albumId}
+                isFoil={card.isFoil}
+                setIsFoil={setIsFoil}
+              />
+            )}
           </DialogTitle>
         </DialogHeader>
         <div className="flex justify-center">

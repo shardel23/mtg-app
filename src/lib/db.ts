@@ -625,3 +625,20 @@ export async function setCardPrices(
   );
   await prisma.$transaction(dbActions);
 }
+export async function setCardFoil(
+  cardId: string,
+  albumId: number,
+  isFoil: boolean,
+) {
+  await prisma.card.update({
+    where: {
+      id_albumId: {
+        id: cardId,
+        albumId: albumId,
+      },
+    },
+    data: {
+      isFoil: isFoil,
+    },
+  });
+}
