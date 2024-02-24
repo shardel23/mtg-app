@@ -34,10 +34,11 @@ function Card({
   const [isCardDialogOpen, setIsCardDialogOpen] = useState(false);
 
   const changeCardVersion = useCallback(() => {
-    setCardVersionNumberToDisplay(
-      (currVersionNum) => (currVersionNum + 1) % cardVersions.length,
-    );
-  }, [cardVersions.length]);
+    const newVersionNum =
+      (cardVersionNumberToDisplay + 1) % cardVersions.length;
+    setCardVersionNumberToDisplay(newVersionNum);
+    setIsFoil(cardVersions[newVersionNum].isFoil);
+  }, [cardVersionNumberToDisplay, cardVersions]);
 
   const card = cardVersions[cardVersionNumberToDisplay];
   const isEditMode = viewMode === "edit";
