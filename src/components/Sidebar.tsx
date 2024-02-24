@@ -1,9 +1,9 @@
 import { getAllAlbums } from "@/actions/get/getAllAlbumsAction";
 import { getAllSets } from "@/actions/get/getAllSetsAction";
+import Link from "next/link";
 import CreateNewAlbumDialog from "./CreateNewAlbumDialog";
 import ExportCollectionButton from "./ExportCollectionButton";
 import ImportCollectionButton from "./ImportCollectionButton";
-import MyLink from "./MyLink";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 
@@ -20,18 +20,23 @@ export async function Sidebar() {
           <div className="flex flex-row md:flex-col md:space-y-1">
             {albums.map((album) => (
               <Button
+                asChild
                 key={album.id}
                 variant="ghost"
                 className="w-full justify-start"
               >
-                <MyLink displayText={album.name} href={`/album/${album.id}`} />
+                <Link href={`/album/${album.id}`} prefetch={false}>
+                  {album.name}
+                </Link>
               </Button>
             ))}
           </div>
         </SidebarSection>
         <SidebarSection title="Views">
           <Button variant="ghost" className="w-full justify-start">
-            <MyLink displayText="Tradeable Cards" href={`/trades`} />
+            <Link href={`/trades`} prefetch={false}>
+              Tradeable Cards
+            </Link>
           </Button>
         </SidebarSection>
         <SidebarSection title="Options">
