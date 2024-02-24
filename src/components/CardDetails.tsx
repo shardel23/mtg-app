@@ -4,6 +4,7 @@ import { CardData, ViewMode } from "@/types/types";
 import Image from "next/image";
 import React, { useState, useTransition } from "react";
 import DeleteCardDialog from "./DeleteCardDialog";
+import IsFoilButton from "./cardDetails/IsFoilButton";
 import ArrowUTurnRight from "./icons/ArrowUTurnRightIcon";
 import Minus from "./icons/MinusIcon";
 import Plus from "./icons/PlusIcon";
@@ -27,6 +28,8 @@ export default function CardDetails({
   cardVersionIndex,
   viewMode,
   isCardDeleteable,
+  isFoil,
+  setIsFoil,
 }: {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -38,6 +41,8 @@ export default function CardDetails({
   cardVersionIndex: number;
   viewMode: ViewMode;
   isCardDeleteable?: boolean;
+  isFoil: boolean;
+  setIsFoil: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [cardFaceIndex, setCardFaceIndex] = useState<number>(0);
   const cardFaces = card.cardFaces || [];
@@ -50,6 +55,15 @@ export default function CardDetails({
         <DialogHeader>
           <DialogTitle className="flex justify-center">
             {isMultiFaced ? cardFaces[cardFaceIndex].name : card.name}
+            {card.albumId && (
+              <IsFoilButton
+                cardId={card.id}
+                albumId={card.albumId}
+                isFoil={isFoil}
+                setIsFoil={setIsFoil}
+                isCollected={amountCollected > 0}
+              />
+            )}
           </DialogTitle>
         </DialogHeader>
         <div className="flex justify-center">
@@ -64,6 +78,9 @@ export default function CardDetails({
                 placeholder="blur"
                 blurDataURL="/assets/card-back.jpg"
               />
+              {isFoil && (
+                <div className="absolute rounded-xl inset-0 bg-gradient-to-br from-red-500 via-yellow-500 to-green-500 opacity-40 mix-blend-screen"></div>
+              )}
               <div className="absolute bottom-0 right-0 rounded-full bg-black bg-opacity-50 px-1 py-0.5 text-xxs md:px-2 md:py-1 md:text-xs">
                 {`$${card.priceUsd !== 0 ? card.priceUsd : "--"}`}
               </div>
@@ -88,6 +105,7 @@ export default function CardDetails({
                 setAmountCollected={setAmountCollected}
                 onAmountCollectedChange={onAmountCollectedChange}
                 cardVersionIndex={cardVersionIndex}
+                setIsFoil={setIsFoil}
               />
             </div>
           </div>
@@ -117,6 +135,7 @@ const CardAmountCollectedSection = (props: {
   setAmountCollected: React.Dispatch<React.SetStateAction<number>>;
   onAmountCollectedChange: React.Dispatch<React.SetStateAction<boolean[]>>;
   cardVersionIndex: number;
+  setIsFoil: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [_, startTransition] = useTransition();
 
@@ -145,6 +164,9 @@ const CardAmountCollectedSection = (props: {
             return newIsVersionCollected;
           });
           props.setAmountCollected((curr) => Math.max(0, curr - 1));
+          if (props.amountCollected - 1 === 0) {
+            props.setIsFoil(false);
+          }
         }}
       >
         <Minus />

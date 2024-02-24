@@ -34,15 +34,17 @@ function Card({
   const [isCardDialogOpen, setIsCardDialogOpen] = useState(false);
 
   const changeCardVersion = useCallback(() => {
-    setCardVersionNumberToDisplay(
-      (currVersionNum) => (currVersionNum + 1) % cardVersions.length,
-    );
-  }, [cardVersions.length]);
+    const newVersionNum =
+      (cardVersionNumberToDisplay + 1) % cardVersions.length;
+    setCardVersionNumberToDisplay(newVersionNum);
+    setIsFoil(cardVersions[newVersionNum].isFoil);
+  }, [cardVersionNumberToDisplay, cardVersions]);
 
   const card = cardVersions[cardVersionNumberToDisplay];
   const isEditMode = viewMode === "edit";
 
   const [numCollected, setNumCollected] = useState<number>(card.numCollected);
+  const [isFoil, setIsFoil] = useState<boolean>(card.isFoil);
 
   return (
     <div className="rounded p-1 shadow-md">
@@ -64,6 +66,12 @@ function Card({
               blurDataURL="/assets/card-back.jpg"
               onClick={() => setIsCardDialogOpen(true)}
             />
+            {isFoil && (
+              <div
+                className="absolute rounded-xl inset-0 bg-gradient-to-br from-red-500 via-yellow-500 to-green-500 opacity-40 mix-blend-screen"
+                onClick={() => setIsCardDialogOpen(true)}
+              ></div>
+            )}
             {isEditMode && (
               <CheckCircle
                 className={
@@ -132,6 +140,8 @@ function Card({
           cardVersionIndex={cardVersionNumberToDisplay}
           viewMode={viewMode}
           isCardDeleteable={isCardDeleteable}
+          isFoil={isFoil}
+          setIsFoil={setIsFoil}
         />
       )}
     </div>
