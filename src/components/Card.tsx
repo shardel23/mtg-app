@@ -139,6 +139,7 @@ function Card({
           cardVersionIndex={cardVersionNumberToDisplay}
           viewMode={viewMode}
           isCardDeleteable={isCardDeleteable}
+          isFoil={isFoil}
           setIsFoil={setIsFoil}
         />
       )}

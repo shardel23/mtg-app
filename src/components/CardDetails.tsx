@@ -28,6 +28,7 @@ export default function CardDetails({
   cardVersionIndex,
   viewMode,
   isCardDeleteable,
+  isFoil,
   setIsFoil,
 }: {
   isOpen: boolean;
@@ -40,6 +41,7 @@ export default function CardDetails({
   cardVersionIndex: number;
   viewMode: ViewMode;
   isCardDeleteable?: boolean;
+  isFoil: boolean;
   setIsFoil: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [cardFaceIndex, setCardFaceIndex] = useState<number>(0);
@@ -57,7 +59,7 @@ export default function CardDetails({
               <IsFoilButton
                 cardId={card.id}
                 albumId={card.albumId}
-                isFoil={card.isFoil}
+                isFoil={isFoil}
                 setIsFoil={setIsFoil}
               />
             )}
@@ -75,6 +77,9 @@ export default function CardDetails({
                 placeholder="blur"
                 blurDataURL="/assets/card-back.jpg"
               />
+              {isFoil && (
+                <div className="absolute rounded-xl inset-0 bg-gradient-to-br from-red-500 via-yellow-500 to-green-500 opacity-40 mix-blend-screen"></div>
+              )}
               <div className="absolute bottom-0 right-0 rounded-full bg-black bg-opacity-50 px-1 py-0.5 text-xxs md:px-2 md:py-1 md:text-xs">
                 {`$${card.priceUsd !== 0 ? card.priceUsd : "--"}`}
               </div>

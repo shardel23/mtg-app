@@ -1,5 +1,5 @@
 import { setCardFoil } from "@/actions/update/setCardFoilAction";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import SparklesIcon from "../icons/SparklesIcon";
 import { Button } from "../ui/button";
 
@@ -17,7 +17,6 @@ export default function IsFoilButton({
   setIsFoil,
 }: IsFoilButtonProps) {
   const [_, startTransition] = useTransition();
-  const [isFoilLocal, setIsFoilLocal] = useState<boolean>(isFoil);
 
   return (
     <Button
@@ -27,12 +26,11 @@ export default function IsFoilButton({
         startTransition(() => {
           setCardFoil(cardId, albumId, !isFoil);
           setIsFoil((prev) => !prev);
-          setIsFoilLocal((prev) => !prev);
         });
       }}
     >
       <SparklesIcon
-        className={isFoilLocal ? "text-yellow-500 fill-yellow-500" : ""}
+        className={isFoil ? "text-yellow-500 fill-yellow-500" : ""}
       />
     </Button>
   );
