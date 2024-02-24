@@ -54,6 +54,8 @@ export const transformCardsFromDB = (
       types: face.type_line.split(" ").map((type) => type.toLowerCase()),
     })),
     priceUsd: card.CardDetails.price_usd ?? 0,
+    priceUsdFoil: card.CardDetails.price_usd_foil ?? 0,
+    isFoil: card.isFoil,
   }));
 };
 
@@ -81,6 +83,8 @@ export const transformCardsFromAPI = (cards: Scry.Card[]): CardData[] => {
       types: face.type_line?.split(" ").map((type) => type.toLowerCase()) ?? [],
     })),
     priceUsd: Number(card.prices?.usd),
+    priceUsdFoil: Number(card.prices?.usd_foil),
+    isFoil: false,
   }));
 };
 

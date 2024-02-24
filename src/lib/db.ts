@@ -10,6 +10,7 @@ const cardsSelectFields = {
   id: true,
   numCollected: true,
   albumId: true,
+  isFoil: true,
   CardDetails: {
     select: {
       name: true,
@@ -37,6 +38,7 @@ const cardsSelectFields = {
         },
       },
       price_usd: true,
+      price_usd_foil: true,
     },
   },
 } as const;

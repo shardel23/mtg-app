@@ -44,6 +44,8 @@ function Card({
 
   const [numCollected, setNumCollected] = useState<number>(card.numCollected);
 
+  const price = card.isFoil ? card.priceUsdFoil : card.priceUsd;
+
   return (
     <div className="rounded p-1 shadow-md">
       {card.image && (
@@ -64,6 +66,9 @@ function Card({
               blurDataURL="/assets/card-back.jpg"
               onClick={() => setIsCardDialogOpen(true)}
             />
+            {card.isFoil && (
+              <div className="absolute inset-0 bg-gradient-to-br from-red-500 via-yellow-500 to-green-500 opacity-40 mix-blend-screen"></div>
+            )}
             {isEditMode && (
               <CheckCircle
                 className={

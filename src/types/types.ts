@@ -36,6 +36,8 @@ export type CardData = {
     types: string[];
   }[];
   priceUsd: number;
+  priceUsdFoil: number;
+  isFoil: boolean;
 };
 
 export type ManaCost = string | null | undefined;
