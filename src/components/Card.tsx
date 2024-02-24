@@ -67,7 +67,7 @@ function Card({
             />
             {isFoil && (
               <div
-                className="absolute inset-0 bg-gradient-to-br from-red-500 via-yellow-500 to-green-500 opacity-40 mix-blend-screen"
+                className="absolute rounded-xl inset-0 bg-gradient-to-br from-red-500 via-yellow-500 to-green-500 opacity-40 mix-blend-screen"
                 onClick={() => setIsCardDialogOpen(true)}
               ></div>
             )}
