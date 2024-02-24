@@ -32,9 +32,7 @@ export default function IsFoilButton({
       }}
       disabled={!isCollected}
     >
-      <SparklesIcon
-        className={isFoil ? "text-yellow-500 fill-yellow-500" : ""}
-      />
+      <SparklesIcon className={isFoil ? "text-yellow-500" : ""} />
     </Button>
   );
 }
