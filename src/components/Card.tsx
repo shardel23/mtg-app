@@ -38,6 +38,7 @@ function Card({
       (cardVersionNumberToDisplay + 1) % cardVersions.length;
     setCardVersionNumberToDisplay(newVersionNum);
     setIsFoil(cardVersions[newVersionNum].isFoil);
+    setNumCollected(cardVersions[newVersionNum].numCollected);
   }, [cardVersionNumberToDisplay, cardVersions]);
 
   const card = cardVersions[cardVersionNumberToDisplay];
