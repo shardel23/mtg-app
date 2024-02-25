@@ -1,5 +1,6 @@
 import { CardData, ViewMode } from "@/types/types";
 import Card from "./Card";
+import { CardProvider } from "./CardContext";
 
 function CardGrid({
   cards,
@@ -17,12 +18,14 @@ function CardGrid({
       {Array.from(cards.keys()).map((cardName) => {
         const cardVersions = cards.get(cardName)!;
         return (
-          <Card
+          <CardProvider
             key={cardName}
             cardVersions={cardVersions}
             viewMode={viewMode}
             isCardDeleteable={isCardDeleteable}
-          />
+          >
+            <Card />
+          </CardProvider>
         );
       })}
     </div>

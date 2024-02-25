@@ -1,8 +1,8 @@
 import { isCardMultiFace } from "@/actions/helpers";
 import { updateAmountCollected } from "@/actions/update/updateAmountCollectedAction";
-import { CardData, ViewMode } from "@/types/types";
 import Image from "next/image";
-import React, { useState, useTransition } from "react";
+import { useState, useTransition } from "react";
+import { useCardContext } from "./CardContext";
 import DeleteCardDialog from "./DeleteCardDialog";
 import IsFoilButton from "./cardDetails/IsFoilButton";
 import ArrowUTurnRight from "./icons/ArrowUTurnRightIcon";
@@ -17,54 +17,34 @@ import {
   DialogTitle,
 } from "./ui/dialog";
 
-export default function CardDetails({
-  isOpen,
-  setIsOpen,
-  card,
-  cardVersions,
-  amountCollected,
-  setAmountCollected,
-  onAmountCollectedChange,
-  cardVersionIndex,
-  viewMode,
-  isCardDeleteable,
-  isFoil,
-  setIsFoil,
-}: {
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  card: CardData;
-  cardVersions: CardData[];
-  amountCollected: number;
-  setAmountCollected: React.Dispatch<React.SetStateAction<number>>;
-  onAmountCollectedChange: React.Dispatch<React.SetStateAction<boolean[]>>;
-  cardVersionIndex: number;
-  viewMode: ViewMode;
-  isCardDeleteable?: boolean;
-  isFoil: boolean;
-  setIsFoil: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+export default function CardDetails({}: {}) {
+  const {
+    isCardDialogOpen,
+    viewMode,
+    isCardDeleteable,
+    currentCard: card,
+    cardVersions,
+    setIsCardDialogOpen,
+  } = useCardContext();
+
   const [cardFaceIndex, setCardFaceIndex] = useState<number>(0);
+
+  if (card == null) {
+    return null;
+  }
+
   const cardFaces = card.cardFaces || [];
   const isMultiFaced = isCardMultiFace(card);
   const isEditMode = viewMode === "edit";
-  const cardPrice = isFoil ? card.priceUsdFoil : card.priceUsd;
+  const cardPrice = card.isFoil ? card.priceUsdFoil : card.priceUsd;
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isCardDialogOpen} onOpenChange={setIsCardDialogOpen}>
       <DialogContent className="max-w-xs md:max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex justify-center">
             {isMultiFaced ? cardFaces[cardFaceIndex].name : card.name}
-            {card.albumId && (
-              <IsFoilButton
-                cardId={card.id}
-                albumId={card.albumId}
-                isFoil={isFoil}
-                setIsFoil={setIsFoil}
-                isCollected={amountCollected > 0}
-              />
-            )}
+            <IsFoilButton />
           </DialogTitle>
         </DialogHeader>
         <div className="flex justify-center">
@@ -79,7 +59,7 @@ export default function CardDetails({
                 placeholder="blur"
                 blurDataURL="/assets/card-back.jpg"
               />
-              {isFoil && (
+              {card.isFoil && (
                 <div className="absolute rounded-xl inset-0 bg-gradient-to-br from-red-500 via-yellow-500 to-green-500 opacity-40 mix-blend-screen"></div>
               )}
               <div className="absolute bottom-0 right-0 rounded-full bg-black bg-opacity-50 px-1 py-0.5 text-xxs md:px-2 md:py-1 md:text-xs">
@@ -98,16 +78,7 @@ export default function CardDetails({
                   <ArrowUTurnRight />
                 </Button>
               )}
-              <CardAmountCollectedSection
-                isEditMode={isEditMode}
-                card={card}
-                cardVersions={cardVersions}
-                amountCollected={amountCollected}
-                setAmountCollected={setAmountCollected}
-                onAmountCollectedChange={onAmountCollectedChange}
-                cardVersionIndex={cardVersionIndex}
-                setIsFoil={setIsFoil}
-              />
+              <CardAmountCollectedSection isEditMode={isEditMode} />
             </div>
           </div>
         </div>
@@ -128,19 +99,11 @@ export default function CardDetails({
   );
 }
 
-const CardAmountCollectedSection = (props: {
-  isEditMode: boolean;
-  card: CardData;
-  cardVersions: CardData[];
-  amountCollected: number;
-  setAmountCollected: React.Dispatch<React.SetStateAction<number>>;
-  onAmountCollectedChange: React.Dispatch<React.SetStateAction<boolean[]>>;
-  cardVersionIndex: number;
-  setIsFoil: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+const CardAmountCollectedSection = (props: { isEditMode: boolean }) => {
+  const { currentCard: card, setNumCollected, setIsFoil } = useCardContext();
   const [_, startTransition] = useTransition();
 
-  if (!props.isEditMode) {
+  if (card == null || !props.isEditMode) {
     return null;
   }
 
@@ -149,47 +112,33 @@ const CardAmountCollectedSection = (props: {
       <Button
         variant={"secondary"}
         className="w-12"
-        disabled={props.amountCollected === 0}
+        disabled={card.numCollected === 0}
         onClick={() => {
           startTransition(() => {
             updateAmountCollected(
-              props.card.albumId!,
-              props.card.id,
-              Math.max(0, props.amountCollected - 1),
+              card.albumId!,
+              card.id,
+              Math.max(0, card.numCollected - 1),
             );
           });
-          props.onAmountCollectedChange((curr) => {
-            const newIsVersionCollected = [...curr];
-            newIsVersionCollected[props.cardVersionIndex] =
-              props.amountCollected > 1;
-            return newIsVersionCollected;
-          });
-          props.setAmountCollected((curr) => Math.max(0, curr - 1));
-          if (props.amountCollected - 1 === 0) {
-            props.setIsFoil(false);
-          }
+          setNumCollected(Math.max(0, card.numCollected - 1));
         }}
       >
         <Minus />
       </Button>
-      <span className="px-2">{props.amountCollected}</span>
+      <span className="px-2">{card.numCollected}</span>
       <Button
         variant={"secondary"}
         className="w-12"
         onClick={() => {
           startTransition(() => {
             updateAmountCollected(
-              props.card.albumId!,
-              props.card.id,
-              props.amountCollected + 1,
+              card.albumId!,
+              card.id,
+              card.numCollected + 1,
             );
           });
-          props.onAmountCollectedChange((curr) => {
-            const newIsVersionCollected = [...curr];
-            newIsVersionCollected[props.cardVersionIndex] = true;
-            return newIsVersionCollected;
-          });
-          props.setAmountCollected((curr) => curr + 1);
+          setNumCollected(card.numCollected + 1);
         }}
       >
         <Plus />
