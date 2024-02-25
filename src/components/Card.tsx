@@ -1,52 +1,33 @@
 "use client";
 
 import { markCardAsCollected } from "@/actions/update/markCardAsCollectedAction";
-import { CardData, ViewMode } from "@/types/types";
 import Image from "next/image";
-import { useCallback, useState, useTransition } from "react";
+import { useTransition } from "react";
+import { useCardContext } from "./CardContext";
 import CardDetails from "./CardDetails";
 import ArrowRightLeft from "./icons/ArrowRightLeftIcon";
 import CheckCircle from "./icons/CheckCircleIcon";
 
-function Card({
-  cardVersions,
-  viewMode,
-  isCardDeleteable,
-}: {
-  cardVersions: CardData[];
-  viewMode: ViewMode;
-  isCardDeleteable?: boolean;
-}) {
-  const [isPending, startTransition] = useTransition();
-  const [cardVersionNumberToDisplay, setCardVersionNumberToDisplay] = useState(
-    () => {
-      const inCollectionIndex = cardVersions.findIndex(
-        (card) => card.isCollected,
-      );
-      return inCollectionIndex === -1 ? 0 : inCollectionIndex;
-    },
-  );
-  const [isVersionCollected, setIsVersionCollected] = useState<boolean[]>(
-    () => {
-      return cardVersions.map((card) => card.isCollected!);
-    },
-  );
-  const [isCardDialogOpen, setIsCardDialogOpen] = useState(false);
+function Card({}: {}) {
+  const {
+    isCardDialogOpen,
+    currentCard: card,
+    hasMoreVersions,
+    viewMode,
+    changeCardVersion,
+    setNumCollected,
+    setIsCardDialogOpen,
+  } = useCardContext();
 
-  const changeCardVersion = useCallback(() => {
-    const newVersionNum =
-      (cardVersionNumberToDisplay + 1) % cardVersions.length;
-    setCardVersionNumberToDisplay(newVersionNum);
-    setIsFoil(cardVersions[newVersionNum].isFoil);
-    setNumCollected(cardVersions[newVersionNum].numCollected);
-  }, [cardVersionNumberToDisplay, cardVersions]);
+  const [_, startTransition] = useTransition();
 
-  const card = cardVersions[cardVersionNumberToDisplay];
+  if (card == null) {
+    return null;
+  }
+
+  const isCardCollected = card.numCollected > 0;
   const isEditMode = viewMode === "edit";
-
-  const [numCollected, setNumCollected] = useState<number>(card.numCollected);
-  const [isFoil, setIsFoil] = useState<boolean>(card.isFoil);
-  const price = isFoil ? card.priceUsdFoil : card.priceUsd;
+  const price = card.isFoil ? card.priceUsdFoil : card.priceUsd;
 
   return (
     <div className="rounded p-1 shadow-md">
@@ -55,11 +36,7 @@ function Card({
           <div className="relative">
             <Image
               unoptimized
-              className={`${
-                !isVersionCollected[cardVersionNumberToDisplay]
-                  ? "opacity-50"
-                  : ""
-              }`}
+              className={`${!isCardCollected ? "opacity-50" : ""}`}
               src={card.image}
               alt={card.name}
               height={400}
@@ -68,7 +45,7 @@ function Card({
               blurDataURL="/assets/card-back.jpg"
               onClick={() => setIsCardDialogOpen(true)}
             />
-            {isFoil && (
+            {card.isFoil && (
               <div
                 className="absolute rounded-xl inset-0 bg-gradient-to-br from-red-500 via-yellow-500 to-green-500 opacity-40 mix-blend-screen"
                 onClick={() => setIsCardDialogOpen(true)}
@@ -78,31 +55,24 @@ function Card({
               <CheckCircle
                 className={
                   "absolute left-1/10 top-1/10 cursor-pointer " +
-                  (isVersionCollected[cardVersionNumberToDisplay]
-                    ? "text-green-400 "
-                    : "text-slate-400 ") +
-                  (isVersionCollected[cardVersionNumberToDisplay]
+                  (isCardCollected ? "text-green-400 " : "text-slate-400 ") +
+                  (isCardCollected
                     ? "md:hover:text-white"
                     : "md:hover:text-green-500")
                 }
                 onClick={() => {
-                  setIsVersionCollected((curr) => {
-                    const newIsVersionCollected = [...curr];
-                    newIsVersionCollected[cardVersionNumberToDisplay] =
-                      !newIsVersionCollected[cardVersionNumberToDisplay];
-                    return newIsVersionCollected;
-                  });
+                  setNumCollected(isCardCollected ? 0 : 1);
                   startTransition(() => {
                     markCardAsCollected(
                       card.albumId!,
                       card.id,
-                      !isVersionCollected[cardVersionNumberToDisplay],
+                      !isCardCollected,
                     );
                   });
                 }}
               />
             )}
-            {cardVersions.length > 1 && (
+            {hasMoreVersions && (
               <ArrowRightLeft
                 className="absolute right-1/10 top-1/10 cursor-pointer text-slate-400 md:hover:text-red-500"
                 onClick={() => {
@@ -133,22 +103,7 @@ function Card({
           </div>
         </div>
       )}
-      {isCardDialogOpen && (
-        <CardDetails
-          isOpen={isCardDialogOpen}
-          setIsOpen={setIsCardDialogOpen}
-          card={card}
-          cardVersions={cardVersions}
-          amountCollected={numCollected}
-          setAmountCollected={setNumCollected}
-          onAmountCollectedChange={setIsVersionCollected}
-          cardVersionIndex={cardVersionNumberToDisplay}
-          viewMode={viewMode}
-          isCardDeleteable={isCardDeleteable}
-          isFoil={isFoil}
-          setIsFoil={setIsFoil}
-        />
-      )}
+      {isCardDialogOpen && <CardDetails />}
     </div>
   );
 }

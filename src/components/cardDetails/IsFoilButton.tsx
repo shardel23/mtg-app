@@ -1,24 +1,16 @@
 import { setCardFoil } from "@/actions/update/setCardFoilAction";
 import { useTransition } from "react";
+import { useCardContext } from "../CardContext";
 import SparklesIcon from "../icons/SparklesIcon";
 import { Button } from "../ui/button";
 
-type IsFoilButtonProps = {
-  cardId: string;
-  albumId: string;
-  isFoil: boolean;
-  setIsFoil: React.Dispatch<React.SetStateAction<boolean>>;
-  isCollected: boolean;
-};
-
-export default function IsFoilButton({
-  cardId,
-  albumId,
-  isFoil,
-  setIsFoil,
-  isCollected,
-}: IsFoilButtonProps) {
+export default function IsFoilButton() {
+  const { currentCard: card, setIsFoil } = useCardContext();
   const [_, startTransition] = useTransition();
+
+  if (card == null || card.albumId == null) {
+    return null;
+  }
 
   return (
     <Button
@@ -26,13 +18,13 @@ export default function IsFoilButton({
       className="absolute top-4 left-4 rounded-full w-10 h-10 md:w-12 md:h-12"
       onClick={() => {
         startTransition(() => {
-          setCardFoil(cardId, albumId, !isFoil);
+          setCardFoil(card.id, card.albumId!, !card.isFoil);
         });
-        setIsFoil((prev) => !prev);
+        setIsFoil(!card.isFoil);
       }}
-      disabled={!isCollected}
+      disabled={card.numCollected === 0}
     >
-      <SparklesIcon className={isFoil ? "text-yellow-500" : ""} />
+      <SparklesIcon className={card.isFoil ? "text-yellow-500" : ""} />
     </Button>
   );
 }
