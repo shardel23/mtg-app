@@ -11,7 +11,9 @@ const rarityPriority = {
 export const SORTINGS = {
   "Collector Number": (a: CardData, b: CardData) =>
     Number(a.collectorNumber) - Number(b.collectorNumber),
-  Price: (a: CardData, b: CardData) => a.priceUsd - b.priceUsd,
+  Price: (a: CardData, b: CardData) =>
+    (a.isFoil ? a.priceUsdFoil : a.priceUsd) -
+    (b.isFoil ? b.priceUsdFoil : b.priceUsd),
   Name: (a: CardData, b: CardData) => a.name.localeCompare(b.name),
   Rarity: (a: CardData, b: CardData) =>
     rarityPriority[a.rarity as keyof typeof rarityPriority] -
