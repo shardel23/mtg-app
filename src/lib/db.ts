@@ -529,6 +529,7 @@ export const getAlbumsOfUserWithCollectionStats = async (
       cards: {
         select: {
           numCollected: true,
+          isFoil: true,
           CardDetails: {
             select: {
               name: true,
@@ -540,6 +541,7 @@ export const getAlbumsOfUserWithCollectionStats = async (
                 },
               },
               price_usd: true,
+              price_usd_foil: true,
             },
           },
         },

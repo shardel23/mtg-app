@@ -53,7 +53,9 @@ const albumToStats = (
               .concat(c.CardDetails.card_faces[1].colors)
               .filter((color, index, array) => array.indexOf(color) === index)
           : c.CardDetails.colors,
-      price: c.CardDetails.price_usd ?? 0,
+      price:
+        (c.isFoil ? c.CardDetails.price_usd_foil : c.CardDetails.price_usd) ??
+        0,
     })),
   );
   const stats = {
