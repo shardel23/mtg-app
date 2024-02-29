@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useTransition } from "react";
 import { useCardContext } from "./CardContext";
 import CardDetails from "./CardDetails";
+import PriceTag from "./PriceTag";
 import ArrowRightLeft from "./icons/ArrowRightLeftIcon";
 import CheckCircle from "./icons/CheckCircleIcon";
 
@@ -80,9 +81,7 @@ function Card({}: {}) {
                 }}
               />
             )}
-            <div className="absolute bottom-0 left-0 rounded-full bg-black bg-opacity-50 px-1 py-0.5 text-xxs md:px-2 md:py-1 md:text-xs">
-              {`$${price !== 0 ? price : "--"}`}
-            </div>
+            <PriceTag price={price} />
           </div>
           <div className="flex items-center justify-center gap-x-1 pt-1 md:pt-2">
             <Image

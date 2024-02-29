@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState, useTransition } from "react";
 import { useCardContext } from "./CardContext";
 import DeleteCardDialog from "./DeleteCardDialog";
+import PriceTag from "./PriceTag";
 import IsFoilButton from "./cardDetails/IsFoilButton";
 import ArrowUTurnRight from "./icons/ArrowUTurnRightIcon";
 import Minus from "./icons/MinusIcon";
@@ -36,7 +37,7 @@ export default function CardDetails({}: {}) {
   const cardFaces = card.cardFaces || [];
   const isMultiFaced = isCardMultiFace(card);
   const isEditMode = viewMode === "edit";
-  const cardPrice = card.isFoil ? card.priceUsdFoil : card.priceUsd;
+  const price = card.isFoil ? card.priceUsdFoil : card.priceUsd;
 
   return (
     <Dialog open={isCardDialogOpen} onOpenChange={setIsCardDialogOpen}>
@@ -62,9 +63,7 @@ export default function CardDetails({}: {}) {
               {card.isFoil && (
                 <div className="absolute rounded-xl inset-0 bg-gradient-to-br from-red-500 via-yellow-500 to-green-500 opacity-40 mix-blend-screen"></div>
               )}
-              <div className="absolute bottom-0 right-0 rounded-full bg-black bg-opacity-50 px-1 py-0.5 text-xxs md:px-2 md:py-1 md:text-xs">
-                {`$${cardPrice !== 0 ? cardPrice : "--"}`}
-              </div>
+              <PriceTag price={price} />
             </div>
             <div className="flex justify-center gap-x-4">
               {isMultiFaced && (
