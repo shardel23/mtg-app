@@ -89,3 +89,41 @@ export type CollectionStats = {
 };
 
 export type ViewMode = "view" | "edit";
+
+type NullishNumber = number | null;
+
+export type CardStats17Lands = {
+  seen_count: NullishNumber;
+  avg_seen: NullishNumber;
+  pick_count: NullishNumber;
+  avg_pick: NullishNumber;
+  game_count: NullishNumber;
+  pool_count: NullishNumber;
+  play_rate: NullishNumber;
+  win_rate: NullishNumber;
+  opening_hand_game_count: NullishNumber;
+  opening_hand_win_rate: NullishNumber;
+  drawn_game_count: NullishNumber;
+  drawn_win_rate: NullishNumber;
+  ever_drawn_game_count: NullishNumber;
+  ever_drawn_win_rate: NullishNumber;
+  never_drawn_game_count: NullishNumber;
+  never_drawn_win_rate: NullishNumber;
+  drawn_improvement_win_rate: NullishNumber;
+  name: string;
+  mtga_id: NullishNumber;
+  color: string;
+  rarity: string;
+  url: string;
+  url_back: string;
+  types: string[];
+};
+
+export type CardStats17LandsResponse = {
+  seen_count: NullishNumber;
+  avg_seen: NullishNumber;
+  avg_pick: NullishNumber;
+  game_count: NullishNumber;
+  play_rate: NullishNumber;
+  ever_drawn_win_rate: NullishNumber;
+};

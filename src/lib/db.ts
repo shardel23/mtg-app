@@ -609,6 +609,14 @@ export async function getAllCardDetails() {
   });
 }
 
+export async function getCardDetails(cardId: string) {
+  return await prisma.cardDetails.findUnique({
+    where: {
+      id: cardId,
+    },
+  });
+}
+
 export async function setCardPrices(
   prices: { cardId: string; priceUsd: number; priceUsdFoil: number }[],
 ) {
