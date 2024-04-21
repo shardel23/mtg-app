@@ -49,7 +49,8 @@ export async function GET(request: NextRequest, context: any) {
     }
 
     const cardStats = cardStats17Lands.find(
-      (card) => card.mtga_id === cardDetails.arena_id,
+      (card) =>
+        card.mtga_id === cardDetails.arena_id || card.name === cardDetails.name,
     );
     if (cardStats == null) {
       return NextResponse.json({
