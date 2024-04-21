@@ -1,3 +1,4 @@
+import { NullishNumber } from "@/types/types";
 import { clsx, type ClassValue } from "clsx";
 import Hashids from "hashids";
 import { twMerge } from "tailwind-merge";
@@ -87,4 +88,11 @@ export function logWithTimestamp(message: string) {
   if (process.env.NODE_ENV === "development") {
     console.log(new Date().toLocaleString(), "-", message);
   }
+}
+
+export function numberWithCommas(x: NullishNumber | undefined) {
+  if (x == null) {
+    return null;
+  }
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }

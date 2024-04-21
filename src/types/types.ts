@@ -90,7 +90,7 @@ export type CollectionStats = {
 
 export type ViewMode = "view" | "edit";
 
-type NullishNumber = number | null;
+export type NullishNumber = number | null;
 
 export type CardStats17Lands = {
   seen_count: NullishNumber;

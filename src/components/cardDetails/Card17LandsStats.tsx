@@ -1,5 +1,6 @@
 "use client";
 
+import { numberWithCommas } from "@/lib/utils";
 import { CardStats17LandsResponse } from "@/types/types";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -36,16 +37,16 @@ export default function Card17LandsStats() {
   }
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center bg-slate-900 border-solid border-2 rounded-md p-1">
       <div className="flex flex-col gap-1 items-center">
-        <div className="underline font-bold">17Lands Stats</div>
+        <div className="underline font-bold text-xs">17Lands Stats</div>
         {isFetching ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         ) : (
-          <div className="grid grid-cols-3 gap-2 text-sm">
+          <div className="grid grid-cols-3 gap-2 text-xxs">
             <div>
               <span># Seen: </span>
-              <span>{cardStats?.seen_count ?? 0}</span>
+              <span>{numberWithCommas(cardStats?.seen_count) ?? "--"}</span>
             </div>
             <div>
               <span>Avg Seen: </span>
@@ -57,7 +58,7 @@ export default function Card17LandsStats() {
             </div>
             <div>
               <span># Game: </span>
-              <span>{cardStats?.game_count ?? 0}</span>
+              <span>{numberWithCommas(cardStats?.game_count) ?? "--"}</span>
             </div>
             <div>
               <span>Play Rate: </span>
