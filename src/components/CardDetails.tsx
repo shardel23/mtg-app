@@ -5,6 +5,7 @@ import { useState, useTransition } from "react";
 import { useCardContext } from "./CardContext";
 import DeleteCardDialog from "./DeleteCardDialog";
 import PriceTag from "./PriceTag";
+import Card17LandsStats from "./cardDetails/Card17LandsStats";
 import IsFoilButton from "./cardDetails/IsFoilButton";
 import ArrowUTurnRight from "./icons/ArrowUTurnRightIcon";
 import Minus from "./icons/MinusIcon";
@@ -81,6 +82,7 @@ export default function CardDetails({}: {}) {
             </div>
           </div>
         </div>
+        <Card17LandsStats />
         <DialogFooter>
           {isCardDeleteable && (
             <div className="flex justify-end">

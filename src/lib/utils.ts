@@ -85,6 +85,6 @@ export function hashDecode(encoded: string) {
 
 export function logWithTimestamp(message: string) {
   if (process.env.NODE_ENV === "development") {
-    console.log(new Date().toLocaleString(), message);
+    console.log(new Date().toLocaleString(), "-", message);
   }
 }
