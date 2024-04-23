@@ -40,11 +40,13 @@ export default function Card17LandsStats() {
   return (
     <div className="flex justify-center bg-slate-900 border-solid border-2 rounded-md p-1">
       <div className="flex flex-col gap-1 items-center">
-        <div className="underline font-bold text-xs">17Lands Stats</div>
+        <div className="underline font-bold text-xs md:text-base">
+          17Lands Stats
+        </div>
         {isFetching ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         ) : (
-          <div className="grid grid-cols-3 gap-2 text-xxs">
+          <div className="grid grid-cols-3 gap-2 text-xxs md:text-sm">
             <div>
               <span># Seen: </span>
               <span>{numberWithCommas(cardStats?.seen_count) ?? "--"}</span>
@@ -74,6 +76,16 @@ export default function Card17LandsStats() {
               <span>
                 {cardStats?.ever_drawn_win_rate != null
                   ? `${(cardStats.ever_drawn_win_rate * 100).toPrecision(3)}%`
+                  : "--"}
+              </span>
+            </div>
+            <div></div>
+            <div></div>
+            <div>
+              <span>M GIH WR: </span>
+              <span>
+                {cardStats?.median_win_rate != null
+                  ? `${(cardStats.median_win_rate * 100).toPrecision(3)}%`
                   : "--"}
               </span>
             </div>

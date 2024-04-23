@@ -19,6 +19,25 @@ export async function GET(request: NextRequest, context: any) {
     }
     const setCode = cardDetails.setCode;
     const cardStats17Lands = await fetch17LandsStats(setCode);
+
+    cardStats17Lands.sort(
+      (a, b) => (b.ever_drawn_win_rate ?? 0) - (a.ever_drawn_win_rate ?? 0),
+    );
+    const winRates = cardStats17Lands
+      .map((card) => card.ever_drawn_win_rate)
+      .filter((rate) => rate != null) as number[];
+    winRates.sort((a, b) => a - b);
+    console.log(winRates);
+    const medianWinRate = winRates[Math.floor(winRates.length / 2)];
+    console.log(medianWinRate);
+
+    // const avgWinRate = cardStats17Lands.reduce(
+    //   (acc, card) => acc + (card.ever_drawn_win_rate ?? 0),
+    //   0,
+    // )/cardStats17Lands.length;
+    // const medianWinRate = cardStats17Lands[Math.floor(cardStats17Lands.length / 2)].ever_drawn_win_rate;
+    // console.log(medianWinRate);
+
     const cardStats = cardStats17Lands.find(
       (card) =>
         card.mtga_id === cardDetails.arena_id || card.name === cardDetails.name,
@@ -43,6 +62,7 @@ export async function GET(request: NextRequest, context: any) {
       game_count,
       play_rate,
       ever_drawn_win_rate,
+      median_win_rate: medianWinRate,
     }))(cardStats);
     return NextResponse.json({ status: "ok", stats: cardStatsResponse });
   } catch (error) {
