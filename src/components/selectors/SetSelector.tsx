@@ -30,7 +30,10 @@ function SetSelector({
               key={idx}
               value={set.id}
             >
-              {set.name}
+              {set.name}{" "}
+              <span>
+                {set.parentSet != null && `(${set.parentSet.toUpperCase()})`}
+              </span>
             </SelectItem>
           ))}
         </SelectGroup>

@@ -24,15 +24,15 @@ export async function createAlbum(
     logWithTimestamp("Set " + set.name + " already exists in DB");
     return "";
   }
-  const cards = await API.getCardsOfSet(setIdentifier);
+  const cardsToAdd = await API.getCardsOfSet(setIdentifier);
 
-  // Avoid adding cards which are not in boosters
-  log(LogLevel.info, "Filtering cards");
-  const cardsInBoosters = cards.filter((c) => c.booster);
-  const cardNamesInBoosters = new Set<string>(
-    cardsInBoosters.map((c) => c.name),
-  );
-  const cardsToAdd = cards.filter((c) => cardNamesInBoosters.has(c.name));
+  // // Avoid adding cards which are not in boosters
+  // log(LogLevel.info, "Filtering cards");
+  // const cardsInBoosters = cards.filter((c) => c.booster);
+  // const cardNamesInBoosters = new Set<string>(
+  //   cardsInBoosters.map((c) => c.name),
+  // );
+  // const cardsToAdd = cards.filter((c) => cardNamesInBoosters.has(c.name));
 
   log(LogLevel.info, "Creating album " + set.name);
   const album = await prisma.album.create({

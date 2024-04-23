@@ -30,6 +30,7 @@ export default function Card17LandsStats() {
     fetchStats()
       .catch(console.error)
       .finally(() => setIsFetching(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (card == null) {

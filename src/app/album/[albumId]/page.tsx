@@ -1,4 +1,5 @@
 import { getAlbum } from "@/actions/get/getAlbumAction";
+import { getAllSets } from "@/actions/get/getAllSetsAction";
 import AlbumView from "./AlbumView";
 
 export default async function AlbumPage({
@@ -7,6 +8,7 @@ export default async function AlbumPage({
   params: { albumId: string };
 }) {
   const { album, cards, viewMode } = await getAlbum("", albumId);
+  const sets = await getAllSets();
   if (album == null) {
     return (
       <>
@@ -16,7 +18,12 @@ export default async function AlbumPage({
   }
   return (
     <>
-      <AlbumView album={album} cards={cards} viewMode={viewMode} />
+      <AlbumView
+        album={album}
+        cards={cards}
+        viewMode={viewMode}
+        availableSets={sets}
+      />
     </>
   );
 }

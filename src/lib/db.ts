@@ -11,12 +11,18 @@ const cardsSelectFields = {
   numCollected: true,
   albumId: true,
   isFoil: true,
+  Album: {
+    select: {
+      setName: true,
+    },
+  },
   CardDetails: {
     select: {
       name: true,
       collectorNumber: true,
       normalImageURI: true,
       set: true,
+      set_name: true,
       setIconSvgUri: true,
       rarity: true,
       colors: true,

@@ -30,12 +30,14 @@ export const transformCardsFromDB = (
     numCollected: card.numCollected,
     name: card.CardDetails.name,
     albumId: hashEncode(card.albumId),
+    albumSetName: card.Album.setName ?? "",
     image:
       card.CardDetails.normalImageURI ??
       card.CardDetails.card_faces[0].normalImageURI ??
       "",
     collectorNumber: card.CardDetails.collectorNumber.toString(),
     setCode: card.CardDetails.set ?? "",
+    setName: card.CardDetails.set_name ?? "",
     setIconUri: card.CardDetails.setIconSvgUri,
     rarity: card.CardDetails.rarity,
     colors: getDBCardColors(card),
@@ -69,6 +71,7 @@ export const transformCardsFromAPI = (cards: Scry.Card[]): CardData[] => {
       card.image_uris?.normal ?? card.card_faces[0].image_uris?.normal ?? "",
     collectorNumber: card.collector_number,
     setCode: card.set,
+    setName: card.set_name,
     rarity: card.rarity,
     colors: getAPICardColors(card),
     manaCost: card.mana_cost,

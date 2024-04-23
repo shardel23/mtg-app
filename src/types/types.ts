@@ -10,7 +10,7 @@ export type AlbumData = {
   setReleaseDate?: string | null;
 };
 
-export type SetData = { name: string; id: string };
+export type SetData = { name: string; id: string; parentSet?: string | null };
 
 export type CardData = {
   id: string;
@@ -19,8 +19,10 @@ export type CardData = {
   isCollected?: boolean;
   numCollected: number;
   albumId?: string;
+  albumSetName?: string;
   collectorNumber: string;
   setCode: string;
+  setName: string;
   setIconUri?: string;
   rarity: string;
   colors: string[];

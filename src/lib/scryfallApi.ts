@@ -5,9 +5,13 @@ export async function getAllSets(): Promise<Scry.Set[]> {
   const sets = await Scry.Sets.all();
   return sets
     .filter((set) =>
-      ["core", "expansion", "masters", "draft_innovation"].includes(
-        set.set_type,
-      ),
+      [
+        "core",
+        "expansion",
+        "masters",
+        "draft_innovation",
+        "masterpiece",
+      ].includes(set.set_type),
     )
     .filter((set) => set.digital === false);
 }

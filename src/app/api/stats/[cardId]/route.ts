@@ -1,4 +1,5 @@
 import { getCardDetails } from "@/lib/db";
+import * as API from "@/lib/scryfallApi";
 import { logWithTimestamp } from "@/lib/utils";
 import { CardStats17Lands, CardStats17LandsResponse } from "@/types/types";
 import { Redis } from "ioredis";
@@ -18,7 +19,10 @@ export async function GET(request: NextRequest, context: any) {
         message: "Failed to find card details",
       });
     }
-    const cardSet = cardDetails.setCode.toUpperCase();
+    const setCode = cardDetails.setCode;
+    const set = await API.getSet({ setCode });
+    const setCodeToUse = set.parent_set_code || setCode;
+    const cardSet = setCodeToUse.toUpperCase();
     const redis =
       process.env.NODE_ENV === "development"
         ? new Redis(process.env.REDIS_URL || "", {

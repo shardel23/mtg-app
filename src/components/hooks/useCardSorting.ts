@@ -9,8 +9,18 @@ const rarityPriority = {
 } as const;
 
 export const SORTINGS = {
-  "Collector Number": (a: CardData, b: CardData) =>
-    Number(a.collectorNumber) - Number(b.collectorNumber),
+  "Collector Number": (a: CardData, b: CardData) => {
+    if (a.setCode === b.setCode) {
+      return Number(a.collectorNumber) - Number(b.collectorNumber);
+    }
+    if (a.setName === a.albumSetName) {
+      return -1;
+    }
+    if (b.setName === b.albumSetName) {
+      return 1;
+    }
+    return a.setName.localeCompare(b.setName);
+  },
   Price: (a: CardData, b: CardData) =>
     (a.isFoil ? a.priceUsdFoil : a.priceUsd) -
     (b.isFoil ? b.priceUsdFoil : b.priceUsd),
