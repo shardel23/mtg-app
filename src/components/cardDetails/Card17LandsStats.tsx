@@ -71,22 +71,16 @@ export default function Card17LandsStats() {
                   : "--"}
               </span>
             </div>
-            <div>
-              <span>GIH WR: </span>
+            <div className="flex text-xxs md:text-sm gap-x-0.5 md:gap-x-1">
+              <span>GIH:</span>
               <span>
                 {cardStats?.ever_drawn_win_rate != null
                   ? `${(cardStats.ever_drawn_win_rate * 100).toPrecision(3)}%`
                   : "--"}
               </span>
-            </div>
-            <div></div>
-            <div></div>
-            <div>
-              <span>M GIH WR: </span>
               <span>
-                {cardStats?.median_win_rate != null
-                  ? `${(cardStats.median_win_rate * 100).toPrecision(3)}%`
-                  : "--"}
+                {cardStats?.median_win_rate != null &&
+                  `(${(cardStats.median_win_rate * 100).toPrecision(3)}%)`}
               </span>
             </div>
           </div>
