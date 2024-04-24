@@ -42,7 +42,7 @@ export default function CardDetails({}: {}) {
 
   return (
     <Dialog open={isCardDialogOpen} onOpenChange={setIsCardDialogOpen}>
-      <DialogContent className="max-w-xs md:max-w-lg">
+      <DialogContent className="max-w-xs md:max-w-lg p-4 md:p-6">
         <DialogHeader>
           <DialogTitle className="flex justify-center">
             {isMultiFaced ? cardFaces[cardFaceIndex].name : card.name}

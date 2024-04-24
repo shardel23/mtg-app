@@ -128,4 +128,5 @@ export type CardStats17LandsResponse = {
   game_count: NullishNumber;
   play_rate: NullishNumber;
   ever_drawn_win_rate: NullishNumber;
+  median_win_rate: number;
 };
