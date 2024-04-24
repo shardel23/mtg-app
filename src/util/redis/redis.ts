@@ -1,9 +1,13 @@
 import Redis from "ioredis";
 
 const redisClientSingleton = () => {
-  return new Redis(process.env.REDIS_URL!, {
-    password: process.env.REDIS_PASSWORD,
-  });
+  return process.env.NODE_ENV === "development"
+    ? new Redis(process.env.REDIS_URL || "", {
+        password: process.env.REDIS_PASSWORD || "",
+      })
+    : new Redis(
+        `rediss://default:${process.env.REDIS_PASSWORD}@${process.env.REDIS_URL}`,
+      );
 };
 
 type RedisClientSingleton = ReturnType<typeof redisClientSingleton>;

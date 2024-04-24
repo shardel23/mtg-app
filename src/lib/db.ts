@@ -568,6 +568,7 @@ export const getAlbumOfUser = async (collectionId: number, albumId: number) => {
     select: {
       id: true,
       collectionId: true,
+      setId: true,
     },
   });
 };
