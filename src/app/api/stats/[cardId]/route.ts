@@ -1,4 +1,6 @@
+import { getAlbum } from "@/actions/get/getAlbumAction";
 import { getCardDetails } from "@/lib/db";
+import * as API from "@/lib/scryfallApi";
 import { CardStats17LandsResponse } from "@/types/types";
 import { fetch17LandsStats } from "@/util/redis/fetch17LandsStats";
 import { NextRequest, NextResponse } from "next/server";
@@ -8,6 +10,7 @@ export const dynamic = "force-dynamic";
 export async function GET(request: NextRequest, context: any) {
   const { params } = context;
   const { cardId } = params;
+  const albumId = request.nextUrl.searchParams.get("albumId");
 
   try {
     const cardDetails = await getCardDetails(cardId);
@@ -17,7 +20,25 @@ export async function GET(request: NextRequest, context: any) {
         message: "Failed to find card details",
       });
     }
-    const setCode = cardDetails.setCode;
+    let setCode = cardDetails.setCode;
+    if (setCode === "spg") {
+      if (albumId == null) {
+        return NextResponse.json({
+          status: "error",
+          message: "Album ID is required for SPG set",
+        });
+      }
+      const album = await getAlbum("", albumId);
+      const setId = album.album?.setId;
+      if (setId == null) {
+        return NextResponse.json({
+          status: "error",
+          message: "Failed to find album set",
+        });
+      }
+      const albumSet = await API.getSet({ setId });
+      setCode = albumSet.code;
+    }
     const cardStats17Lands = await fetch17LandsStats(setCode);
 
     const winRates = cardStats17Lands
@@ -28,7 +49,8 @@ export async function GET(request: NextRequest, context: any) {
 
     const cardStats = cardStats17Lands.find(
       (card) =>
-        card.mtga_id === cardDetails.arena_id || card.name === cardDetails.name,
+        card.mtga_id === cardDetails.arena_id ||
+        cardDetails.name.includes(card.name),
     );
     if (cardStats == null) {
       return NextResponse.json({

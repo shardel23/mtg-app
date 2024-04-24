@@ -19,7 +19,7 @@ export default function Card17LandsStats() {
         return;
       }
       setIsFetching(true);
-      const apiURL = `/api/stats/${card.id}`;
+      const apiURL = `/api/stats/${card.id}?albumId=${card.albumId}`;
       const response = await fetch(apiURL);
       const data = await response.json();
       if (data && data.status === "ok") {
