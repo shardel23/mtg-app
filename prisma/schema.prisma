@@ -161,6 +161,13 @@ model Collection {
   userId String?
 }
 
+model UserConfig {
+  id                 Int     @id @default(autoincrement())
+  user               User    @relation(fields: [userId], references: [id])
+  userId             String  @unique
+  show17LandsSection Boolean @default(false)
+}
+
 // next-auth
 model Account {
   id                 String  @id @default(cuid())
@@ -201,6 +208,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   collections   Collection[]
+  userConfig    UserConfig?
 }
 
 model VerificationToken {

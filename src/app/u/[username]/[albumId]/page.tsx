@@ -1,5 +1,6 @@
 import { getAlbum } from "@/actions/get/getAlbumAction";
 import { getAllSets } from "@/actions/get/getAllSetsAction";
+import { getUserConfig } from "@/actions/get/getUserConfigAction";
 import AlbumView from "@/app/album/[albumId]/AlbumView";
 
 type PageParams = { username: string; albumId: string };
@@ -10,6 +11,7 @@ export default async function AlbumPage({ params }: { params: PageParams }) {
     params.albumId,
   );
   const sets = await getAllSets();
+  const userConfig = await getUserConfig();
   if (album == null) {
     return (
       <>
@@ -24,6 +26,7 @@ export default async function AlbumPage({ params }: { params: PageParams }) {
         cards={cards}
         viewMode={viewMode}
         availableSets={sets}
+        userConfig={userConfig}
       />
     </>
   );

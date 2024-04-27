@@ -7,6 +7,7 @@ import DeleteCardDialog from "./DeleteCardDialog";
 import PriceTag from "./PriceTag";
 import Card17LandsStats from "./cardDetails/Card17LandsStats";
 import IsFoilButton from "./cardDetails/IsFoilButton";
+import { useUserConfigContext } from "./context/UserConfigContext";
 import ArrowUTurnRight from "./icons/ArrowUTurnRightIcon";
 import Minus from "./icons/MinusIcon";
 import Plus from "./icons/PlusIcon";
@@ -28,6 +29,7 @@ export default function CardDetails({}: {}) {
     cardVersions,
     setIsCardDialogOpen,
   } = useCardContext();
+  const userConfig = useUserConfigContext();
 
   const [cardFaceIndex, setCardFaceIndex] = useState<number>(0);
 
@@ -82,7 +84,7 @@ export default function CardDetails({}: {}) {
             </div>
           </div>
         </div>
-        <Card17LandsStats />
+        {userConfig.show17LandsSection && <Card17LandsStats />}
         <DialogFooter>
           {isCardDeleteable && (
             <div className="flex justify-end">
