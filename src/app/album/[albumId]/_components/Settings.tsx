@@ -2,6 +2,7 @@
 
 import { deleteAlbum } from "@/actions/delete/deleteAlbumAction";
 import { updateUserConfig } from "@/actions/update/updateUserConfigAction";
+import { useUserConfigContext } from "@/components/context/UserConfigContext";
 import SettingsIcon from "@/components/icons/SettingsIcon";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -27,15 +28,14 @@ import { useState, useTransition } from "react";
 export default function Settings({
   isEditMode,
   album,
-  userConfig,
 }: {
   isEditMode: boolean;
   album: { id: string; name: string; setId: string | null | undefined };
-  userConfig?: { show17LandsSection: boolean } | null;
 }) {
   const [isPending, startTransition] = useTransition();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const router = useRouter();
+  const userConfig = useUserConfigContext();
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -47,9 +47,7 @@ export default function Settings({
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="end" forceMount>
           <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-            <Toggle17LandsStats
-              isEnabled={userConfig?.show17LandsSection ?? false}
-            />
+            <Toggle17LandsStats isEnabled={userConfig.show17LandsSection} />
           </DropdownMenuItem>
           {isEditMode && (
             <DropdownMenuItem>
