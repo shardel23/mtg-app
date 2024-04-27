@@ -659,3 +659,32 @@ export async function setCardFoil(
     },
   });
 }
+
+export async function getUserConfig(userId: string) {
+  return await prisma.userConfig.findUnique({
+    select: {
+      show17LandsSection: true,
+    },
+    where: {
+      userId: userId,
+    },
+  });
+}
+
+export async function updateUserConfig(
+  userId: string,
+  { show17LandsSection }: { show17LandsSection: boolean },
+) {
+  await prisma.userConfig.upsert({
+    where: {
+      userId: userId,
+    },
+    create: {
+      userId: userId,
+      show17LandsSection: show17LandsSection,
+    },
+    update: {
+      show17LandsSection: show17LandsSection,
+    },
+  });
+}

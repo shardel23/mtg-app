@@ -2,7 +2,6 @@ import { deleteAlbum } from "@/actions/delete/deleteAlbumAction";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import Trash from "./icons/TrashIcon";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -22,9 +21,7 @@ function DeleteAlbumDialog({ albumId }: { albumId: string }) {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="destructive" size={"icon"}>
-          <Trash />
-        </Button>
+        <Button>Delete Album</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

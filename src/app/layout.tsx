@@ -25,7 +25,7 @@ export default async function RootLayout({
   const isLogged = session?.user != null;
 
   return (
-    <html lang="en" className="dark w-full h-full">
+    <html lang="en" className="dark w-full h-full overflow-y-scroll">
       <body className={inter.className + " w-full h-full"}>
         <AxiomWebVitals />
         {isLogged && (

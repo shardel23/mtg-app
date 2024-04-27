@@ -2,7 +2,6 @@
 
 import AddCardDialog from "@/components/AddCardDialog";
 import CardGrid from "@/components/CardGrid";
-import DeleteAlbumDialog from "@/components/DeleteAlbumDialog";
 import Filters, { Filter } from "@/components/Filters";
 import { useCardSorting } from "@/components/hooks/useCardSorting";
 import { Badge } from "@/components/ui/badge";
@@ -11,17 +10,20 @@ import { CardData, SetData, ViewMode } from "@/types/types";
 import { X } from "lucide-react";
 import { useMemo, useState } from "react";
 import Sorting from "./Sorting";
+import Settings from "./_components/Settings";
 
 function AlbumView({
   album,
   cards,
   viewMode,
   availableSets,
+  userConfig,
 }: {
   album: { id: string; name: string; setId: string | null | undefined };
   cards: Map<string, CardData[]>;
   viewMode: ViewMode;
   availableSets: Array<SetData>;
+  userConfig?: { show17LandsSection: boolean } | null;
 }) {
   const [cardsPerRow, setCardsPerRow] = useState<number>(5);
   const [filters, setFilters] = useState<Map<string, Filter>>(new Map());
@@ -75,7 +77,11 @@ function AlbumView({
             <AddCardDialog albumId={album.id} sets={availableSets} />
           )}
         </div>
-        {isEditMode && <DeleteAlbumDialog albumId={album.id} />}
+        <Settings
+          isEditMode={isEditMode}
+          album={album}
+          userConfig={userConfig}
+        />
       </div>
       <div className="flex justify-between">
         <div className="flex flex-col gap-y-4">
