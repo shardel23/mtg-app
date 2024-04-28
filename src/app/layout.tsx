@@ -25,11 +25,11 @@ export default async function RootLayout({
   const isLogged = session?.user != null;
 
   return (
-    <html lang="en" className="dark w-full h-full overflow-y-scroll">
-      <body className={inter.className + " w-full h-full"}>
+    <html lang="en" className="dark w-full h-full">
+      <body className={inter.className + " h-full"}>
         <AxiomWebVitals />
         {isLogged && (
-          <div className="w-full flex h-full space-y-4">
+          <div className="flex h-full space-y-4">
             <Header />
             <div className="flex w-full flex-auto flex-col pt-6 md:pl-72 md:pt-20">
               <Sidebar />
