@@ -1,39 +1,41 @@
 "use client";
 
-import { deleteAlbum } from "@/actions/delete/deleteAlbumAction";
 import { updateUserConfig } from "@/actions/update/updateUserConfigAction";
+import AddCardDialog from "@/app/album/[albumId]/_components/settings/AddCardDialog";
+import DeleteAlbumDialog from "@/app/album/[albumId]/_components/settings/DeleteAlbumDialog";
 import { useUserConfigContext } from "@/components/context/UserConfigContext";
 import SettingsIcon from "@/components/icons/SettingsIcon";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Loader2 } from "lucide-react";
+import { SetData } from "@/types/types";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
+const dialogs = {
+  addCard: "addCard",
+  deleteAlbum: "deleteAlbum",
+};
+
 export default function Settings({
   isEditMode,
-  album,
+  albumId,
+  availableSets,
 }: {
   isEditMode: boolean;
-  album: { id: string; name: string; setId: string | null | undefined };
+  albumId: string;
+  availableSets: Array<SetData>;
 }) {
-  const [isPending, startTransition] = useTransition();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [dialogType, setDialogType] = useState<string>(
+    "" as keyof typeof dialogs,
+  );
   const router = useRouter();
   const userConfig = useUserConfigContext();
 
@@ -51,35 +53,48 @@ export default function Settings({
           </DropdownMenuItem>
           {isEditMode && (
             <DropdownMenuItem>
-              <DialogTrigger>Delete album</DialogTrigger>
+              <DialogTrigger
+                className="flex justify-start w-full"
+                onClick={() => {
+                  setDialogType(dialogs.addCard);
+                }}
+              >
+                Add cards
+              </DialogTrigger>
+            </DropdownMenuItem>
+          )}
+          {isEditMode && (
+            <DropdownMenuItem>
+              <DialogTrigger
+                className="flex justify-start w-full"
+                onClick={() => {
+                  setDialogType(dialogs.deleteAlbum);
+                }}
+              >
+                Delete album
+              </DialogTrigger>
             </DropdownMenuItem>
           )}
         </DropdownMenuContent>
       </DropdownMenu>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Are you sure you want to delete this album?</DialogTitle>
-          <DialogDescription>
-            This action is irreversible. You will lose all the data associated
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <form
-            action={async () => {
-              startTransition(async () => {
-                await deleteAlbum(album.id);
-                setIsDialogOpen(false);
-                router.push("/");
-              });
-            }}
-          >
-            <Button type="submit" variant="destructive" disabled={isPending}>
-              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Delete Album
-            </Button>
-          </form>
-        </DialogFooter>
-      </DialogContent>
+      {dialogType === dialogs.addCard && (
+        <AddCardDialog
+          albumId={albumId}
+          sets={availableSets}
+          onCardAdd={() => {
+            setIsDialogOpen(false);
+          }}
+        />
+      )}
+      {dialogType === dialogs.deleteAlbum && (
+        <DeleteAlbumDialog
+          albumId={albumId}
+          onDelete={() => {
+            setIsDialogOpen(false);
+            router.push("/");
+          }}
+        />
+      )}
     </Dialog>
   );
 }

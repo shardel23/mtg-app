@@ -1,7 +1,7 @@
 import { getAlbum } from "@/actions/get/getAlbumAction";
 import { getAllSets } from "@/actions/get/getAllSetsAction";
 import { getUserConfig } from "@/actions/get/getUserConfigAction";
-import AlbumView from "@/app/album/[albumId]/AlbumView";
+import AlbumView from "@/app/album/[albumId]/_components/AlbumView";
 
 type PageParams = { username: string; albumId: string };
 

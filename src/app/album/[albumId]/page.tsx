@@ -1,7 +1,7 @@
 import { getAlbum } from "@/actions/get/getAlbumAction";
 import { getAllSets } from "@/actions/get/getAllSetsAction";
 import { getUserConfig } from "@/actions/get/getUserConfigAction";
-import AlbumView from "./AlbumView";
+import AlbumView from "./_components/AlbumView";
 
 export default async function AlbumPage({
   params: { albumId },

@@ -1,6 +1,5 @@
 "use client";
 
-import AddCardDialog from "@/components/AddCardDialog";
 import CardGrid from "@/components/CardGrid";
 import Filters, { Filter } from "@/components/Filters";
 import { UserConfigProvider } from "@/components/context/UserConfigContext";
@@ -11,7 +10,7 @@ import { CardData, SetData, ViewMode } from "@/types/types";
 import { X } from "lucide-react";
 import { useMemo, useState } from "react";
 import Sorting from "./Sorting";
-import Settings from "./_components/Settings";
+import Settings from "./settings/Settings";
 
 function AlbumView({
   album,
@@ -65,25 +64,28 @@ function AlbumView({
 
   return (
     <UserConfigProvider userConfig={userConfig}>
-      <div className="space-y-2 pt-2 md:pt-0">
-        <div className="flex justify-between">
-          <div className="flex items-center gap-x-4">
-            <div data-testid="album-name-div" className="text-xl">
+      <div className="flex flex-col space-y-2 pt-2 md:pt-0 gap-4">
+        <div className="flex justify-between items-center gap-2">
+          <div className="flex flex-col">
+            <div
+              data-testid="album-name-div"
+              className="text-lg md:text-xl truncate"
+            >
               {album.name}
             </div>
             <div data-testid="album-collection-status-div" className="text-sm">
-              {album.setId != null &&
-                `Collected: ${collectedCardsCount}/${cards.size}`}
+              {album.setId != null && `(${collectedCardsCount}/${cards.size})`}
             </div>
-            {isEditMode && (
-              <AddCardDialog albumId={album.id} sets={availableSets} />
-            )}
           </div>
-          <Settings isEditMode={isEditMode} album={album} />
+          <Settings
+            isEditMode={isEditMode}
+            albumId={album.id}
+            availableSets={availableSets}
+          />
         </div>
         <div className="flex justify-between">
           <div className="flex flex-col gap-y-4">
-            <div className="flex gap-x-8 items-center">
+            <div className="flex justify-between w-full items-center gap-4">
               <div className="flex gap-x-2 items-center">
                 <Filters filters={filters} setFilters={setFilters} />
                 {filters.size !== 0 && (
