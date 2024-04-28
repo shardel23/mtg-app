@@ -93,35 +93,35 @@ function AlbumView({
             sortingDirection={sortingDirection}
           />
         </div>
-        <div className="flex justify-between items-center">
-          {Array.from(filters.keys()).length !== 0 && (
-            <div className="flex flex-col items-center gap-2">
-              {Array.from(filters.keys()).map((filterName) => (
-                <Badge
-                  variant="secondary"
-                  key={filterName}
-                  className="mb-1 mr-1 gap-x-2"
-                >
-                  {`${filterName}: ${filters.get(filterName)?.inputValues}`}
-                  <X
-                    className="h-3 w-3 text-muted-foreground hover:cursor-pointer hover:text-foreground"
-                    onClick={() => {
-                      setFilters((curr) => {
-                        const newFilters = new Map(curr);
-                        newFilters.delete(filterName);
-                        return newFilters;
-                      });
-                    }}
-                  />
-                </Badge>
-              ))}
-            </div>
-          )}
-          {filters.size !== 0 && (
+        {filters.size !== 0 && (
+          <div className="flex justify-between items-center">
+            {Array.from(filters.keys()).length !== 0 && (
+              <div className="flex flex-col items-center gap-2">
+                {Array.from(filters.keys()).map((filterName) => (
+                  <Badge
+                    variant="secondary"
+                    key={filterName}
+                    className="mb-1 mr-1 gap-x-2"
+                  >
+                    {`${filterName}: ${filters.get(filterName)?.inputValues}`}
+                    <X
+                      className="h-3 w-3 text-muted-foreground hover:cursor-pointer hover:text-foreground"
+                      onClick={() => {
+                        setFilters((curr) => {
+                          const newFilters = new Map(curr);
+                          newFilters.delete(filterName);
+                          return newFilters;
+                        });
+                      }}
+                    />
+                  </Badge>
+                ))}
+              </div>
+            )}
             <Button onClick={() => setFilters(new Map())}>Clear filters</Button>
-          )}
-        </div>
-        <div className="hidden items-center gap-x-6 md:visible md:flex justify-end">
+          </div>
+        )}
+        <div className="hidden items-center gap-x-6 md:visible md:flex md:justify-end">
           <div>Cards per row:</div>
           <Button
             variant="ghost"
