@@ -64,7 +64,7 @@ function AlbumView({
 
   return (
     <UserConfigProvider userConfig={userConfig}>
-      <div className="flex flex-col space-y-2 pt-2 md:pt-0 gap-4">
+      <div className="flex flex-col space-y-2 pt-2 md:pt-0 gap-2">
         <div className="flex justify-between items-center gap-2">
           <div className="flex flex-col">
             <div
@@ -83,70 +83,65 @@ function AlbumView({
             availableSets={availableSets}
           />
         </div>
-        <div className="flex justify-between">
-          <div className="flex flex-col gap-y-4">
-            <div className="flex justify-between w-full items-center gap-4">
-              <div className="flex gap-x-2 items-center">
-                <Filters filters={filters} setFilters={setFilters} />
-                {filters.size !== 0 && (
-                  <Button onClick={() => setFilters(new Map())}>
-                    Clear filters
-                  </Button>
-                )}
-              </div>
-              <Sorting
-                setSortingMethod={setSortingMethod}
-                setSortingDirection={setSortingDirection}
-                sortingDirection={sortingDirection}
-              />
+        <div className="flex justify-between w-full items-center gap-4">
+          <div className="flex gap-x-2 items-center">
+            <Filters filters={filters} setFilters={setFilters} />
+          </div>
+          <Sorting
+            setSortingMethod={setSortingMethod}
+            setSortingDirection={setSortingDirection}
+            sortingDirection={sortingDirection}
+          />
+        </div>
+        <div className="flex justify-between items-center">
+          {Array.from(filters.keys()).length !== 0 && (
+            <div className="flex flex-col items-center gap-2">
+              {Array.from(filters.keys()).map((filterName) => (
+                <Badge
+                  variant="secondary"
+                  key={filterName}
+                  className="mb-1 mr-1 gap-x-2"
+                >
+                  {`${filterName}: ${filters.get(filterName)?.inputValues}`}
+                  <X
+                    className="h-3 w-3 text-muted-foreground hover:cursor-pointer hover:text-foreground"
+                    onClick={() => {
+                      setFilters((curr) => {
+                        const newFilters = new Map(curr);
+                        newFilters.delete(filterName);
+                        return newFilters;
+                      });
+                    }}
+                  />
+                </Badge>
+              ))}
             </div>
-            {Array.from(filters.keys()).length !== 0 && (
-              <div className="flex items-center gap-x-2">
-                <div>Active filters:</div>
-                {Array.from(filters.keys()).map((filterName) => (
-                  <Badge
-                    variant="secondary"
-                    key={filterName}
-                    className="mb-1 mr-1 gap-x-2"
-                  >
-                    {`${filterName}: ${filters.get(filterName)?.inputValues}`}
-                    <X
-                      className="h-3 w-3 text-muted-foreground hover:cursor-pointer hover:text-foreground"
-                      onClick={() => {
-                        setFilters((curr) => {
-                          const newFilters = new Map(curr);
-                          newFilters.delete(filterName);
-                          return newFilters;
-                        });
-                      }}
-                    />
-                  </Badge>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="hidden items-center gap-x-6 md:visible md:flex">
-            <div>Cards per row:</div>
-            <Button
-              variant="ghost"
-              disabled={cardsPerRow === 1}
-              onClick={() =>
-                setCardsPerRow((curr) => (curr === 1 ? curr : curr - 1))
-              }
-            >
-              -
-            </Button>
-            <div>{cardsPerRow}</div>
-            <Button
-              variant="ghost"
-              disabled={cardsPerRow === 12}
-              onClick={() =>
-                setCardsPerRow((curr) => (curr === 12 ? curr : curr + 1))
-              }
-            >
-              +
-            </Button>
-          </div>
+          )}
+          {filters.size !== 0 && (
+            <Button onClick={() => setFilters(new Map())}>Clear filters</Button>
+          )}
+        </div>
+        <div className="hidden items-center gap-x-6 md:visible md:flex justify-end">
+          <div>Cards per row:</div>
+          <Button
+            variant="ghost"
+            disabled={cardsPerRow === 1}
+            onClick={() =>
+              setCardsPerRow((curr) => (curr === 1 ? curr : curr - 1))
+            }
+          >
+            -
+          </Button>
+          <div>{cardsPerRow}</div>
+          <Button
+            variant="ghost"
+            disabled={cardsPerRow === 12}
+            onClick={() =>
+              setCardsPerRow((curr) => (curr === 12 ? curr : curr + 1))
+            }
+          >
+            +
+          </Button>
         </div>
         <CardGrid
           cards={cardsToDisplay}
