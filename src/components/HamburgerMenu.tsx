@@ -31,7 +31,7 @@ function HamburgerMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost">
+        <Button variant="ghost" size={"icon"}>
           <Hamburger />
         </Button>
       </DropdownMenuTrigger>
