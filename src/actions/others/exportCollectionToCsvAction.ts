@@ -43,6 +43,7 @@ export async function exportCollectionToCSV(): Promise<CsvOutput> {
           rarity: true,
           price_usd: true,
           set_id: true,
+          set_name: true,
         },
       },
     },
@@ -56,6 +57,7 @@ export async function exportCollectionToCSV(): Promise<CsvOutput> {
     cardPrice: card.CardDetails.price_usd,
     numCollected: card.numCollected,
     setScryfallId: card.CardDetails.set_id,
+    setName: card.CardDetails.set_name,
     albumId: hashEncode(card.Album.id),
     albumName: card.Album.name,
   }));
