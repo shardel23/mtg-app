@@ -2,6 +2,7 @@
 
 import { exportDataToCSV } from "@/lib/csv";
 import { prisma } from "@/lib/prisma";
+import { hashEncode } from "@/lib/utils";
 import { CsvOutput } from "export-to-csv";
 import { LogLevel } from "next-axiom/dist/logger";
 import { getCollection, getUserIdFromSession, log } from "../helpers";
@@ -40,6 +41,8 @@ export async function exportCollectionToCSV(): Promise<CsvOutput> {
           name: true,
           collectorNumber: true,
           rarity: true,
+          price_usd: true,
+          set_id: true,
         },
       },
     },
@@ -50,9 +53,10 @@ export async function exportCollectionToCSV(): Promise<CsvOutput> {
     cardName: card.CardDetails.name,
     cardCollectorNumber: card.CardDetails.collectorNumber,
     cardRarity: card.CardDetails.rarity,
+    cardPrice: card.CardDetails.price_usd,
     numCollected: card.numCollected,
-    setScryfallId: card.Album.setId,
-    albumId: card.Album.id,
+    setScryfallId: card.CardDetails.set_id,
+    albumId: hashEncode(card.Album.id),
     albumName: card.Album.name,
   }));
 
