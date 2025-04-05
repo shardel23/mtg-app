@@ -24,6 +24,7 @@ export async function searchCardFromAPI(
     transformedCards = transformedCards.map((card) => ({
       ...card,
       isCollected: ownedCards.has(card.id),
+      numCollected: ownedCards.has(card.id) ? 1 : 0,
     }));
   }
   return cardsArrayToMap(transformedCards);
