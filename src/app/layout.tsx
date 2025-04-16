@@ -12,8 +12,9 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "MTG Collection App",
-  description: "Your place to manage your MTG collection",
+  title: "SuperMTG - Your MTG Collection Manager",
+  description:
+    "Manage your Magic: The Gathering collection with ease. Track cards, values, and build better decks with SuperMTG.",
 };
 
 export default async function RootLayout({
@@ -42,7 +43,7 @@ export default async function RootLayout({
           </div>
         )}
         {!isLogged && (
-          <div className="flex h-screen items-center justify-center">
+          <div className="min-h-screen bg-slate-950 flex items-center justify-center">
             {children}
             <Analytics />
             <SpeedInsights />

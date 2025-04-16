@@ -1,10 +1,7 @@
 "use client";
 
-import {
-  AlbumStats,
-  CollectedMissingStats,
-  CollectionStats,
-} from "@/types/types";
+import type { CollectionStats } from "@/types/types";
+import { AlbumStats, CollectedMissingStats } from "@/types/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { isMobile } from "react-device-detect";

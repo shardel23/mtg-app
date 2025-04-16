@@ -6,6 +6,8 @@ const whitelist = [
   "/api/inngest",
   "/.netlify/functions/inngest",
   "/.redwood/functions/inngest",
+  "/", // Allow landing page
+  "/signin", // Allow sign in page
 ];
 
 const authMiddleware = withAuth((req: NextRequest) => {}, {
