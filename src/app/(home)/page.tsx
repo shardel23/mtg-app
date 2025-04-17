@@ -2,7 +2,7 @@ import { getCollectionStats } from "@/actions/get/getCollectionStatsAction";
 import CollectionStats from "@/components/CollectionStats";
 import LandingPage from "@/components/LandingPage";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "./api/auth/[...nextauth]/authOptions";
+import { authOptions } from "../api/auth/[...nextauth]/authOptions";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
