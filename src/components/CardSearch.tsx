@@ -20,12 +20,12 @@ function CardSearch() {
   };
 
   return (
-    <div className="relative md:w-72">
+    <div className="relative md:w-1/2">
       <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
       <Input
         data-testid="card-search-input"
         value={searchString}
-        className="pl-9 md:w-72"
+        className="pl-9 md:w-3/4"
         placeholder="Search..."
         autoFocus
         onChange={handleChange}

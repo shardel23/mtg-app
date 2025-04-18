@@ -22,14 +22,14 @@ async function Header() {
             <div className="text-xs md:text-lg">Your Collection Manager</div>
           </Link>
         </div>
-        <div className="hidden md:flex">
-          <Auth />
-        </div>
       </div>
+      <CardSearch />
       <div className="flex items-center justify-between gap-x-1 md:gap-x-8">
-        <CardSearch />
         <div className="flex md:hidden">
           {user && <HamburgerMenu user={user} sets={sets} albums={albums} />}
+        </div>
+        <div className="hidden md:flex">
+          <Auth />
         </div>
       </div>
     </div>
