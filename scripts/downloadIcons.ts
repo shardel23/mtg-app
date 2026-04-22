@@ -29,7 +29,7 @@ async function getAllMtgSets() {
 function download(url: string, setCode: string) {
   const dirPath = `./public/assets/${setCode}`;
   if (fs.existsSync(dirPath)) {
-    console.log(`${setCode} already exists`);
+    // console.log(`${setCode} already exists`);
     return;
   }
   fs.mkdirSync(dirPath);
@@ -87,10 +87,18 @@ function download(url: string, setCode: string) {
 async function runScript() {
   console.log("Getting all sets...");
   const sets = await getAllMtgSets();
-  console.log("Downloading set icons...");
-  sets.forEach((set) => {
-    download(set.icon_svg_uri, set.code);
-  });
+  console.log(`Downloading ${sets.length} set icons...`);
+
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+  for (let index = 0; index < sets.length; index++) {
+    const set = sets[index];
+    await download(set.icon_svg_uri, set.code);
+    // Wait 250ms between downloads (adjust as needed)
+    if (index < sets.length - 1) {
+      await delay(250);
+    }
+  }
   console.log("Done");
 }
 
