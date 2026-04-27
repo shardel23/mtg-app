@@ -2,6 +2,9 @@
   "name": "mtg-app",
   "version": "0.1.0",
   "private": true,
+  "prisma": {
+    "seed": "node prisma/seed.cjs"
+  },
   "scripts": {
     "dev": "next dev --turbo",
     "test": "NODE_ENV=test next dev --port 3001",

@@ -8,6 +8,9 @@ const whitelist = [
   "/.redwood/functions/inngest",
   "/", // Allow landing page
   "/signin", // Allow sign in page
+  ...(process.env.NODE_ENV === "development"
+    ? ["/dev/admin", "/api/dev/impersonate"]
+    : []),
 ];
 
 const authMiddleware = withAuth((req: NextRequest) => {}, {

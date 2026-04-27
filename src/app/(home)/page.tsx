@@ -1,6 +1,7 @@
 import { getCollectionStats } from "@/actions/get/getCollectionStatsAction";
 import CollectionStats from "@/components/CollectionStats";
 import LandingPage from "@/components/LandingPage";
+import { isDevelopmentRuntime } from "@/lib/devAuth";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../api/auth/[...nextauth]/authOptions";
 
@@ -9,7 +10,7 @@ export default async function Home() {
   const isLogged = session?.user != null;
 
   if (!isLogged) {
-    return <LandingPage />;
+    return <LandingPage showDevAdminLink={isDevelopmentRuntime()} />;
   }
 
   const collectionData = await getCollectionStats();

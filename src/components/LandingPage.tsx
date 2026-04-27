@@ -12,7 +12,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
 
-export default function LandingPage() {
+export default function LandingPage({
+  showDevAdminLink = false,
+}: {
+  showDevAdminLink?: boolean;
+}) {
   return (
     <div className="flex flex-col items-center gap-y-16 px-4 py-12 md:px-8">
       {/* Hero Section */}
@@ -21,13 +25,23 @@ export default function LandingPage() {
         <p className="text-xl text-slate-400 md:text-2xl">
           Your Ultimate MTG Collection Manager
         </p>
-        <div className="flex gap-x-4">
-          <Button asChild size="lg">
-            <Link href="/signin">Get Started</Link>
-          </Button>
-          <Button asChild variant="outline" size="lg">
-            <Link href="#features">Learn More</Link>
-          </Button>
+        <div className="flex flex-col items-center gap-y-4">
+          <div className="flex gap-x-4">
+            <Button asChild size="lg">
+              <Link href="/signin">Get Started</Link>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <Link href="#features">Learn More</Link>
+            </Button>
+          </div>
+          {showDevAdminLink ? (
+            <Link
+              href="/dev/admin"
+              className="text-sm text-slate-500 underline decoration-slate-600 underline-offset-4 hover:text-slate-300"
+            >
+              Dev Mode
+            </Link>
+          ) : null}
         </div>
       </div>
 
