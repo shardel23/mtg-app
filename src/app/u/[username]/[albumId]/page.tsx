@@ -19,6 +19,9 @@ export default async function AlbumPage({ params }: { params: PageParams }) {
       </>
     );
   }
+
+  const albumSharePath = `/u/${encodeURIComponent(params.username)}/${encodeURIComponent(params.albumId)}`;
+
   return (
     <>
       <AlbumView
@@ -27,6 +30,7 @@ export default async function AlbumPage({ params }: { params: PageParams }) {
         viewMode={viewMode}
         availableSets={sets}
         userConfig={userConfig}
+        albumSharePath={albumSharePath}
       />
     </>
   );

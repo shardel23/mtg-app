@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { CardData, SetData, ViewMode } from "@/types/types";
 import { X } from "lucide-react";
 import { useMemo, useState } from "react";
+import { CopyAlbumShareLink } from "./CopyAlbumShareLink";
 import Sorting from "./Sorting";
 import Settings from "./settings/Settings";
 
@@ -18,12 +19,14 @@ function AlbumView({
   viewMode,
   availableSets,
   userConfig,
+  albumSharePath,
 }: {
   album: { id: string; name: string; setId: string | null | undefined };
   cards: Map<string, CardData[]>;
   viewMode: ViewMode;
   availableSets: Array<SetData>;
   userConfig: { show17LandsSection: boolean } | null;
+  albumSharePath?: string;
 }) {
   const [cardsPerRow, setCardsPerRow] = useState<number>(5);
   const [filters, setFilters] = useState<Map<string, Filter>>(new Map());
@@ -77,11 +80,16 @@ function AlbumView({
               {album.setId != null && `(${collectedCardsCount}/${cards.size})`}
             </div>
           </div>
-          <Settings
-            isEditMode={isEditMode}
-            albumId={album.id}
-            availableSets={availableSets}
-          />
+          <div className="flex shrink-0 items-center gap-2">
+            {albumSharePath != null ? (
+              <CopyAlbumShareLink relativePath={albumSharePath} />
+            ) : null}
+            <Settings
+              isEditMode={isEditMode}
+              albumId={album.id}
+              availableSets={availableSets}
+            />
+          </div>
         </div>
         <div className="flex justify-between w-full items-center gap-4">
           <div className="flex gap-x-2 items-center">
