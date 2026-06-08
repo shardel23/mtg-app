@@ -1,6 +1,8 @@
 import * as Scry from "scryfall-sdk";
 import { endsWithNumber } from "./utils";
 
+Scry.setAgent("mtg-app", "1.0.0");
+
 export async function getAllSets(): Promise<Scry.Set[]> {
   const sets = await Scry.Sets.all();
   return sets
