@@ -22,7 +22,7 @@ export async function fetch17LandsStats(
     logWithTimestamp(`Fetching 17Lands stats for set ${cardSet}`);
     const apiURL = `https://www.17lands.com/api/card_data?expansion=${cardSet}&event_type=PremierDraft&time_period=ALL_TIME`;
     const response = await fetch(apiURL);
-    cardStats17Lands = (await response.json()) as CardStats17Lands[];
+    cardStats17Lands = (await response.json().data) as CardStats17Lands[];
     await redis.set(
       redisKey,
       JSON.stringify(cardStats17Lands),
