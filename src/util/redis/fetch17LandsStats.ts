@@ -20,7 +20,7 @@ export async function fetch17LandsStats(
     ) as CardStats17Lands[];
   } else {
     logWithTimestamp(`Fetching 17Lands stats for set ${cardSet}`);
-    const apiURL = `https://www.17lands.com/card_ratings/data?expansion=${cardSet}&format=PremierDraft&start_date=2000-01-01`;
+    const apiURL = `https://www.17lands.com/api/card_data?expansion=${cardSet}&event_type=PremierDraft&time_period=ALL_TIME`;
     const response = await fetch(apiURL);
     cardStats17Lands = (await response.json()) as CardStats17Lands[];
     await redis.set(
